@@ -26,6 +26,10 @@ public class GCCommandExecutor implements CommandExecutor {
         if(!label.equalsIgnoreCase("gc")) {
             return false;
         }
+        if(!cs.hasPermission("minigames.user")) {
+            sendNoPermsErrorMessage(cs);
+            return true;
+        }
         if(args == null || args.length == 0) {
             sendNoMessageErrorMessage(cs);
             return true;
@@ -64,6 +68,10 @@ public class GCCommandExecutor implements CommandExecutor {
         return true;
     }
 
+    private void sendNoPermsErrorMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "You don't have permission to run this command.");
+    }
+    
     private void sendNoMessageErrorMessage(CommandSender cs) {
         MessageUtil.sendErrorMessage(cs, "You did not specify a message.");
     }

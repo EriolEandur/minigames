@@ -10,11 +10,15 @@ commands:
         description: MiniGames chat message
         usage: /gc <message> Sends a message to all participants of the MiniGame
 permissions:
-    miniGames.*:
+    minigames.*:
         description: Gives access to all miniGames commands
         default: op
         children:
-            miniGames.guide: true
-    miniGames.guide:
+            minigames.manager: true
+            minigames.user: true
+    minigames.manager:
         description: Gives guides access to miniGames commands for managing games
         default: op
+    minigames.user:
+        description: Gives access miniGames commands for players
+        default: true
