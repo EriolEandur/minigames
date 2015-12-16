@@ -1,0 +1,20 @@
+name: MiniGames
+main: com.mcmiddleearth.minigames.MiniGamesPlugin
+version: 0.1
+description: MiniGames plugin
+commands:
+    game:
+        description: manage MiniGames plugin
+        usage: TBA
+    gc:
+        description: MiniGames chat message
+        usage: /gc <message> Sends a message to all participants of the MiniGame
+permissions:
+    miniGames.*:
+        description: Gives access to all miniGames commands
+        default: op
+        children:
+            miniGames.guide: true
+    miniGames.guide:
+        description: Gives guides access to miniGames commands for managing games
+        default: op
