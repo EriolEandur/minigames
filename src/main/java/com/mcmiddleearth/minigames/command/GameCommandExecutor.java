@@ -29,7 +29,7 @@ public class GameCommandExecutor implements CommandExecutor {
         addCommandHandler("leave", new GameLeave("minigames.user"));
         addCommandHandler("join", new GameJoin("minigames.user"));
         addCommandHandler("check", new GameCheck("minigames.user"));
-        addCommandHandler("list", new GameInfo("minigames.user"));
+        addCommandHandler("info", new GameInfo("minigames.user"));
         addCommandHandler("help", new GameHelp("minigames.user"));
         addCommandHandler("kick", new GameKick("minigames.manager"));
         addCommandHandler("ban", new GameBan("minigames.manager"));

@@ -83,9 +83,9 @@ public class GameHelp extends AbstractCommand{
     }
 
     private void sendChatDescriptionMessage(CommandSender cs) {
-        MessageUtil.sendNoPrefixInfoMessage(cs, "/g <message>: Send a game chat message.");
-        MessageUtil.sendNoPrefixInfoMessage(cs, "/g !on: Switch on receiving game chat messages (default).");
-        MessageUtil.sendNoPrefixInfoMessage(cs, "/g !off: Switch off receiving game chat messages.");
+        MessageUtil.sendNoPrefixInfoMessage(cs, "/gc <message>: Send a game chat message.");
+        MessageUtil.sendNoPrefixInfoMessage(cs, "/gc !on: Switch on receiving game chat messages (default).");
+        MessageUtil.sendNoPrefixInfoMessage(cs, "/gc !off: Switch off receiving game chat messages.");
     }
     
  }
