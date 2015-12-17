@@ -248,7 +248,7 @@ public class HideAndSeekGame extends AbstractGame {
         MessageUtil.showTitle((Player) seeker, "yellow"," SEEK!!!"," Try to find the other players.");
         for(Player player : getOnlinePlayers()) {
             if(!BukkitUtil.isSame(player, seeker)) {
-                MessageUtil.showTitle(player, "blue"," FREEZE!!!",seeker.getName() + "is seeking you.");
+                MessageUtil.showTitle(player, "blue"," FREEZE!!!",seeker.getName() + " is seeking you.");
                 if(BukkitUtil.getOnlinePlayer(player)!=null) {
                     MessageUtil.sendInfoMessage(BukkitUtil.getOnlinePlayer(player), "Hold SHIFT to hide your name tag.");
                 }

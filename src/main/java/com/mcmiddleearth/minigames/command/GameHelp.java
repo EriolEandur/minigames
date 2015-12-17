@@ -79,7 +79,7 @@ public class GameHelp extends AbstractCommand{
     }
 
    private void sendManualMessage(CommandSender cs) {
-        //MessageUtil.sendNoPrefixInfoMessage(cs, "Manual for plotbuild plugin: ... .");
+        //MessageUtil.sendNoPrefixInfoMessage(cs, "Manual for plotbuild plugin: ...sooon... .");
     }
 
     private void sendChatDescriptionMessage(CommandSender cs) {
