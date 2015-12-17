@@ -31,16 +31,12 @@ public class GameEnd extends AbstractGameCommand{
         AbstractGame game = getGame((Player) cs);
         if(game!=null && isManager((Player) cs, game)) {
             sendGameEndMessage(cs, game);
-            for(OfflinePlayer player: game.getOnlinePlayers()) {
-                game.removePlayer(player); 
-            }
+            game.end((Player) cs);
             ((Player)cs).setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-            PluginData.removeGame(game);
         }
     }
     
     public void sendGameEndMessage(CommandSender cs, AbstractGame game) {
         MessageUtil.sendInfoMessage(cs, "You ended your minigame.");
-        MessageUtil.sendAllInfoMessage(cs, game, "The game "+ game.getName()+" ended.");
     }
  }

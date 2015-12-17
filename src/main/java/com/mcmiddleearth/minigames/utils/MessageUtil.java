@@ -68,7 +68,7 @@ public class MessageUtil {
     public static void sendChatMessage(CommandSender sender, Player recipient, String message) {
         if (!(sender instanceof Player)) {
             recipient.sendMessage(ChatColor.AQUA + CHATPREFIX
-                                        + ChatColor.RED+ "<Server>" 
+                                        + ChatColor.RED+ "<Server> " 
                                         + ChatColor.WHITE + message);
         } else {
             AbstractGame game = PluginData.getGame((Player)sender);

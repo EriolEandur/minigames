@@ -5,11 +5,14 @@
  */
 package com.mcmiddleearth.minigames.game;
 
+import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.scoreboard.GameScoreboard;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 /**
@@ -47,12 +51,39 @@ public abstract class AbstractGame {
     @Getter
     private final GameScoreboard board;
     
+    private boolean managerOnlineLastTime = true; //for cleanup task
+    
     public AbstractGame(Player manager, String name, GameType type, GameScoreboard board) {
         this.name = name;
         this.manager = manager;
         warp = manager.getLocation();
         this.board = board;
         this.type = type;
+        BukkitRunnable cleanupTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if(!getManager().isOnline()) {
+                    if(!managerOnlineLastTime) {
+                        end(null);
+                        cancel();
+                    }
+                    else {
+                        managerOnlineLastTime = false;
+                    }
+                }
+                else {
+                    managerOnlineLastTime = true;
+                }
+            }};
+        cleanupTask.runTaskTimer(MiniGamesPlugin.getPluginInstance(), 3000, 3000);
+    }
+    
+    public void end(Player sender) {
+        sendGameEndMessage(sender);    
+        for(Player player: getOnlinePlayers()) {
+                removePlayer(player); 
+            }
+            PluginData.removeGame(this);
     }
     
     public int countOnlinePlayer() {
@@ -199,5 +230,9 @@ public abstract class AbstractGame {
         else {
             return ChatColor.BLUE + "<Player "; 
         }
+    }
+    
+    public void sendGameEndMessage(Player sender) {
+        MessageUtil.sendAllInfoMessage(sender, this, "The game "+ getName()+" ended.");
     }
 }

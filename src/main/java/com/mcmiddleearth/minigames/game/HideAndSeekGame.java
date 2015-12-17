@@ -82,7 +82,7 @@ public class HideAndSeekGame extends AbstractGame {
         }
         ((HideAndSeekGameBoard)this.getBoard()).startHiding(seeker.getName(), hideTime);
         sendStartHideMessage();
-        Location loc = ((Player)seeker).getLocation().clone();
+        Location loc = getWarp().clone();
         loc.setPitch(80);
         ((Player) seeker).teleport(loc);
         seekTask = new BukkitRunnable() {
