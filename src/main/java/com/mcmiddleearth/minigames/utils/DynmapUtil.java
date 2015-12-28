@@ -5,7 +5,10 @@
  */
 package com.mcmiddleearth.minigames.utils;
 
+import com.mcmiddleearth.minigames.MiniGamesPlugin;
+import java.util.logging.Logger;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -14,17 +17,29 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class DynmapUtil {
     
-    private final JavaPlugin dynmapPlugin;
-    
-    public DynmapUtil(JavaPlugin dynmapPlugin) {
-        this.dynmapPlugin = dynmapPlugin;
+    public static void hide(Player player) {
+        JavaPlugin dynmap = getDynmap();
+        if(dynmap!=null) {
+                getDynmap().getCommand("dynmap").execute(player, "dynmap", new String[]{"hide"});
+        }
     }
     
-    public void hide(Player player) {
-        dynmapPlugin.getCommand("dynmap").execute(player, "dynmap", new String[]{"hide"});
+    public static void show(Player player) {
+        JavaPlugin dynmap = getDynmap();
+        if(dynmap!=null) {
+            getDynmap().getCommand("dynmap").execute(player, "dynmap", new String[]{"show"});
+        }   
     }
     
-    public void show(Player player) {
-        dynmapPlugin.getCommand("dynmap").execute(player, "dynmap", new String[]{"show"});
+    private static JavaPlugin getDynmap() {
+            Plugin dynmap = MiniGamesPlugin.getPluginInstance().getServer().getPluginManager().getPlugin("dynmap");
+            if(dynmap==null) {
+                Logger.getGlobal().info("Dynmap not found");
+                return null;
+            }
+            else {
+                return (JavaPlugin) dynmap;
+            }
     }
+
 }

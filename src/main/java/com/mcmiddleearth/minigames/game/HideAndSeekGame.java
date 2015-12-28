@@ -6,9 +6,9 @@
 package com.mcmiddleearth.minigames.game;
 
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
-import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.scoreboard.HideAndSeekGameScoreboard;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.DynmapUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,12 +128,12 @@ public class HideAndSeekGame extends AbstractGame {
     
     private void hidePlayer(Player player) {
         hiddenPlayers.add(player);
-        PluginData.getDynmap().hide(player);
+        DynmapUtil.hide(player);
     }
     
     private void unhidePlayer(Player player) {
         hiddenPlayers.remove(player);
-        PluginData.getDynmap().show(player);
+        DynmapUtil.show(player);
     }
     
     private void revealPlayer(Player player) {

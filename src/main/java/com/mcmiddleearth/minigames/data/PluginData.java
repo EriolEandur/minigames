@@ -130,14 +130,4 @@ public class PluginData {
        return true;
     }
     
-    public static DynmapUtil getDynmap() {
-            Plugin dynmap = MiniGamesPlugin.getPluginInstance().getServer().getPluginManager().getPlugin("dynmap");
-            if(dynmap==null) {
-                Logger.getGlobal().info("Dynmap not found");
-                return null;
-            }
-            else {
-                return new DynmapUtil((JavaPlugin) dynmap);
-            }
-    }
 }
