@@ -5,6 +5,9 @@
  */
 package com.mcmiddleearth.minigames.game;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Eriol_Eandur
@@ -29,4 +32,26 @@ public enum GameType{
         return null;
     }
     
+    @Override
+    public String toString() {
+        switch(this) {
+            case HIDE_AND_SEEK: return "Hide and Seek";
+            case RACE: return "Race";
+            case LORE_QUIZ: return "Lore Quiz";
+        }
+        return "Illegal type";
+    }
+    
+    public Class associatedClass() {
+        try {
+            switch(this) {
+                case HIDE_AND_SEEK: return Class.forName("com.mcmiddleearth.minigames.game.HideAndSeekGame");
+                case RACE: return Class.forName("com.mcmiddleearth.minigames.game.RaceGame");
+                case LORE_QUIZ: return Class.forName("com.mcmiddleearth.minigames.game.QuizGame");
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GameType.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

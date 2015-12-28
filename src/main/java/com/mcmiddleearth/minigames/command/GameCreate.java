@@ -7,7 +7,9 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.data.PluginData;
+import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
+import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,7 +33,7 @@ public class GameCreate extends AbstractGameCommand{
                 sendGameExistsMessage(cs);
                 return;
             }
-            HideAndSeekGame game;
+            AbstractGame game;
             GameType type = GameType.getGameType(args[0]);
             if(type==null) {
                 sendInvalidGameTypeErrorMessage(cs);
@@ -40,19 +42,21 @@ public class GameCreate extends AbstractGameCommand{
             switch(type) {
                 case HIDE_AND_SEEK:
                     game = new HideAndSeekGame((Player) cs, args[1]);
-                    sendNewHaSGameMessage(cs, game);
+                    break;
+                case LORE_QUIZ:
+                    game = new QuizGame((Player) cs, args[1]);
+                    sendQuizGameCreateMessage(cs);
                     break;
                 default:
                     sendInvalidGameTypeErrorMessage(cs);
                     return;
             }
             PluginData.addGame(game);
-            sendGameCreateMessage(cs);
         }
     }
     
-    public void sendGameCreateMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You created a new minigame.");
+    public void sendQuizGameCreateMessage(CommandSender cs) {
+        MessageUtil.sendInfoMessage(cs, "You created a new Lore Quiz.");
     }
 
     private void sendInvalidGameTypeErrorMessage(CommandSender cs) {
@@ -63,8 +67,4 @@ public class GameCreate extends AbstractGameCommand{
          MessageUtil.sendErrorMessage(cs, "A game with that name already exists.");
     }
 
-    private void sendNewHaSGameMessage(CommandSender cs, HideAndSeekGame game) {
-        MessageUtil.sendBroadcastMessage(cs.getName() + " started a new Hide and Seek game. "
-                                        + "To play that game, type in chat: /game join "+game.getName());
-    }
  }

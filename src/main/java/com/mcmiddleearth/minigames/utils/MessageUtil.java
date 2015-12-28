@@ -9,6 +9,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import java.lang.reflect.Constructor;
 import java.util.logging.Logger;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -21,6 +22,7 @@ import org.bukkit.entity.Player;
 
 public class MessageUtil {
     
+    @Getter
     private static final String PREFIX   = "[MiniGames] ";
     private static final String NOPREFIX = "    ";
     private static final String CHATPREFIX = "[GameChat] ";

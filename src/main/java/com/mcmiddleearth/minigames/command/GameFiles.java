@@ -1,0 +1,96 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.mcmiddleearth.minigames.command;
+
+import com.mcmiddleearth.minigames.MiniGamesPlugin;
+import com.mcmiddleearth.minigames.data.PluginData;
+import com.mcmiddleearth.minigames.utils.MessageUtil;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import org.bukkit.command.CommandSender;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+/**
+ *
+ * @author Eriol_Eandur
+ */
+public class GameFiles extends AbstractCommand{
+    
+    public GameFiles(String... permissionNodes) {
+        super(1, true, permissionNodes);
+        setShortDescription(": Lists all saved quiz files.");
+        setUsageDescription(": ");
+    }
+    
+    @Override
+    protected void execute(CommandSender cs, String... args) {
+        File[] files;
+        if(args[0].equalsIgnoreCase("quiz")) {
+            files = PluginData.getQuestionDir().listFiles();
+        }
+        else {
+            sendInvalidDataTypeMessage(cs);
+            return;
+        }
+        int page=1;
+        int maxPage=(files.length-1)/10+1;
+        if(maxPage<1) {
+            maxPage = 1;
+        }
+        if(args.length>1) {
+            try {
+                page = Integer.parseInt(args[1]);
+            } catch (NumberFormatException ex) {
+                page = 1;
+            }
+        }
+        if(page>maxPage) {
+            page = maxPage;
+        }
+        sendHeaderMessage(cs, args[0], page, maxPage);
+        for(int i = files.length-1-(page-1)*10; i >= 0 && i > files.length-1-(page-1)*10-10; i--) {
+            sendEntryMessage(cs, files[i].getName(), getDescription(files[i]));
+        }
+    }
+    
+    private String getDescription(File file) {
+        try {
+            String input;
+            try (Scanner reader = new Scanner(file)) {
+                input = "";
+                while(reader.hasNext()){
+                    input = input+reader.nextLine();
+                }
+            }
+            JSONObject jInput = (JSONObject) new JSONParser().parse(input);
+            return (String) jInput.get("description");
+        } catch (FileNotFoundException | ParseException ex) {
+            MiniGamesPlugin.getPluginInstance().getLogger().log(Level.SEVERE, null, ex);
+            return "";
+        }
+    }
+
+    private void sendHeaderMessage(CommandSender cs, String type, int page, int maxPage) {
+        MessageUtil.sendInfoMessage(cs, "Saved "+type+" data files [page " +page+"/"+maxPage+"]");
+    }
+
+    private void sendEntryMessage(CommandSender cs, String fileName, String description) {
+        String name = fileName.substring(0, fileName.lastIndexOf('.'));
+        while(name.length()<15) {
+            name = name.concat(" ");
+        }
+        MessageUtil.sendNoPrefixInfoMessage(cs, name+description);
+    }
+
+    private void sendInvalidDataTypeMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "Invalid data type. Try /game files quiz|race");
+    }
+}

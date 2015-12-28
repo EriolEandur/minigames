@@ -7,6 +7,8 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
+import com.mcmiddleearth.minigames.game.GameType;
+import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.command.CommandSender;
@@ -64,6 +66,20 @@ public abstract class AbstractGameCommand extends AbstractCommand {
         return false;
     }
     
+    protected boolean isCorrectGameType(Player player, AbstractGame game, GameType gameType) {
+        if(gameType.associatedClass().isInstance(game)) {
+            return true;
+        }
+        else {
+            sendWrongGameTypeErrorMessage(player, gameType);
+            return false;
+        }
+    }
+    
+    protected void sendWrongGameTypeErrorMessage(CommandSender cs, GameType gameType) {
+        MessageUtil.sendErrorMessage(cs, "This is not a "+gameType.toString()+" game.");
+    }
+
     private void sendNotInGameErrorMessage(CommandSender cs) {
         MessageUtil.sendErrorMessage(cs, "You are not part of a mini game.");
     }

@@ -12,7 +12,6 @@ import com.mcmiddleearth.minigames.utils.BukkitUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,6 +32,9 @@ public abstract class AbstractGame {
     
     @Getter
     private final String name;
+    
+    @Getter
+    private boolean announced = false;
     
     @Getter
     private OfflinePlayer manager;
@@ -58,6 +60,7 @@ public abstract class AbstractGame {
         this.manager = manager;
         warp = manager.getLocation();
         this.board = board;
+        manager.setScoreboard(getBoard().getScoreboard());
         this.type = type;
         BukkitRunnable cleanupTask = new BukkitRunnable() {
             @Override
@@ -181,13 +184,10 @@ public abstract class AbstractGame {
     }
     
     public void playerLeaveServer(PlayerQuitEvent event) {
+        event.getPlayer().setScoreboard(Bukkit.getServer().getScoreboardManager().getMainScoreboard());
         getBoard().decrementPlayer();
     }
     
-    public boolean moveAllowed(Player player, Location loc) {
-        return loc.distance(getWarp())<allowedRadius(player);
-    }
-
     public int allowedRadius(Player player) {
         return Integer.MAX_VALUE;
     }
@@ -220,7 +220,12 @@ public abstract class AbstractGame {
     }
     
     public boolean joinAllowed() {
-        return true;
+        return announced;
+    }
+    
+    public void announceGame() {
+        announced = true;
+        sendAnnounceGameMessage();
     }
 
     public String getGameChatTag(Player player) {
@@ -230,6 +235,11 @@ public abstract class AbstractGame {
         else {
             return ChatColor.BLUE + "<Player "; 
         }
+    }
+    
+    protected void sendAnnounceGameMessage() {
+        MessageUtil.sendBroadcastMessage("§2"+manager.getName() + "§b started a new §2"+ getType().toString()+"§b game. "
+                                        + "To play that game, type in chat: /game join §2"+getName());
     }
     
     public void sendGameEndMessage(Player sender) {

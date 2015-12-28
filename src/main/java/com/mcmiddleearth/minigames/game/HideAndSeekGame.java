@@ -7,7 +7,7 @@ package com.mcmiddleearth.minigames.game;
 
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
-import com.mcmiddleearth.minigames.scoreboard.HideAndSeekGameBoard;
+import com.mcmiddleearth.minigames.scoreboard.HideAndSeekGameScoreboard;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.util.ArrayList;
@@ -59,8 +59,8 @@ public class HideAndSeekGame extends AbstractGame {
     private BukkitRunnable seekTask, stopTask;
     
     public HideAndSeekGame(Player manager, String name) {
-        super(manager, name, GameType.HIDE_AND_SEEK, new HideAndSeekGameBoard());
-        manager.setScoreboard(getBoard().getScoreboard());
+        super(manager, name, GameType.HIDE_AND_SEEK, new HideAndSeekGameScoreboard());
+        announceGame();
     }
     
     public void hiding(int radius) {
@@ -80,7 +80,7 @@ public class HideAndSeekGame extends AbstractGame {
                 hidePlayer(player);
             }
         }
-        ((HideAndSeekGameBoard)this.getBoard()).startHiding(seeker.getName(), hideTime);
+        ((HideAndSeekGameScoreboard)this.getBoard()).startHiding(seeker.getName(), hideTime);
         sendStartHideMessage();
         Location loc = getWarp().clone();
         loc.setPitch(80);
@@ -96,7 +96,7 @@ public class HideAndSeekGame extends AbstractGame {
     public void seeking() {
         this.hiding = false;
         this.seeking = true;
-        ((HideAndSeekGameBoard)this.getBoard()).startSeeking(seekTime);
+        ((HideAndSeekGameScoreboard)this.getBoard()).startSeeking(seekTime);
         sendStartSeekingMessage();
         stopTask = new BukkitRunnable() {
             @Override
@@ -123,7 +123,7 @@ public class HideAndSeekGame extends AbstractGame {
         this.seeking = false;
         this.hiding = false;
         seeker = null;
-        ((HideAndSeekGameBoard)this.getBoard()).stop();
+        ((HideAndSeekGameScoreboard)this.getBoard()).stop();
     }
     
     private void hidePlayer(Player player) {
@@ -138,7 +138,7 @@ public class HideAndSeekGame extends AbstractGame {
     
     private void revealPlayer(Player player) {
         unhidePlayer(player);
-        ((HideAndSeekGameBoard)this.getBoard()).locatePlayer();
+        ((HideAndSeekGameScoreboard)this.getBoard()).locatePlayer();
         if(hiddenPlayers.isEmpty()) {
             stop();
         }
@@ -160,7 +160,7 @@ public class HideAndSeekGame extends AbstractGame {
     
     public void setSeeker(OfflinePlayer player) {
         seeker = player;
-        ((HideAndSeekGameBoard)getBoard()).setSeeker(seeker.getName());
+        ((HideAndSeekGameScoreboard)getBoard()).setSeeker(seeker.getName());
     }
     
     private boolean isHidden(Player player) {
@@ -222,7 +222,7 @@ public class HideAndSeekGame extends AbstractGame {
 
     @Override
     public boolean joinAllowed() {
-        return !(hiding || seeking);
+        return isAnnounced() && !(hiding || seeking);
     }
     
     @Override

@@ -16,7 +16,7 @@ import org.bukkit.scoreboard.Score;
  *
  * @author Eriol_Eandur
  */
-public class HideAndSeekGameBoard extends GameScoreboard {
+public class HideAndSeekGameScoreboard extends GameScoreboard {
     
     private final Objective hidingObjective;
     private final Objective seekingObjective;
@@ -31,7 +31,7 @@ public class HideAndSeekGameBoard extends GameScoreboard {
     
     private BukkitRunnable timerTask;
     
-    public HideAndSeekGameBoard() {
+    public HideAndSeekGameScoreboard() {
         super(playerCountTitle+"?");
         hidingObjective = scoreboard.registerNewObjective("HidingTime", "dummy");
         hidingObjective.setDisplayName(title+"?");

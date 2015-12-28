@@ -8,6 +8,7 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -24,15 +25,17 @@ public class GameCheck extends AbstractCommand{
     
     @Override
     protected void execute(CommandSender cs, String... args) {
-        if(PluginData.getGames().isEmpty()) {
+        if(!PluginData.gameRunning()) {
             MessageUtil.sendInfoMessage(cs, "There are no minigames running. Check again later.");
         } else {
             MessageUtil.sendInfoMessage(cs, "Running minigames:");
             for(AbstractGame game : PluginData.getGames()) {
-                MessageUtil.sendNoPrefixInfoMessage(cs, game.getName() + ": "
-                                                      + game.getType() + " with " 
-                                                      + game.getManager().getName()+" and "
-                                                      + game.getPlayers().size() + " players.");
+                if(game.isAnnounced()) {
+                    MessageUtil.sendNoPrefixInfoMessage(cs, "§2"+game.getName() + "§b, a §2"
+                                                          + game.getType() + "§b game with §2" 
+                                                          + game.getManager().getName()+"§b and "
+                                                          + game.getPlayers().size() + " players.");
+                }
             }
         }
     }

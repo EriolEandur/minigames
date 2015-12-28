@@ -7,8 +7,11 @@ package com.mcmiddleearth.minigames.data;
 
 import com.mcmiddleearth.minigames.utils.DynmapUtil;
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
+import com.mcmiddleearth.minigames.conversation.ConfirmationFactory;
+import com.mcmiddleearth.minigames.conversation.CreateQuestionConversationFactory;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -24,10 +27,34 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class PluginData {
     
+    @Getter
+    private static CreateQuestionConversationFactory createQuestionFactory;
+    
+    @Getter
+    private static ConfirmationFactory confirmationFactory;
+    
     private static final List<OfflinePlayer> noGameChat = new ArrayList<>();
     
     @Getter
     private static final List<AbstractGame> games = new ArrayList<>();
+    
+    @Getter
+    private static final File questionDir = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
+                                                    + File.separator + "QuizQuestions");
+    
+    static {
+        if(!MiniGamesPlugin.getPluginInstance().getDataFolder().exists()) {
+            MiniGamesPlugin.getPluginInstance().getDataFolder().mkdirs();
+        }
+        if(!questionDir.exists()) {
+            questionDir.mkdirs();
+        }
+    }
+   
+    public static void createConversationFactories() {
+        createQuestionFactory = new CreateQuestionConversationFactory(MiniGamesPlugin.getPluginInstance());
+        confirmationFactory = new ConfirmationFactory(MiniGamesPlugin.getPluginInstance());
+    }
     
     public static AbstractGame getGame(Player player) {
         for(AbstractGame game : games) {
@@ -50,6 +77,15 @@ public class PluginData {
             }
         }
         return null;
+    }
+    
+    public static boolean gameRunning() {
+        for(AbstractGame game : games) {
+            if(game.isAnnounced()) {
+                return true;
+            }
+        }
+        return false;
     }
     
     public static void addGame(AbstractGame game) {

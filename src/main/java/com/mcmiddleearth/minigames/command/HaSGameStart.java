@@ -6,6 +6,7 @@
 package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.game.AbstractGame;
+import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import com.mcmiddleearth.minigames.utils.StringUtil;
@@ -14,9 +15,9 @@ import org.bukkit.entity.Player;
 
 /**
  *
- * @author Eriol_Eandur
+ * @author Eriol_Eandur 
  */
-public class HaSGameStart extends AbstractHideAndSeekCommand{
+public class HaSGameStart extends AbstractGameCommand{
     
     public HaSGameStart(String... permissionNodes) {
         super(1, true, permissionNodes);
@@ -27,7 +28,8 @@ public class HaSGameStart extends AbstractHideAndSeekCommand{
     @Override
     protected void execute(CommandSender cs, String... args) {
         AbstractGame game = getGame((Player) cs);
-        if(game != null && isManager((Player) cs, game) && isHideAndSeekGame((Player)cs, game)) {
+        if(game != null && isManager((Player) cs, game) 
+                        && isCorrectGameType((Player)cs, game, GameType.HIDE_AND_SEEK)) {
             if(game.countOnlinePlayer()<2) {
                 sendNotEnoughPlayerErrorMessage(cs);
             }
