@@ -24,6 +24,7 @@ public class MiniGamesPlugin extends JavaPlugin{
     @Override
     public void onEnable() {
         pluginInstance = this;
+        PluginData.cleanup();
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getCommand("game").setExecutor(new GameCommandExecutor());
         getCommand("gc").setExecutor(new GCCommandExecutor());

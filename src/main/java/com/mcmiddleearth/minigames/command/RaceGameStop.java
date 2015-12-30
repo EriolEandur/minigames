@@ -5,9 +5,9 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
+import com.mcmiddleearth.minigames.game.RaceGame;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,25 +16,28 @@ import org.bukkit.entity.Player;
  *
  * @author Eriol_Eandur
  */
-public class GameReady extends AbstractGameCommand{
+public class RaceGameStop extends AbstractGameCommand{
     
-    public GameReady(String... permissionNodes) {
+    public RaceGameStop(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": Announces a mini game.");
+        setShortDescription(": ");
         setUsageDescription(": ");
     }
     
     @Override
     protected void execute(CommandSender cs, String... args) {
         AbstractGame game = getGame((Player) cs);
-        if(game != null && isManager((Player) cs, game)) {
-            if(game.isAnnounced()) {
-                sendAlreadyAnnouncedErrorMessage(cs);
+        if(game != null && isManager((Player) cs, game)
+                        && isCorrectGameType((Player) cs, game, GameType.RACE)) {
+            RaceGame raceGame = (RaceGame) game;
+            if(!raceGame.isStarted()) {
+                sendNotStartedMessage(cs);
             }
-            else {
-                game.announceGame();
-            }
+            raceGame.stop();
         }
     }
 
+    private void sendNotStartedMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "Race not started yet.");
+    }
 }

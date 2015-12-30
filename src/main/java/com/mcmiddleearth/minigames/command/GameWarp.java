@@ -14,9 +14,9 @@ import org.bukkit.command.CommandSender;
  *
  * @author Eriol_Eandur
  */
-public class GameCheck extends AbstractCommand{
+public class GameWarp extends AbstractCommand{
     
-    public GameCheck(String... permissionNodes) {
+    public GameWarp(String... permissionNodes) {
         super(0, true, permissionNodes);
         setShortDescription(": Lists all currently active mini game.");
         setUsageDescription(": ");

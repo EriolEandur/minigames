@@ -2,6 +2,8 @@ name: MiniGames
 main: com.mcmiddleearth.minigames.MiniGamesPlugin
 version: 0.1
 description: MiniGames plugin
+load: POSTWORLD
+depend: [Multiverse-Core]
 commands:
     game:
         description: manage MiniGames plugin
@@ -18,7 +20,7 @@ permissions:
             minigames.user: true
     minigames.manager:
         description: Gives guides access to miniGames commands for managing games
-        default: op
+        default: true
     minigames.user:
         description: Gives access miniGames commands for players
         default: true

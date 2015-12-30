@@ -7,6 +7,7 @@ package com.mcmiddleearth.minigames.listener;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
+import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -40,6 +41,9 @@ public class PlayerListener implements Listener{
     public void playerJoin(PlayerJoinEvent event) {
         if(PluginData.isInGame(event.getPlayer())) {
             PluginData.getGame(event.getPlayer()).playerJoinServer(event);
+        }
+        else if(PluginData.gameRunning()) {
+            MessageUtil.sendInfoMessage(event.getPlayer(),"There is game going on. For more information type /game check.");
         }
     }
     

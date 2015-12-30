@@ -10,10 +10,10 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.util.Scanner;
 import java.util.logging.Level;
 import org.bukkit.command.CommandSender;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -26,15 +26,24 @@ public class GameFiles extends AbstractCommand{
     
     public GameFiles(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": Lists all saved quiz files.");
+        setShortDescription(": Lists all saved game files.");
         setUsageDescription(": ");
     }
     
     @Override
     protected void execute(CommandSender cs, String... args) {
+        FilenameFilter pFilter = new FilenameFilter() {
+            @Override
+            public boolean accept(File file, String string) {
+                return string.endsWith(".json");
+            }
+        };
         File[] files;
         if(args[0].equalsIgnoreCase("quiz")) {
-            files = PluginData.getQuestionDir().listFiles();
+            files = PluginData.getQuestionDir().listFiles(pFilter);
+        }
+        else if(args[0].equalsIgnoreCase("race")) {
+            files = PluginData.getRaceDir().listFiles(pFilter);
         }
         else {
             sendInvalidDataTypeMessage(cs);

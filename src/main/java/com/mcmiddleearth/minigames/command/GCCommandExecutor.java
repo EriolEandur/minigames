@@ -72,7 +72,8 @@ public class GCCommandExecutor implements CommandExecutor {
     }
     
     private void sendNoMessageErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You did not specify a message.");
+        MessageUtil.sendErrorMessage(cs, "You can send a game chat message with /gc <message>. "
+                                         +"You can switch on/off game chat with /gc !on|!off");
     }
 
     private void sendNoPlayerMessage(CommandSender cs) {

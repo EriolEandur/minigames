@@ -22,7 +22,7 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
     
     public GameDelete(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": Lists all currently active mini game.");
+        setShortDescription(": Deletes saved mini games.");
         setUsageDescription(": ");
     }
     

@@ -5,21 +5,19 @@
  */
 package com.mcmiddleearth.minigames.data;
 
-import com.mcmiddleearth.minigames.utils.DynmapUtil;
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.conversation.ConfirmationFactory;
 import com.mcmiddleearth.minigames.conversation.CreateQuestionConversationFactory;
 import com.mcmiddleearth.minigames.game.AbstractGame;
+import com.mcmiddleearth.minigames.game.RaceGame;
+import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
@@ -42,12 +40,19 @@ public class PluginData {
     private static final File questionDir = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
                                                     + File.separator + "QuizQuestions");
     
+    @Getter
+    private static final File raceDir = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
+                                                    + File.separator + "Races");
+    
     static {
         if(!MiniGamesPlugin.getPluginInstance().getDataFolder().exists()) {
             MiniGamesPlugin.getPluginInstance().getDataFolder().mkdirs();
         }
         if(!questionDir.exists()) {
             questionDir.mkdirs();
+        }
+        if(!raceDir.exists()) {
+            raceDir.mkdirs();
         }
     }
    
@@ -130,4 +135,7 @@ public class PluginData {
        return true;
     }
     
+    public static void cleanup() {
+        Checkpoint.cleanup();
+    }
 }

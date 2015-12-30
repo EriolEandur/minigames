@@ -29,7 +29,7 @@ public class RaceGameSet extends AbstractGameCommand{
     protected void execute(CommandSender cs, String... args) {
         AbstractGame game = getGame((Player) cs);
         if(game != null && isManager((Player) cs, game)
-                        && isCorrectGameType((Player) cs, game, GameType.LORE_QUIZ)) {
+                        && isCorrectGameType((Player) cs, game, GameType.RACE)) {
             if(game.isAnnounced()) {
                 sendAlreadyAnnouncedErrorMessage(cs);
                 return;
@@ -37,28 +37,34 @@ public class RaceGameSet extends AbstractGameCommand{
             RaceGame raceGame = (RaceGame) game;
             Location loc = ((Player) cs).getLocation();
             if(args[0].equalsIgnoreCase("start")) {
-                if(raceGame.setStartLocation(loc)) {
+                if(raceGame.getCheckpointManager().setStartLocation(loc)) {
                     sendStartSetMessage(cs);
                     return;
                 }
             } else if(args[0].equalsIgnoreCase("finish")) {
-                if(raceGame.setFinishLocation(loc)) {
+                if(raceGame.getCheckpointManager().setFinishLocation(loc)) {
                     sendFinishSetMessage(cs);
                     return;
                 }
             } else if(args[0].equalsIgnoreCase("checkpoint")) {
                 if(args.length<2) {
-                    if(raceGame.setFinishLocation(loc)) {
-                        sendFinishSetMessage(cs);
+                    if(raceGame.getCheckpointManager().addCheckpointLocation(loc)) {
+                        sendCheckpointAddedMessage(cs);
                         return;
                     }
                 }
                 else {
                     try {
                         int id = Integer.parseInt(args[1]);
-                        if(raceGame.isIdValid(id)) {
-                            raceGame.insertCheckpointLocation(loc, id);
-                            sendCheckpointAddedMessage(cs);
+                        if(raceGame.getCheckpointManager().isIdValid(id)) {
+                            if(args.length>2 && args[2].equals("-i")) {
+                                raceGame.getCheckpointManager().insertCheckpointLocation(loc, id);
+                                sendCheckpointAddedMessage(cs);
+                            }
+                            else {
+                                raceGame.getCheckpointManager().setCheckpointLocation(loc, id);
+                                sendCheckpointMovedMessage(cs);
+                            }
                             return;
                         }
                         sendIdNotValidMessage(cs);
@@ -69,37 +75,44 @@ public class RaceGameSet extends AbstractGameCommand{
                         return;
                     }
                 }
+            } else {
+                sendInvalidArgumentMessage(cs);
+                return;
             }
-            sendInvalidArgumentMessage(cs);
+            sendInvalidLocationMessage(cs);
         }
     }
 
-    private void sendAlreadyAnnouncedErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "This game was already announced.");
-    }
-
     private void sendStartSetMessage(CommandSender cs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        MessageUtil.sendInfoMessage(cs, "Start location saved.");
     }
 
     private void sendFinishSetMessage(CommandSender cs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        MessageUtil.sendInfoMessage(cs, "Finish location saved.");
     }
 
     private void sendCheckpointAddedMessage(CommandSender cs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        MessageUtil.sendInfoMessage(cs, "Checkpoint saved.");
     }
 
     private void sendIdNotValidMessage(CommandSender cs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        MessageUtil.sendErrorMessage(cs, "You did not specify a valid Checkpoint ID.");
     }
 
     private void sendNotANumberMessage(CommandSender cs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        MessageUtil.sendErrorMessage(cs, "Not a number.");
     }
 
     private void sendInvalidArgumentMessage(CommandSender cs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        MessageUtil.sendErrorMessage(cs, "Invalid Argument. Usage: /game set start|finish|checkpoint.");
+    }
+
+    private void sendInvalidLocationMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "Your location is too near to another Checkpoint.");
+    }
+
+    private void sendCheckpointMovedMessage(CommandSender cs) {
+        MessageUtil.sendInfoMessage(cs, "Checkpoint moved to your location.");
     }
     
 }

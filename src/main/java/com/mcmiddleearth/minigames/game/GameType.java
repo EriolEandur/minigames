@@ -13,9 +13,9 @@ import java.util.logging.Logger;
  * @author Eriol_Eandur
  */
 public enum GameType{
-    HIDE_AND_SEEK   ("HideAndSeek"),
+    HIDE_AND_SEEK   ("Hide"),
     RACE            ("Race"),
-    LORE_QUIZ       ("LoreQuiz");
+    LORE_QUIZ       ("Quiz");
     
     private final String name;
 

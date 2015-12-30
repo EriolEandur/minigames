@@ -10,6 +10,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
 import com.mcmiddleearth.minigames.game.QuizGame;
+import com.mcmiddleearth.minigames.game.RaceGame;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -42,6 +43,9 @@ public class GameCreate extends AbstractGameCommand{
             switch(type) {
                 case HIDE_AND_SEEK:
                     game = new HideAndSeekGame((Player) cs, args[1]);
+                    break;
+                case RACE:
+                    game = new RaceGame((Player) cs, args[1]);
                     break;
                 case LORE_QUIZ:
                     game = new QuizGame((Player) cs, args[1]);

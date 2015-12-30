@@ -100,5 +100,14 @@ public abstract class AbstractGameCommand extends AbstractCommand {
         MessageUtil.sendErrorMessage(player, "You are already the manager of an other game.");
     }
     
+    protected void sendAlreadyAnnouncedErrorMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "This game was already announced.");
+    }
+    
+    protected void sendNotAnnouncedErrorMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "Game needs to be announced first.");
+    }
+
+
     
 }

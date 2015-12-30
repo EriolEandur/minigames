@@ -41,11 +41,20 @@ public class GameCommandExecutor implements CommandExecutor {
         addCommandHandler("send", new QuizGameSend("minigames.manager"));
         addCommandHandler("ready", new GameReady("minigames.manager"));
         addCommandHandler("restart", new QuizGameRestart("minigames.manager"));
-        addCommandHandler("save", new QuizGameSave("minigames.manager"));
-        addCommandHandler("load", new QuizGameLoad("minigames.manager"));
+        addCommandHandler("savequiz", new QuizGameSave("minigames.manager"));
+        addCommandHandler("loadquiz", new QuizGameLoad("minigames.manager"));
         addCommandHandler("delete", new GameDelete("minigames.manager"));
         addCommandHandler("clear", new QuizGameClear("minigames.manager"));
         addCommandHandler("files", new GameFiles("minigames.manager"));
+        addCommandHandler("set", new RaceGameSet("minigames.manager"));
+        addCommandHandler("remove", new RaceGameRemove("minigames.manager"));
+        addCommandHandler("savemarker", new RaceGameSaveMarker("minigames.manager"));
+        addCommandHandler("marker", new RaceGameMarker("minigames.manager"));
+        addCommandHandler("saverace", new RaceGameSave("minigames.manager"));
+        addCommandHandler("loadrace", new RaceGameLoad("minigames.manager"));
+        addCommandHandler("steady", new RaceGameSteady("minigames.manager"));
+        addCommandHandler("stop", new RaceGameStop("minigames.manager"));
+        addCommandHandler("warp", new GameWarp("minigames.user"));
     }
     
     @Override
