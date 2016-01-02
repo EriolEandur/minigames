@@ -289,9 +289,11 @@ public class Checkpoint {
     }
     
     public static void cleanup() {
-        File[] files = restoreDir.listFiles(FileUtil.getFileExtFilter(restoreExt));
-        for(File file: files) {
-            restoreBlocks(file);
+        if(restoreDir.exists()) {
+            File[] files = restoreDir.listFiles(FileUtil.getFileExtFilter(restoreExt));
+            for(File file: files) {
+                restoreBlocks(file);
+            }
         }
     }
     
