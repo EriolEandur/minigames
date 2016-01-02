@@ -19,14 +19,12 @@ package com.mcmiddleearth.minigames.conversation;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.Prompt;
-import org.bukkit.conversations.ValidatingPrompt;
 
 /**
  *
  * @author Eriol_Eandur
  */
-class EnterSingleChoicesPrompt extends ValidatingPrompt {
+class EnterSingleChoicesPrompt extends EnterMultipleChoicesPrompt {
 
     @Override
     public String getPromptText(ConversationContext cc) {
@@ -34,12 +32,6 @@ class EnterSingleChoicesPrompt extends ValidatingPrompt {
         return "[Hint] Type in chat the letter of the correct answer.";
     }
 
-    @Override
-    protected Prompt acceptValidatedInput(ConversationContext cc, String string) {
-        cc.setSessionData("answer", string);
-        return END_OF_CONVERSATION;
-    }
-    
     @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
         return ChatColor.RED+"[Invalid input] Type in the letter of the correct answer only.";

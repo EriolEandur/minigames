@@ -48,13 +48,14 @@ public class CreateQuestionConversationFactory implements ConversationAbandonedL
                 .addConversationAbandonedListener(this);
     }
     
-    public void start(Player player, QuizGame game, QuestionType questionType) {
+    public void start(Player player, QuizGame game, QuestionType questionType, int questionIndex) {
         Conversation conversation = factory.buildConversation(player);
         ConversationContext context = conversation.getContext();
         context.setSessionData("game", game);
         context.setSessionData("player", player);
         context.setSessionData("questionType", questionType);
         context.setSessionData("createQuestion", true);
+        context.setSessionData("questionIndex", questionIndex);
         conversation.begin();
     }
    
@@ -71,19 +72,23 @@ public class CreateQuestionConversationFactory implements ConversationAbandonedL
             switch(((QuestionType)cc.getSessionData("questionType"))) {
                 case FREE:
                     game.addQuestion(new FreeQuestion((String) cc.getSessionData("question"),
-                                                      (String) cc.getSessionData("answer"))); break;
+                                                      (String) cc.getSessionData("answer")),
+                                                      (int) cc.getSessionData("questionIndex")); break;
                 case NUMBER:
                     game.addQuestion(new NumberQuestion((String) cc.getSessionData("question"),
                                                         Integer.parseInt((String) cc.getSessionData("answer")),
-                                                        Integer.parseInt((String) cc.getSessionData("precision")))); break;
+                                                        Integer.parseInt((String) cc.getSessionData("precision"))),
+                                                        (int) cc.getSessionData("questionIndex")); break;
                 case MULTI:
                     game.addQuestion(new ChoiceQuestion((String) cc.getSessionData("question"),
                                                         (String[]) cc.getSessionData("choices"),
-                                                        (String) cc.getSessionData("answer"))); break;
+                                                        (String) cc.getSessionData("answer")),
+                                                        (int) cc.getSessionData("questionIndex")); break;
                 default:
                     game.addQuestion(new SingleChoiceQuestion((String) cc.getSessionData("question"),
                                                               (String[]) cc.getSessionData("choices"),
-                                                              (String) cc.getSessionData("answer"))); break;
+                                                              (String) cc.getSessionData("answer")),
+                                                              (int) cc.getSessionData("questionIndex")); break;
             }
         }
     }

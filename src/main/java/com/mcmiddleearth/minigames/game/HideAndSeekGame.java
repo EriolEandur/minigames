@@ -10,6 +10,7 @@ import com.mcmiddleearth.minigames.scoreboard.HideAndSeekGameScoreboard;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
 import com.mcmiddleearth.minigames.utils.DynmapUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.TitleUtil;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -32,9 +33,9 @@ public class HideAndSeekGame extends AbstractGame {
     
     private final int defaultRadius = 10;
     
-    private final int defaultHideTimeSeconds = 10;
+    private final int defaultHideTimeSeconds = 60;
     
-    private final int defaultSeekTimeSeconds = 20;
+    private final int defaultSeekTimeSeconds = 300;
     
     private final int revealDistance = 1;
     
@@ -196,7 +197,7 @@ public class HideAndSeekGame extends AbstractGame {
         if(hiding) {
             return Math.abs(radius);
         }
-        return Math.abs(seekerCageRadius);
+        return Math.abs(defaultRadius);
     }
 
     @Override
@@ -236,19 +237,19 @@ public class HideAndSeekGame extends AbstractGame {
     }
 
     private void sendStartHideMessage() {
-        MessageUtil.showTitle((Player) seeker, "blue"," FREEZE!!!"," Wait for other players to hide.");
+        TitleUtil.showTitle((Player) seeker, "blue"," FREEZE!!!"," Wait for other players to hide.");
         for(Player player : getOnlinePlayers()) {
             if(!BukkitUtil.isSame(player,seeker)) {
-                MessageUtil.showTitle(player, "yellow"," HIDE!!!"," ");
+                TitleUtil.showTitle(player, "yellow"," HIDE!!!"," ");
             }
         }
     }
 
     private void sendStartSeekingMessage() {
-        MessageUtil.showTitle((Player) seeker, "yellow"," SEEK!!!"," Try to find the other players.");
+        TitleUtil.showTitle((Player) seeker, "yellow"," SEEK!!!"," Try to find the other players.");
         for(Player player : getOnlinePlayers()) {
             if(!BukkitUtil.isSame(player, seeker)) {
-                MessageUtil.showTitle(player, "blue"," FREEZE!!!",seeker.getName() + " is seeking you.");
+                TitleUtil.showTitle(player, "blue"," FREEZE!!!",seeker.getName() + " is seeking you.");
                 if(BukkitUtil.getOnlinePlayer(player)!=null) {
                     MessageUtil.sendInfoMessage(BukkitUtil.getOnlinePlayer(player), "Hold SHIFT to hide your name tag.");
                 }
@@ -258,21 +259,21 @@ public class HideAndSeekGame extends AbstractGame {
 
     private void sendStopSeekingMessage() {
         if(hiddenPlayers.isEmpty()) {
-                MessageUtil.showTitle((Player) seeker, "green","YOU WON", "You found all players.");
+                TitleUtil.showTitle((Player) seeker, "green","YOU WON", "You found all players.");
             }
             else {
-               MessageUtil.showTitle((Player) seeker, "red", "GAME OVER", "You found not all players.");
+               TitleUtil.showTitle((Player) seeker, "red", "GAME OVER", "You found not all players.");
             }
         for(Player player : getOnlinePlayers()) {
             if(!BukkitUtil.isSame(player,seeker)) {
                 if(hiddenPlayers.isEmpty()) {
-                    MessageUtil.showTitle(player, "red","GAME OVER", seeker.getName()+" found all players.");
+                    TitleUtil.showTitle(player, "red","GAME OVER", seeker.getName()+" found all players.");
                 }
                 else if (isHidden(player)) {
-                    MessageUtil.showTitle(player, "green","YOU WON", seeker.getName()+" found you not.");
+                    TitleUtil.showTitle(player, "green","YOU WON", seeker.getName()+" found you not.");
                 }
                 else {
-                    MessageUtil.showTitle(player, "red","GAME OVER", seeker.getName()+" found you but not all players.");
+                    TitleUtil.showTitle(player, "red","GAME OVER", seeker.getName()+" found you but not all players.");
                 }
             }
         }

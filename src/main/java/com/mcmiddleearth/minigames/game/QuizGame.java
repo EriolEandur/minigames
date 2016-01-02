@@ -7,6 +7,7 @@ package com.mcmiddleearth.minigames.game;
 
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.conversation.AskQuestionConversationFactory;
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.FreeQuestion;
@@ -15,6 +16,8 @@ import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
 import com.mcmiddleearth.minigames.quizQuestion.SingleChoiceQuestion;
 import com.mcmiddleearth.minigames.scoreboard.QuizGameScoreboard;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.TitleUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -24,7 +27,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -42,6 +47,11 @@ public class QuizGame extends AbstractGame {
 
     @Getter
     private final List<AbstractQuestion> questions = new ArrayList<>();
+    
+    private boolean randomQuestions = true;
+
+    @Getter
+    private boolean randomChoices = true;
     
     private int nextQuestion = 0;
 
@@ -74,25 +84,80 @@ public class QuizGame extends AbstractGame {
         }
     }
     
-   public void addQuestion(AbstractQuestion question) {
-        questions.add(question);
+    public void setRandom(boolean question, boolean choice) {
+        if(this.randomQuestions && !question) {
+            nextQuestion = 0;
+        }
+        this.randomQuestions = question;
+        this.randomChoices = choice;
+    }
+    
+    public void addQuestion(AbstractQuestion question, int index) {
+        if(index==-1) {
+            questions.add(question);
+Logger.getGlobal().info("add question");
+        }
+        else {
+Logger.getGlobal().info("insert question");
+            questions.add(index, question);
+            if(nextQuestion>=index) {
+                nextQuestion++;
+            }
+        }
         ((QuizGameScoreboard)getBoard()).addQuestion();
     }
     
-    public void toFirstQuestion() {
+    public void removeQuestion(int index) {
+        questions.remove(index);
+        ((QuizGameScoreboard)getBoard()).removeQuestion();
+    }
+    
+    public void resetQuestions() {
         nextQuestion = 0;
+        for(AbstractQuestion search: questions) {
+            search.setAnswered(false);
+        }
         ((QuizGameScoreboard)getBoard()).restart();
     }
     
     public boolean hasNextQuestion() {
-        return nextQuestion<questions.size();
+        for(AbstractQuestion search: questions) {
+            if(!search.isAnswered()){
+                return true;
+            }
+        }
+        return false;
+        //return nextQuestion<questions.size();
     }
     
     public AbstractQuestion getNextQuestion() {
         if(hasNextQuestion()) {
-            AbstractQuestion question = questions.get(nextQuestion);
-            nextQuestion++;
-            return question;
+            if(randomQuestions) {
+                int questionsLeft = 0;
+                for(AbstractQuestion search: questions) {
+                    if(!search.isAnswered()){
+                        questionsLeft++;
+                    }
+                }
+Logger.getGlobal().info("getnextQuestion random questions left"+ questionsLeft);            
+                int rand = (int) Math.round(Math.floor(questionsLeft*Math.random()));
+Logger.getGlobal().info("getnextQuestion random number "+ rand+" next "+nextQuestion);            
+                nextQuestion = 0;
+                while(questions.get(nextQuestion).isAnswered()) {
+                    nextQuestion++;
+Logger.getGlobal().info("getnextQuestion random search for free A "+ nextQuestion);            
+                }
+                for(int i=0; i<rand; i++) {
+                    nextQuestion++;
+Logger.getGlobal().info("getnextQuestion random next free "+ nextQuestion);            
+                    while(questions.get(nextQuestion).isAnswered()) {
+                        nextQuestion++;
+Logger.getGlobal().info("getnextQuestion random search for free B "+ nextQuestion);            
+                    }
+                }
+Logger.getGlobal().info("getnextQuestion random "+ nextQuestion);            
+            }
+            return questions.get(nextQuestion);
         }
         else { 
             return null;
@@ -102,6 +167,8 @@ public class QuizGame extends AbstractGame {
     public void sendQuestion(int answerTime) {
         if(hasNextQuestion()) {
             AbstractQuestion question = getNextQuestion();
+            nextQuestion++;
+            question.setAnswered(true);
             if(answerTime <= 0) {
                 answerTime = defaultAnswerTime;
             }
@@ -118,8 +185,55 @@ public class QuizGame extends AbstractGame {
     public void stopQuestion() {
         ((QuizGameScoreboard)getBoard()).stopQuestion();
         playersInQuestion.clear();
+        if(!hasNextQuestion()) {
+            if(!announceWinner(false)) {
+                Player manager = Bukkit.getPlayer(getManager().getUniqueId());
+                if(manager!=null) {
+                    sendManagerWinnerInfo(manager);
+                }
+            }
+        }
+    }
+
+    public boolean announceWinner(boolean allowEqual) {
+        int maxScore = 0;
+        List<Player> winner = new ArrayList<>();
+        boolean equalMaxScore = true;
+        for(Player player: getOnlinePlayers()) {
+            int score = ((QuizGameScoreboard)getBoard()).getScore(player.getName());
+            if(score>maxScore) {
+                maxScore = score;
+                winner.clear();
+                winner.add(player);
+                equalMaxScore = false;
+            }
+            else if(score == maxScore) {
+                equalMaxScore = true;
+                winner.add(player);
+            }
+        }
+        if(winner.size()>0 && (allowEqual || winner.size()==1)) {
+            for(Player player: winner) {
+                TitleUtil.showTitle(player, "gold", "Congrats","You won the quizgame");
+                String winnerNames = winner.get(0).getName();
+                for(int i=1;i<winner.size()-1;i++) {
+                    winnerNames = winnerNames + ", "+winner.get(i).getName();
+                }
+                if(winner.size()>1) {
+                    winnerNames = winnerNames + " and "+winner.get(winner.size()-1).getName();
+                }
+                TitleUtil.showTitleAll(getOnlinePlayers(), winner, "blue", "game over", winnerNames+" won the quiz.");
+                Player manager = Bukkit.getPlayer(getManager().getUniqueId());
+                if(manager!=null && !PluginData.isInGame(manager)) {
+                    TitleUtil.showTitle(manager, "blue", "game over", winnerNames+" won the quiz.");
+                }
+            }
+            return true;
+        }
+        return false;
     }
     
+
     public boolean isPlayerInQuestion() {
         return !playersInQuestion.isEmpty();
     }
@@ -144,7 +258,7 @@ public class QuizGame extends AbstractGame {
         stopQuestion();
         questions.clear();
         ((QuizGameScoreboard)getBoard()).clearQuestions();
-        toFirstQuestion();
+        resetQuestions();
     }
     
     public void saveQuestions(File file, String description) throws IOException {
@@ -216,7 +330,7 @@ public class QuizGame extends AbstractGame {
                     default:
                         throw new ParseException(ParseException.ERROR_UNEXPECTED_TOKEN);
                 }
-                addQuestion(newQuestion);
+                addQuestion(newQuestion,-1);
             }
         } catch (FileNotFoundException | ParseException ex) {
             MiniGamesPlugin.getPluginInstance().getLogger().log(Level.SEVERE, null, ex);
@@ -231,6 +345,11 @@ public class QuizGame extends AbstractGame {
             answers.add((String) answerObject);
         }
         return answers.toArray(new String[0]);
+    }
+
+    private void sendManagerWinnerInfo(Player manager) {
+        MessageUtil.sendInfoMessage(manager, "There is no single winner. You can add more questions or announce multiple winners with /game winner");
+
     }
 
 }

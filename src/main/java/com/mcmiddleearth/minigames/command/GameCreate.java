@@ -42,12 +42,15 @@ public class GameCreate extends AbstractGameCommand{
             }
             switch(type) {
                 case HIDE_AND_SEEK:
+                    PluginData.stopSpectating((Player)cs);
                     game = new HideAndSeekGame((Player) cs, args[1]);
                     break;
                 case RACE:
+                    PluginData.stopSpectating((Player)cs);
                     game = new RaceGame((Player) cs, args[1]);
                     break;
                 case LORE_QUIZ:
+                    PluginData.stopSpectating((Player)cs);
                     game = new QuizGame((Player) cs, args[1]);
                     sendQuizGameCreateMessage(cs);
                     break;

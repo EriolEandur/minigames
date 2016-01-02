@@ -51,6 +51,11 @@ public class RaceGameMarker extends AbstractGameCommand {
                     } else if(args[1].equalsIgnoreCase("checkpoint")) {
                         checkpointManager.setCheckpointMarker(args[0]);
                         sendCheckMarkerMessage(cs);
+                    } else if(args[1].equalsIgnoreCase("all")) {
+                        checkpointManager.setStartMarker(args[0]);
+                        checkpointManager.setFinishMarker(args[0]);
+                        checkpointManager.setCheckpointMarker(args[0]);
+                        sendAllMarkerMessage(cs);
                     } else {
                         sendInvalidArgumentMessage(cs);
                     }
@@ -86,7 +91,7 @@ public class RaceGameMarker extends AbstractGameCommand {
     }
     
     private void sendInvalidArgumentMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Invalid Argument. Try: /game marker start|finish|checkpoint");
+        MessageUtil.sendErrorMessage(cs, "Invalid Argument. Try: /game marker <filename> [start|finish|checkpoint|all]");
     }
 
     private void sendFileNotFoundMessage(CommandSender cs) {
@@ -99,6 +104,10 @@ public class RaceGameMarker extends AbstractGameCommand {
 
     private void sendNotWhileSteadyMessage(CommandSender cs) {
         MessageUtil.sendErrorMessage(cs, "You can't change markers while players are steady.");
+    }
+
+    private void sendAllMarkerMessage(CommandSender cs) {
+        MessageUtil.sendInfoMessage(cs, "All Markers loaded.");
     }
 
 }

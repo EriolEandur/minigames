@@ -16,6 +16,7 @@
  */
 package com.mcmiddleearth.minigames.conversation;
 
+import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.FreeQuestion;
@@ -38,8 +39,13 @@ public class AskQuestionPrompt extends MessagePrompt{
         } else if(question instanceof NumberQuestion) {
             return new EnterNumericPrompt(); 
         } else if(question instanceof ChoiceQuestion) {
-            ((ChoiceQuestion)question).toFirstChoice();
-            cc.setSessionData("Choice", 0);
+            cc.setSessionData("ChoiceIndex", 0);
+            if(((QuizGame) cc.getSessionData("game")).isRandomChoices()) {
+                cc.setSessionData("Choices", ((ChoiceQuestion)question).getInRandomOrder());
+            } 
+            else {
+                cc.setSessionData("Choices", ((ChoiceQuestion)question).getInProperOrder());
+            }
             return new ShowChoicePrompt(); 
         }
         return null;

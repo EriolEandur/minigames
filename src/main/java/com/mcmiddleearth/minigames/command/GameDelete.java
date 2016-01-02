@@ -7,8 +7,10 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.conversation.Confirmationable;
 import com.mcmiddleearth.minigames.data.PluginData;
+import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.io.File;
+import java.util.logging.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,18 +23,33 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
     private File file;
     
     public GameDelete(String... permissionNodes) {
-        super(1, true, permissionNodes);
-        setShortDescription(": Deletes saved mini games.");
+        super(2, true, permissionNodes);
+        setShortDescription(": Deletes saved minigame files.");
         setUsageDescription(": ");
     }
     
     @Override
     protected void execute(CommandSender cs, String... args) {
-            file = new File(PluginData.getQuestionDir(), args[0] + ".json");
-            if(file.exists()) {
-                PluginData.getConfirmationFactory().start((Player) cs, 
-                        "Are you sure to delete this quiz data file? There is no undo.", this);
-            }
+        if(args[0].equalsIgnoreCase("quiz")) {
+            file = new File(PluginData.getQuestionDir(), args[1] + ".json");
+        }
+        else if(args[0].equalsIgnoreCase("race")) {
+            file = new File(PluginData.getRaceDir(), args[1] + ".json");
+        }
+        else if(args[0].equalsIgnoreCase("marker")) {
+            file = new File(Checkpoint.getMarkerDir(), args[1] + "."+ Checkpoint.getMarkerExt());
+        }
+        else {
+            sendInvalidDataTypeMessage(cs);
+            return;
+        }
+        if(file.exists()) {
+            PluginData.getConfirmationFactory().start((Player) cs, 
+                    "Are you sure to delete "+file.getName()+"? There is no undo.", this);
+        }
+        else {
+            sendFileNotFoundMessage(cs);
+        }
     }
 
     @Override
@@ -48,6 +65,14 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
     @Override
     public void cancelled(Player player) {
         MessageUtil.sendInfoMessage(player, "You cancelled deleting.");
+    }
+
+    private void sendInvalidDataTypeMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "Invalid data type. Try /game delete quiz|race|marker");
+    }
+    
+    private void sendFileNotFoundMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "File not found.");
     }
     
 }

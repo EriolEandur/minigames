@@ -18,11 +18,11 @@ package com.mcmiddleearth.minigames.raceCheckpoint;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.FileUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -50,11 +50,13 @@ public class Checkpoint {
     
     private static final File restoreDir = new File(PluginData.getRaceDir(),"restoreData");
     
+    @Getter
     private static final File markerDir = new File(PluginData.getRaceDir(),"markerData");
     
-    private static final String restoreExt = ".res";
+    private static final String restoreExt = "res";
     
-    private static final String markerExt = ".mkr";
+    @Getter
+    private static final String markerExt = "mkr";
     
     private String name;
     
@@ -91,7 +93,7 @@ public class Checkpoint {
 
     public boolean isCheckLocation(Location loc) {
         for(Location search : checkLocList) {
-            if(search.getBlock()==loc.getBlock()) {
+            if(BukkitUtil.isSameBlock(search,loc)) {
                 return true;
             }
         }
@@ -106,7 +108,8 @@ public class Checkpoint {
     
     private void refreshLabel() {
         for(BlockState state: marker) {
-            if(state.getType().equals(Material.WALL_SIGN)) {
+            if(state.getType().equals(Material.WALL_SIGN) 
+                    || state.getType().equals(Material.SIGN_POST)) {
                 Sign sign = (Sign) state.getBlock().getState();
                 sign.setLine(1, label1);
                 sign.setLine(2, label2);
@@ -141,7 +144,7 @@ public class Checkpoint {
         if(!restoreDir.exists()) {
             restoreDir.mkdir();
         }
-        File restoreFile = new File(restoreDir, name+restoreExt);
+        File restoreFile = new File(restoreDir, name+"."+restoreExt);
         if(restoreFile.exists()) {
             Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "RestoreFile already exists.");
             return;
@@ -170,7 +173,7 @@ public class Checkpoint {
     }
     
     private void removeMarker() {
-        File restoreFile = new File(restoreDir, name+restoreExt);
+        File restoreFile = new File(restoreDir, name+"."+restoreExt);
         if(!restoreFile.exists()) {
             Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "RestoreFile is missing.");
             return;
@@ -214,7 +217,7 @@ public class Checkpoint {
     }
  
     private void loadMarkerFromFile(String markerName) throws FileNotFoundException {
-        File file = new File(markerDir,markerName+markerExt);
+        File file = new File(markerDir,markerName+"."+markerExt);
         if(!file.exists()) {
             throw new FileNotFoundException(markerName+".mkr file not found.");
         }
@@ -253,11 +256,11 @@ public class Checkpoint {
         if(!markerDir.exists()) {
             markerDir.mkdir();
         }
-        File file = new File(markerDir, markerName+markerExt);
+        File file = new File(markerDir, markerName+"."+markerExt);
         if(file.exists()) {
             if(!overwrite) {
                 Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "MarkerFile already exisits.");
-                throw new FileNotFoundException(markerName+markerExt+" already exists.");
+                throw new FileNotFoundException(markerName+"."+markerExt+" already exists.");
             }
             else {
                 file.delete();
@@ -286,20 +289,14 @@ public class Checkpoint {
     }
     
     public static void cleanup() {
-        FilenameFilter pFilter = new FilenameFilter() {
-            @Override
-            public boolean accept(File file, String string) {
-                return string.endsWith(restoreExt);
-            }
-        };
-        File[] files = restoreDir.listFiles(pFilter);
+        File[] files = restoreDir.listFiles(FileUtil.getFileExtFilter(restoreExt));
         for(File file: files) {
             restoreBlocks(file);
         }
     }
     
     public static boolean markerExists(String filename) {
-        return new File(markerDir,filename+markerExt).exists();
+        return new File(markerDir,filename+"."+markerExt).exists();
     }
     
     public void addIfNotInMarker(List<Location> list, Location loc) {

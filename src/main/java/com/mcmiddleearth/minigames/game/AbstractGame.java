@@ -12,7 +12,9 @@ import com.mcmiddleearth.minigames.utils.BukkitUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,6 +23,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -46,10 +50,33 @@ public abstract class AbstractGame {
     private final List<OfflinePlayer> players = new ArrayList<>();
     
     private final List<OfflinePlayer> bannedPlayers = new ArrayList<>();
+
+    private final List<OfflinePlayer> spectators = new ArrayList<>();
+    
+    private final List<OfflinePlayer> invitedPlayers = new ArrayList<>();
     
     @Getter
     private final Location warp;
     
+    @Getter
+    @Setter
+    private boolean warpAllowed = true;
+    
+    @Getter
+    @Setter
+    private boolean spectateAllowed = true;
+    
+    @Getter
+    @Setter
+    private boolean privat = false;
+    
+    @Getter
+    private boolean flightAllowed = true;
+    
+    @Getter
+    @Setter
+    private boolean teleportAllowed = true;
+   
     @Getter
     private final GameScoreboard board;
     
@@ -133,9 +160,36 @@ public abstract class AbstractGame {
     }
     
     public void addPlayer(Player player) {
+        if(!flightAllowed) {
+            player.setFlying(false);
+        }
         players.add(player);
         getBoard().incrementPlayer();
         player.setScoreboard(board.getScoreboard());
+    }
+    
+    public void addSpectator(Player player) {
+        spectators.add(player);
+        player.setScoreboard(getBoard().getScoreboard());
+    }
+    
+    public void removeSpectator(Player player) {
+        for(OfflinePlayer search: spectators) {
+            if(BukkitUtil.isSame(search, player)) {
+                spectators.remove(search);
+                player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+                return;
+            }
+        }
+    }
+    
+    public boolean isSpectating(Player player) {
+        for(OfflinePlayer search: spectators) {
+            if(BukkitUtil.isSame(search, player)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     public void removePlayer(OfflinePlayer player) {
@@ -181,6 +235,9 @@ public abstract class AbstractGame {
     public void playerJoinServer(PlayerJoinEvent event) {
         event.getPlayer().setScoreboard(board.getScoreboard());
         getBoard().incrementPlayer();
+        if(!flightAllowed) {
+            event.getPlayer().setFlying(false);
+        }
     }
     
     public void playerLeaveServer(PlayerQuitEvent event) {
@@ -219,6 +276,21 @@ public abstract class AbstractGame {
         }
     }
     
+    public void playerTeleport(PlayerTeleportEvent event) {
+        if(!teleportAllowed) {
+            event.setCancelled(true);
+        }
+    }
+    
+    public void playerToggleFlight(PlayerToggleFlightEvent event) {
+        if(!flightAllowed) {
+            event.getPlayer().setFlying(false);
+Logger.getGlobal().info("ToggleFlight");
+            event.setCancelled(true);
+        }
+    }
+    
+    
     public boolean joinAllowed() {
         return announced;
     }
@@ -227,13 +299,31 @@ public abstract class AbstractGame {
         announced = true;
         sendAnnounceGameMessage();
     }
+    
+    public boolean isInvited(OfflinePlayer player) {
+        return BukkitUtil.getOfflinePlayer(invitedPlayers, player)!=null;
+    }
+    
+    public void invite(OfflinePlayer player) {
+        invitedPlayers.add(player);
+    }
+    
+    public void setFlightAllowed(boolean allowed) {
+        if(this.flightAllowed && !allowed)  {
+            flightAllowed = false;
+            for(Player player : getOnlinePlayers()) {
+                player.setFlying(false);
+            }
+        }
+        flightAllowed = false;
+    }
 
     public String getGameChatTag(Player player) {
         if(PluginData.isManager(player)) {
             return ChatColor.DARK_AQUA + "<Manager "; 
         }
         else {
-            return ChatColor.BLUE + "<Player "; 
+            return ChatColor.BLUE + "<Participant "; 
         }
     }
     

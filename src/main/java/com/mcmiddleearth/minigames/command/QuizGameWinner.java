@@ -5,7 +5,6 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
@@ -17,9 +16,9 @@ import org.bukkit.entity.Player;
  *
  * @author Eriol_Eandur
  */
-public class QuizGameRestart extends AbstractGameCommand{
+public class QuizGameWinner extends AbstractGameCommand{
     
-    public QuizGameRestart(String... permissionNodes) {
+    public QuizGameWinner(String... permissionNodes) {
         super(0, true, permissionNodes);
         setShortDescription(": ");
         setUsageDescription(": ");
@@ -31,13 +30,13 @@ public class QuizGameRestart extends AbstractGameCommand{
         if(game != null && isManager((Player) cs, game) 
                         && isCorrectGameType((Player) cs, game, GameType.LORE_QUIZ)) {
             QuizGame quizGame = (QuizGame) game;
-            quizGame.resetQuestions();
-            sendResetGameMessage(cs);
+            if(!quizGame.announceWinner(true)) {
+                sendNoWinnerMessage(cs);
+            }
         }
     }
 
-    private void sendResetGameMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You restarted the Lore Quiz.");
+    private void sendNoWinnerMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "There is no winner.");
     }
-    
 }

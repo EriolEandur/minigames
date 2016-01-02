@@ -8,6 +8,7 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,7 +31,20 @@ public class GameKick extends AbstractGameCommand{
         if(game != null && isManager((Player) cs, game)) {
             OfflinePlayer player = game.getPlayer(args[0]);
             if(player==null) {
-                sendNoPlayerFoundMessage(cs);
+                Player spectator = Bukkit.getPlayer(args[0]);
+                if(!game.isSpectating(spectator)) {
+                    sendNoPlayerFoundMessage(cs);
+                }
+                else {
+                    game.removeSpectator(spectator);
+                    sendSpectatorRemovedMessage(cs, spectator, game);
+                    if(args.length>1) {
+                        sendKickedPlayerMessage(spectator, cs, " for "+args[1]);
+                    }
+                    else {
+                        sendKickedPlayerMessage(spectator, cs, "");
+                    }
+                }
             } else {
                 game.removePlayer(player);
                 sendPlayerRemovedMessage(cs, player, game);
@@ -59,6 +73,11 @@ public class GameKick extends AbstractGameCommand{
     private void sendKickedPlayerMessage(Player player, CommandSender kicker, String arg) {
         MessageUtil.sendInfoMessage(player, "You were kicked from the game by " 
                                            + kicker.getName()+arg+".");
+    }
+
+    private void sendSpectatorRemovedMessage(CommandSender cs, OfflinePlayer player, AbstractGame game) {
+        MessageUtil.sendInfoMessage(cs, "You kicked spectator "+player.getName()+" from game.");
+        MessageUtil.sendAllInfoMessage(cs, game, "Spectator " + player.getName() +" was removed from this game.");
     }
     
  }

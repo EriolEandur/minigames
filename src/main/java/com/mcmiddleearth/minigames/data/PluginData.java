@@ -9,9 +9,9 @@ import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.conversation.ConfirmationFactory;
 import com.mcmiddleearth.minigames.conversation.CreateQuestionConversationFactory;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.game.RaceGame;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +133,25 @@ public class PluginData {
             }
         }
        return true;
+    }
+    
+    public static void stopSpectating(Player player) {
+        for(AbstractGame game: games) {
+            if(game.isSpectating(player)) {
+                MessageUtil.sendAllInfoMessage(player, game, player.getName()+" stopped spectating.");
+                game.removeSpectator(player);
+                return;
+            }
+        }
+    }
+    
+    public static boolean isSpectating(Player player) {
+        for(AbstractGame game: games) {
+            if(game.isSpectating(player)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     public static void cleanup() {

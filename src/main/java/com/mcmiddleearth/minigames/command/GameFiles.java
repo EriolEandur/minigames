@@ -7,10 +7,11 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
+import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
+import com.mcmiddleearth.minigames.utils.FileUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.util.Scanner;
 import java.util.logging.Level;
 import org.bukkit.command.CommandSender;
@@ -32,18 +33,15 @@ public class GameFiles extends AbstractCommand{
     
     @Override
     protected void execute(CommandSender cs, String... args) {
-        FilenameFilter pFilter = new FilenameFilter() {
-            @Override
-            public boolean accept(File file, String string) {
-                return string.endsWith(".json");
-            }
-        };
         File[] files;
         if(args[0].equalsIgnoreCase("quiz")) {
-            files = PluginData.getQuestionDir().listFiles(pFilter);
+            files = PluginData.getQuestionDir().listFiles(FileUtil.getFileExtFilter("json"));
         }
         else if(args[0].equalsIgnoreCase("race")) {
-            files = PluginData.getRaceDir().listFiles(pFilter);
+            files = PluginData.getRaceDir().listFiles(FileUtil.getFileExtFilter("json"));
+        }
+        else if(args[0].equalsIgnoreCase("marker")) {
+            files = Checkpoint.getMarkerDir().listFiles(FileUtil.getFileExtFilter(Checkpoint.getMarkerExt()));
         }
         else {
             sendInvalidDataTypeMessage(cs);
@@ -71,18 +69,23 @@ public class GameFiles extends AbstractCommand{
     }
     
     private String getDescription(File file) {
-        try {
-            String input;
-            try (Scanner reader = new Scanner(file)) {
-                input = "";
-                while(reader.hasNext()){
-                    input = input+reader.nextLine();
+        if(file.getName().endsWith("json")) {
+            try {
+                String input;
+                try (Scanner reader = new Scanner(file)) {
+                    input = "";
+                    while(reader.hasNext()){
+                        input = input+reader.nextLine();
+                    }
                 }
+                JSONObject jInput = (JSONObject) new JSONParser().parse(input);
+                return (String) jInput.get("description");
+            } catch (FileNotFoundException | ParseException ex) {
+                MiniGamesPlugin.getPluginInstance().getLogger().log(Level.SEVERE, null, ex);
+                return "";
             }
-            JSONObject jInput = (JSONObject) new JSONParser().parse(input);
-            return (String) jInput.get("description");
-        } catch (FileNotFoundException | ParseException ex) {
-            MiniGamesPlugin.getPluginInstance().getLogger().log(Level.SEVERE, null, ex);
+        }
+        else {
             return "";
         }
     }

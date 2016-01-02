@@ -37,7 +37,18 @@ class EnterMultipleChoicesPrompt extends ValidatingPrompt {
 
     @Override
     protected Prompt acceptValidatedInput(ConversationContext cc, String string) {
-        cc.setSessionData("answer", string);
+        if((boolean) cc.getSessionData("createQuestion")) {
+            cc.setSessionData("answer", string);
+        }
+        else {
+            Character[] answerLetters = ChoiceQuestion.parseAnswer(string);
+            String answer = "";
+            for (Character answerLetter : answerLetters) {
+                int answerIndex = ChoiceQuestion.getAnswerIndex(answerLetter);
+                answer = answer+((String[])cc.getSessionData("Choices"))[answerIndex].charAt(0);
+            }
+            cc.setSessionData("answer", answer);
+        }
         return END_OF_CONVERSATION;
     }
     

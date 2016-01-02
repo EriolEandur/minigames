@@ -17,9 +17,9 @@ import org.bukkit.entity.Player;
  *
  * @author Eriol_Eandur 
  */
-public class HaSGameStart extends AbstractGameCommand{
+public class HaSGameHide extends AbstractGameCommand{
     
-    public HaSGameStart(String... permissionNodes) {
+    public HaSGameHide(String... permissionNodes) {
         super(1, true, permissionNodes);
         setShortDescription(": ");
         setUsageDescription(": ");

@@ -35,7 +35,7 @@ public class GameCommandExecutor implements CommandExecutor {
         addCommandHandler("ban", new GameBan("minigames.manager"));
         addCommandHandler("unban", new GameUnban("minigames.manager"));
         addCommandHandler("manager", new GameManager("minigames.manager"));
-        addCommandHandler("start", new HaSGameStart("minigames.manager"));
+        addCommandHandler("hide", new HaSGameHide("minigames.manager"));
         addCommandHandler("seeker", new HaSGameSeeker("minigames.manager"));
         addCommandHandler("question", new QuizGameQuestion("minigames.manager"));
         addCommandHandler("send", new QuizGameSend("minigames.manager"));
@@ -43,7 +43,7 @@ public class GameCommandExecutor implements CommandExecutor {
         addCommandHandler("restart", new QuizGameRestart("minigames.manager"));
         addCommandHandler("savequiz", new QuizGameSave("minigames.manager"));
         addCommandHandler("loadquiz", new QuizGameLoad("minigames.manager"));
-        addCommandHandler("delete", new GameDelete("minigames.manager"));
+        addCommandHandler("delete", new GameDelete("minigames.staff"));
         addCommandHandler("clear", new QuizGameClear("minigames.manager"));
         addCommandHandler("files", new GameFiles("minigames.manager"));
         addCommandHandler("set", new RaceGameSet("minigames.manager"));
@@ -52,9 +52,16 @@ public class GameCommandExecutor implements CommandExecutor {
         addCommandHandler("marker", new RaceGameMarker("minigames.manager"));
         addCommandHandler("saverace", new RaceGameSave("minigames.manager"));
         addCommandHandler("loadrace", new RaceGameLoad("minigames.manager"));
-        addCommandHandler("steady", new RaceGameSteady("minigames.manager"));
+        addCommandHandler("start", new RaceGameStart("minigames.manager"));
         addCommandHandler("stop", new RaceGameStop("minigames.manager"));
         addCommandHandler("warp", new GameWarp("minigames.user"));
+        addCommandHandler("show", new RaceGameShow("minigames.manager"));
+        addCommandHandler("allow", new GameAllow("minigames.manager"));
+        addCommandHandler("deny", new GameDeny("minigames.manager"));
+        addCommandHandler("invite", new GameInvite("minigames.manager"));
+        addCommandHandler("spectate", new GameSpectate("minigames.user"));
+        addCommandHandler("winner", new QuizGameWinner("minigames.manager"));
+        addCommandHandler("random", new QuizGameRandom("minigames.manager"));
     }
     
     @Override

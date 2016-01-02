@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 MCME
+ * Copyright (C) 2016 MCME
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,31 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.quizQuestion;
+package com.mcmiddleearth.minigames.utils;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.io.File;
+import java.io.FilenameFilter;
 
 /**
  *
  * @author Eriol_Eandur
  */
-public abstract class AbstractQuestion {
-    
-    @Getter
-    private final String question;
-    
-    @Getter
-    private final QuestionType type;
-    
-    @Getter
-    @Setter
-    private boolean answered = false;
-    
-    public AbstractQuestion(String question, QuestionType type) {
-        this.question = question;
-        this.type = type;
+public class FileUtil {
+ 
+    public static FilenameFilter getFileExtFilter(final String extension) {
+        return new FilenameFilter () {
+            @Override
+            public boolean accept(File file, String string) {
+                return string.endsWith("."+extension);
+            }
+        };
     }
-    
-    public abstract boolean isCorrectAnswer(String answer);
+
 }

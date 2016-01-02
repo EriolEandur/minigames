@@ -40,15 +40,17 @@ public class CheckpointManager {
     
     String gameName;
    
-    public static final int FAR_DISTANCE = 18;
+    public static final int FAR_DISTANCE = 21;
     
-    public static final int NEAR_DISTANCE = 8;
+    public static final int NEAR_DISTANCE = 10;
  
     @Getter
     private Checkpoint start;
     
+    @Getter
     private Checkpoint finish;
     
+    @Getter
     private final LinkedList<Checkpoint> checkpoints = new LinkedList<>();
     
     private String checkpointMarker, startMarker, finishMarker;
@@ -225,6 +227,14 @@ public class CheckpointManager {
     
     private static int idFromIndex(int index) {
         return index+1;
+    }
+    
+    public int getId(Checkpoint check) {
+        return idFromIndex(checkpoints.indexOf(check));
+    }
+    
+    public Checkpoint getCheckpoint(int id) {
+        return checkpoints.get(indexFromId(id));
     }
     
     private String nextCheckpointName() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Lars
+ * Copyright (C) 2015 MCME
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,8 +94,20 @@ public class QuizGameScoreboard extends GameScoreboard{
         score.setScore(score.getScore()+1);
     }
     
+    public int getScore(String playerName) {
+        return quizObjective.getScore(playerName).getScore();
+    }
+    
     public void addQuestion() {
         questionCount++;
+        setQuestionDisplay();
+    }
+    
+    public void removeQuestion() {
+        questionCount--;
+        if(currentQuestion>questionCount) {
+            currentQuestion = questionCount;
+        }
         setQuestionDisplay();
     }
     

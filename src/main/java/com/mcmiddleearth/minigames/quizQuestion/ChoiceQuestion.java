@@ -18,6 +18,7 @@ package com.mcmiddleearth.minigames.quizQuestion;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import lombok.Getter;
 
 /**
@@ -32,14 +33,10 @@ public class ChoiceQuestion extends AbstractQuestion {
     
     protected final boolean[] correctAnswers = new boolean[answerCount];
     
-    private int nextChoice = 0;
-    
     public final static int answerCount = 4;
     
     public ChoiceQuestion(String question, String[] answers, String correctAnswers) {
-        super(question, QuestionType.MULTI);
-        this.answers = answers;
-        setCorrectAnswers(correctAnswers);
+        this(question, QuestionType.MULTI, answers, correctAnswers);
     }
 
     protected ChoiceQuestion(String question, QuestionType type, String[] answers, String correctAnswers) {
@@ -48,18 +45,31 @@ public class ChoiceQuestion extends AbstractQuestion {
         setCorrectAnswers(correctAnswers);
     }
 
-    public void toFirstChoice() {
-        nextChoice = 0;
+    public String[] getInRandomOrder() {
+        String[] result = new String[answerCount];
+        for(int i = 0; i< answerCount; i++) {
+            int rand = (int) Math.round(Math.floor(answerCount*Math.random()));
+Logger.getGlobal().info("inrandomOrder "+ rand);            
+            while(result[rand]!=null) {
+Logger.getGlobal().info("inrandomOrder search"+ rand);            
+                rand++;
+                if(rand==answerCount) {
+                    rand=0;
+Logger.getGlobal().info("inrandomOrder to first "+ rand);            
+                }
+            }
+Logger.getGlobal().info("inrandomOrder finised "+ rand);            
+            result[rand]=getAnswerCharacter(i)+answers[i];
+        }
+        return result;
     }
     
-    public boolean hasNextChoice() {
-        return nextChoice<answerCount;
-    }
-    
-    public String getNextChoice() {
-        String choice = answers[nextChoice];
-        nextChoice++;
-        return choice;
+    public String[] getInProperOrder() {
+        String[] result = new String[answerCount];
+        for(int i=0; i<answerCount;i++) {
+            result[i] = getAnswerCharacter(i)+answers[i];
+        }
+        return result;
     }
     
     public void setCorrectAnswers(String correctLetters) {
@@ -82,7 +92,7 @@ public class ChoiceQuestion extends AbstractQuestion {
         return result;
     }
     
-    private static int getAnswerIndex(char answer) {
+    public static int getAnswerIndex(char answer) {
         switch(answer) {
             case 'A': case'a': 
                 return 0;
@@ -150,12 +160,16 @@ public class ChoiceQuestion extends AbstractQuestion {
     
     @Override
     public boolean isCorrectAnswer(String answer) {
+        return isCorrectAnswer(parseAnswer(answer));
+    }
+    
+    public static Character[] parseAnswer(String answer) {
         answer = answer.trim();
         List<Character> answerList = new ArrayList<>();
         while(answer.length()>0) {
             answerList.add(answer.charAt(0));
             answer = answer.substring(1).trim();
         }
-        return isCorrectAnswer(answerList.toArray(new Character[0]));
+        return answerList.toArray(new Character[0]);
     }
 }

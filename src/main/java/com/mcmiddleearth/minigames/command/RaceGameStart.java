@@ -16,9 +16,9 @@ import org.bukkit.entity.Player;
  *
  * @author Eriol_Eandur
  */
-public class RaceGameSteady extends AbstractGameCommand{
+public class RaceGameStart extends AbstractGameCommand{
     
-    public RaceGameSteady(String... permissionNodes) {
+    public RaceGameStart(String... permissionNodes) {
         super(0, true, permissionNodes);
         setShortDescription(": ");
         setUsageDescription(": ");

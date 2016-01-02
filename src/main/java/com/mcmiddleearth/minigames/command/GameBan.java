@@ -46,6 +46,9 @@ public class GameBan extends AbstractGameCommand{
                 }
                 else {
                     game.removePlayer(player);
+                    if(player instanceof Player) {
+                        game.removeSpectator((Player) player);
+                    }
                     game.setBanned(player);
                     sendPlayerBannedMessage(cs, player, game);
                     Player bannedPlayer = BukkitUtil.getOnlinePlayer(player);

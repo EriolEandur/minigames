@@ -31,7 +31,7 @@ class ShowChoicePrompt extends MessagePrompt {
     @Override
     protected Prompt getNextPrompt(ConversationContext cc) {
         ChoiceQuestion question = (ChoiceQuestion)cc.getSessionData("question");
-        if(question.hasNextChoice()) {
+        if((Integer) cc.getSessionData("ChoiceIndex")<((String[]) cc.getSessionData("Choices")).length) {
             return new ShowChoicePrompt();
         }
         else if(question instanceof SingleChoiceQuestion) {
@@ -45,10 +45,10 @@ class ShowChoicePrompt extends MessagePrompt {
     @Override
     public String getPromptText(ConversationContext cc) {
         ChoiceQuestion question = ((ChoiceQuestion)cc.getSessionData("question"));
-        int choiceIndex = (Integer) cc.getSessionData("Choice");
-        cc.setSessionData("Choice", choiceIndex+1);
+        int choiceIndex = (Integer) cc.getSessionData("ChoiceIndex");
+        cc.setSessionData("ChoiceIndex", choiceIndex+1);
         return "["+ChoiceQuestion.getAnswerCharacter(choiceIndex)+"] "
-                + question.getNextChoice();
+                + ((String[])cc.getSessionData("Choices"))[choiceIndex].substring(1);
     }
 
 }

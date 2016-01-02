@@ -15,51 +15,46 @@ import org.bukkit.entity.Player;
  *
  * @author Eriol_Eandur
  */
-public class GameJoin extends AbstractGameCommand{
+public class GameSpectate extends AbstractGameCommand{
     
-    public GameJoin(String... permissionNodes) {
+    public GameSpectate(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": Joins a mini game.");
+        setShortDescription(": Spectate at a mini game.");
         setUsageDescription(": ");
     }
     
     @Override
     protected void execute(CommandSender cs, String... args) {
-        if(!isAlreadyInGame((Player)cs)) {
+        if(args[0].equalsIgnoreCase("!off")) {
+            PluginData.stopSpectating((Player)cs);
+        }
+        if(!isAlreadyInGame((Player)cs) && !isAlreadyManager((Player) cs)) {
             AbstractGame game = PluginData.getGame(args[0]);
             if(game == null) {
                 sendNoSuchGameErrorMessage(cs);
             }
             else {
-                if(isAlreadyManagerOfOtherGame((Player) cs, game)) {
-                    return;
-                }
                 if(game.isBanned((Player) cs)) {
                     sendPlayerBannedMessage(cs);
                 }
                 else {
-                    if(game.joinAllowed()) {
-                        if(game.isPrivat() && !game.isInvited((Player) cs)) {
-                            sendNotInvitedMessage(cs);
-                            return;
-                        }
-                        PluginData.stopSpectating((Player)cs);
-                        game.addPlayer((Player) cs);
+                    if(game.isSpectateAllowed()) {
+                        game.addSpectator((Player) cs);
                         PluginData.setGameChat((Player) cs,true);
-                        sendPlayerJoinMessage(cs, game);
+                        sendPlayerSpectatesMessage(cs, game);
                     }
                     else {
-                        sendJoinNotAllowedMessage(cs);
+                        sendSpectateNotAllowedMessage(cs);
                     }
                 }
             }
         }
     }
     
-    public void sendPlayerJoinMessage(CommandSender cs, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs, "You joined the minigame "+ game.getName()
+    public void sendPlayerSpectatesMessage(CommandSender cs, AbstractGame game) {
+        MessageUtil.sendInfoMessage(cs, "You now spectates at the minigame "+ game.getName()
                                    +". Please use the game chat whith /gc <message>");
-        MessageUtil.sendAllInfoMessage(cs, game, cs.getName()+" joined the game.");
+        MessageUtil.sendAllInfoMessage(cs, game, cs.getName()+" now spectates at the game.");
     }
 
     public void sendNoSuchGameErrorMessage(CommandSender cs) {
@@ -70,12 +65,8 @@ public class GameJoin extends AbstractGameCommand{
         MessageUtil.sendErrorMessage(cs, "You are banned from this minigame.");
     }
 
-    private void sendJoinNotAllowedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You can't join this game at the moment, try later.");
-    }
-
-    private void sendNotInvitedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "The game is private. You can ask the manager to invite you.");
+    private void sendSpectateNotAllowedMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "It is not allowed to spectate at this game.");
     }
 
  }
