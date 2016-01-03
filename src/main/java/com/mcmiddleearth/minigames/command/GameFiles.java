@@ -27,8 +27,8 @@ public class GameFiles extends AbstractCommand{
     
     public GameFiles(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": Lists all saved game files.");
-        setUsageDescription(": ");
+        setShortDescription(": Lists all saved game data files.");
+        setUsageDescription(" quiz|race|marker: Lists all quiz or race or marker data files. For quiz and race data files a descripion of the saved data will be shown.");
     }
     
     @Override

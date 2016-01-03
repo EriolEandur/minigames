@@ -5,10 +5,7 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.game.GameType;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -20,8 +17,8 @@ public class GameReady extends AbstractGameCommand{
     
     public GameReady(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": Announces a mini game.");
-        setUsageDescription(": ");
+        setShortDescription(": Announces a game.");
+        setUsageDescription(": Announces a game which is sending a message to all online players.");
     }
     
     @Override

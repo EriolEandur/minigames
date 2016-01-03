@@ -20,7 +20,7 @@ public class GameJoin extends AbstractGameCommand{
     public GameJoin(String... permissionNodes) {
         super(1, true, permissionNodes);
         setShortDescription(": Joins a mini game.");
-        setUsageDescription(": ");
+        setUsageDescription(" <gamename>: The player issuing this command joins the game with name <gamename>.");
     }
     
     @Override

@@ -25,7 +25,7 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
     public GameDelete(String... permissionNodes) {
         super(2, true, permissionNodes);
         setShortDescription(": Deletes saved minigame files.");
-        setUsageDescription(": ");
+        setUsageDescription(" quiz|race|marker <filename>: Deletes a quiz or race or marker data file with name <filename>.");
     }
     
     @Override

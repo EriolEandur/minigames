@@ -7,7 +7,6 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -19,8 +18,8 @@ public class GameAllow extends AbstractGameCommand{
     
     public GameAllow(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": Allows warping and spectating a game.");
-        setUsageDescription(": ");
+        setShortDescription(": Allows various actions for a game.");
+        setUsageDescription(" flight|teleport|join|warp|spectate: flight/teleport allows for players in the game to fly or teleport. join allows players to join without invitation. warp allows player to warp to game location. spectate allows players to see scoreboard of the game without participating.");
     }
     
     @Override

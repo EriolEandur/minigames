@@ -20,7 +20,7 @@ public class GameLeave extends AbstractGameCommand{
     public GameLeave(String... permissionNodes) {
         super(0, true, permissionNodes);
         setShortDescription(": Leaves a mini game.");
-        setUsageDescription(": ");
+        setUsageDescription(": The player issuing the command leaves the game he is participating.");
     }
     
     @Override

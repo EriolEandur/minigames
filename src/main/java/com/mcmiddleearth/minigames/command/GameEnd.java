@@ -22,8 +22,8 @@ public class GameEnd extends AbstractGameCommand{
     
     public GameEnd(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": Ends a mini game.");
-        setUsageDescription(": ");
+        setShortDescription(": Ends a game.");
+        setUsageDescription(": Ends the curent game of the player issuing this command.");
     }
     
     @Override

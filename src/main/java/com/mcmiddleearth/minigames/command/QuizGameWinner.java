@@ -20,8 +20,8 @@ public class QuizGameWinner extends AbstractGameCommand{
     
     public QuizGameWinner(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Announces the winner of a quiz game.");
+        setUsageDescription(": Announces the winner of a quiz game. If two or more player have same score after last question, a winner will not be announced automaticall. The manager can add more questions or announce multiple winners with this command.");
     }
     
     @Override

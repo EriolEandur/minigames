@@ -20,8 +20,8 @@ public class RaceGameStop extends AbstractGameCommand{
     
     public RaceGameStop(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Stops a race.");
+        setUsageDescription(": Aborts a already started race. Useful when there is a problem with a checkpoint or to let some other players join the race. Race can be started again.");
     }
     
     @Override

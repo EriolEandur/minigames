@@ -21,8 +21,8 @@ public class HaSGameHide extends AbstractGameCommand{
     
     public HaSGameHide(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Starts a round of Hide and Seek.");
+        setUsageDescription(" <radius> [seektime] [hidetime]: The number <radius> determines the size of a sphere which cages the players. When no [seektime] in seconds is given seek time is 300 sec by default. Without a given [hidetime] in seconds, time for hiding is 60 sec.");
     }
     
     @Override

@@ -26,8 +26,8 @@ public class RaceGameSaveMarker extends AbstractCommand implements Confirmationa
     
     public RaceGameSaveMarker(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Creates and saves a race marker to file.");
+        setUsageDescription(" <filename>: Creates and saves a race marker to file <filename>. All non-Air blocks within 10 blocks radius of the player who issues the command are saved to the marker. Use Netherrack for check locations. A racing player needs to move to a check location to be registered at the location. Signs will be labeled for races.");
     }
     
     @Override

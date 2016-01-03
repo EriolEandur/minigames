@@ -21,8 +21,8 @@ public class RaceGameSet extends AbstractGameCommand{
     
     public RaceGameSet(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Defines a race game location.");
+        setUsageDescription(" start|finish|checkpoint [checkpointID] [-i]: With argument start or finish defines the start or finish of the game. With argument checkpoint defines a race checkpoint which racing players have to visit in proper order. Without further arguments after 'checkpoint' a new checkpoint is added after the last existing checkpoint. With argument 'checkpointID' the checkpoint with that ID is moved to your location. With additional optioin '-i' a new checkpoint is inserted in front of the checkpoint with ID 'checkpointID'.");
     }
     
     @Override

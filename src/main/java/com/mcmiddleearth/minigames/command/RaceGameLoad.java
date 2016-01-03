@@ -24,8 +24,8 @@ public class RaceGameLoad extends AbstractGameCommand{
     
     public RaceGameLoad(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Loads a race from data file.");
+        setUsageDescription(" <filename>: Loads race locations and markers from the file <filename>.");
     }
     
     @Override

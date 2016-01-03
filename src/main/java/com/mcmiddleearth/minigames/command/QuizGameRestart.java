@@ -5,7 +5,6 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
@@ -21,8 +20,8 @@ public class QuizGameRestart extends AbstractGameCommand{
     
     public QuizGameRestart(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Restarts a quiz game.");
+        setUsageDescription(": Restarts a quiz game which is resetting all scores and marking all questions as not answered.");
     }
     
     @Override

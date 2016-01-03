@@ -21,8 +21,8 @@ public class GameKick extends AbstractGameCommand{
     
     public GameKick(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Kicks a player from a game.");
+        setUsageDescription(" <player>: Removes <player> from a game, he may join again.");
     }
     
     @Override

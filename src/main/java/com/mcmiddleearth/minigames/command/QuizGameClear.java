@@ -21,8 +21,8 @@ public class QuizGameClear extends AbstractGameCommand{
     
     public QuizGameClear(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Removes all questions from a quiz game.");
+        setUsageDescription(": Removes all questions from a quiz game.");
     }
     
     @Override

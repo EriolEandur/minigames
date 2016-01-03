@@ -22,8 +22,8 @@ public class HaSGameSeeker extends AbstractGameCommand{
     
     public HaSGameSeeker(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Appoints the seeker for the next round.");
+        setUsageDescription(" <player>: Appoints <player> to be next seeker. Without using this command seeker will be randomly chosen from all players.");
     }
     
     @Override

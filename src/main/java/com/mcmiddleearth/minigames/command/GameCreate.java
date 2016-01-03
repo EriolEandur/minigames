@@ -24,7 +24,7 @@ public class GameCreate extends AbstractGameCommand{
     public GameCreate(String... permissionNodes) {
         super(2, true, permissionNodes);
         setShortDescription(": Creates a new mini game.");
-        setUsageDescription(": ");
+        setUsageDescription(" quiz|race|hide <gamename>: Creates a lore quiz or a race or a hide and seek game with name <gamename>. The location of the player issuing the command becomes the warp of the game.");
     }
     
     @Override

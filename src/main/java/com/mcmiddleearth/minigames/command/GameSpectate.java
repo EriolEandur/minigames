@@ -19,8 +19,8 @@ public class GameSpectate extends AbstractGameCommand{
     
     public GameSpectate(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": Spectate at a mini game.");
-        setUsageDescription(": ");
+        setShortDescription(": Spectate at a game.");
+        setUsageDescription(" <gamename>: Switches on spectating a game wich is watching the game scoreboard.");
     }
     
     @Override

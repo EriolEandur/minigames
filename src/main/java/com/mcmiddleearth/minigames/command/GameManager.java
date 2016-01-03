@@ -19,8 +19,8 @@ public class GameManager extends AbstractGameCommand{
     
     public GameManager(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Makes another player manager of a game.");
+        setUsageDescription(" <player>: Makes <player> new manager of the game. <player> must have game manager permission.");
     }
     
     @Override

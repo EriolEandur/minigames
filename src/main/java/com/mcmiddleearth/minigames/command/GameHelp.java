@@ -19,8 +19,8 @@ public class GameHelp extends AbstractCommand{
     
     public GameHelp(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Displays help.");
+        setUsageDescription(" [subcommand]: Without argument displays short descriptions about all subcommands. With argument displays detailed help about that subcomman.");
     }
     
     @Override

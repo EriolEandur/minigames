@@ -21,8 +21,8 @@ public class GameBan extends AbstractGameCommand{
     
     public GameBan(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Bans a player from a game.");
+        setUsageDescription(" <player>: Bans the player from the current game. He will not be able to rejoin or spectate at the game.");
     }
     
     @Override

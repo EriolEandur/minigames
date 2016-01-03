@@ -32,8 +32,8 @@ public class RaceGameSave extends AbstractGameCommand implements Confirmationabl
     
     public RaceGameSave(String... permissionNodes) {
         super(2, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Saves a race to file.");
+        setUsageDescription(" <filename> <description>: Saves the race locations with the assigned marker names and a <description> to file <filename>.");
     }
     
     @Override

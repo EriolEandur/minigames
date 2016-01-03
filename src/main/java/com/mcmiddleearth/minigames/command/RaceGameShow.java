@@ -20,8 +20,8 @@ public class RaceGameShow extends AbstractGameCommand{
     
     public RaceGameShow(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Shows rankings for a race.");
+        setUsageDescription(" [start|finish|checkpointID]: 'start' shows the starter list to all participating and spectating players. 'finish' shows the final ranking of the game. An numeric argument shows the intermediate ranking at the checkpoin with checkpointID.");
     }
     
     @Override

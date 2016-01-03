@@ -21,8 +21,8 @@ public class QuizGameSend extends AbstractGameCommand{
     
     public QuizGameSend(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Sends the next question.");
+        setUsageDescription(" [answerTime]: Sends the next question to all participating players. Without a given [answerTime] players will have 60 sec to answer.");
     }
     
     @Override

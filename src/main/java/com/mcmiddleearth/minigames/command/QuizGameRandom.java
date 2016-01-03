@@ -21,8 +21,8 @@ public class QuizGameRandom extends AbstractGameCommand{
     
     public QuizGameRandom(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Defines the order of questions.");
+        setUsageDescription(" off|questions|choices|all: 'off' will set all questions and choices to be shown in saved order. 'questions' will show questions in random order. 'choices' will show possibl answers for a question in random order. 'all' or just no argument will show questions and choices in random order");
     }
     
     @Override
@@ -35,11 +35,11 @@ public class QuizGameRandom extends AbstractGameCommand{
                 quizGame.setRandom(false, false);
                 sendRandomOffMessage(cs);
             }
-            else if(args[0].equalsIgnoreCase("questions")) {
+            else if(args.length>0 && args[0].equalsIgnoreCase("questions")) {
                 quizGame.setRandom(true,false); 
                 sendRandomQuestionsMessage(cs);
             }
-            else if(args[0].equalsIgnoreCase("choices")) {
+            else if(args.length>0 && args[0].equalsIgnoreCase("choices")) {
                 quizGame.setRandom(false,true); 
                 sendRandomChoicesMessage(cs);
             }

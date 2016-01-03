@@ -28,8 +28,8 @@ public class QuizGameLoad extends AbstractGameCommand{
     
     public QuizGameLoad(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Loads questions from a quiz data file.");
+        setUsageDescription(" <filename>: Loads all questions from the file <filename>. The questions will be appended to the existing questions.");
     }
     
     @Override

@@ -19,8 +19,8 @@ public class GameInfo extends AbstractGameCommand{
     
     public GameInfo(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Displays informations about a game.");
+        setUsageDescription(": Displays the manager and the number of players participating a game.");
     }
     
     @Override

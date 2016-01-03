@@ -21,8 +21,8 @@ public class RaceGameRemove extends AbstractGameCommand{
     
     public RaceGameRemove(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Removes a race checkpoint.");
+        setUsageDescription(" [checkpointID]: Removes the race checkpoint with [checkpointID]. Without argument attempts to remove a nearby (10 blocks) checkpoint.");
     }
     
     @Override

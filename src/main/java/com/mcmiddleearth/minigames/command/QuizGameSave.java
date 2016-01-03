@@ -32,8 +32,8 @@ public class QuizGameSave extends AbstractGameCommand implements Confirmationabl
     
     public QuizGameSave(String... permissionNodes) {
         super(2, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Saves questions to file.");
+        setUsageDescription(" <filename> <description>: Saves all questions of the game to file <filename>. A <description> will be saved with the questions.");
     }
     
     @Override

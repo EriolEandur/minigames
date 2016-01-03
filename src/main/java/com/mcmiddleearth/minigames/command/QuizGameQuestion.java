@@ -24,8 +24,8 @@ public class QuizGameQuestion extends AbstractGameCommand{
     
     public QuizGameQuestion(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Manipulates questions of a quiz game.");
+        setUsageDescription(" single|multi|free|number|list|remove [questionID]: Arguments single, multi, free and number will initiate a conversation to create a new question, wich will be added to the quiz. Argument 'remove' will delete the questions number [questionID]. Argument list will display a list of all questions of a game.");
     }
     
     @Override

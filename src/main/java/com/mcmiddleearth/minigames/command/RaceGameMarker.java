@@ -24,8 +24,8 @@ public class RaceGameMarker extends AbstractGameCommand {
     
     public RaceGameMarker(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": ");
-        setUsageDescription(": ");
+        setShortDescription(": Assigns a race maker to a checkpoint.");
+        setUsageDescription(" <filename> start|finish|checkpoint|all: Appoints the marker from file <filename> to start or finish or checkpoints or all race locations. When only <filename> is specified the marker is assigned to a nearby location (10 blocks).");
     }
     
     @Override
