@@ -38,20 +38,20 @@ public class GameWarp extends AbstractCommand{
             return;
         }
         if(args.length == 1 || game instanceof QuizGame || game instanceof HideAndSeekGame) {
-            ((Player)cs).teleport(game.getWarp());
+            game.warp((Player)cs,game.getWarp());
         }
         else if(game instanceof RaceGame) {
             if(args[1].equalsIgnoreCase("start")) {
-                ((Player)cs).teleport(((RaceGame)game).getCheckpointManager().getStart().getLocation());
+                game.warp((Player)cs,((RaceGame)game).getCheckpointManager().getStart().getLocation());
             }
             else if(args[1].equalsIgnoreCase("finish")) {
-                ((Player)cs).teleport(((RaceGame)game).getCheckpointManager().getFinish().getLocation());
+                game.warp((Player)cs,((RaceGame)game).getCheckpointManager().getFinish().getLocation());
             }
             else {
                 try {
                     int checkId = Integer.parseInt(args[1]);
                     if(((RaceGame)game).getCheckpointManager().isIdValid(checkId)) {
-                        ((Player)cs).teleport(((RaceGame)game).getCheckpointManager().getCheckpoint(checkId).getLocation());
+                        game.warp((Player)cs,((RaceGame)game).getCheckpointManager().getCheckpoint(checkId).getLocation());
                     }
                     else {
                         sendIdNotValidMessage(cs);

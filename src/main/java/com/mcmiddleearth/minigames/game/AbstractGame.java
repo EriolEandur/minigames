@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -33,6 +34,10 @@ import org.bukkit.util.Vector;
  * @author Eriol_Eandur
  */
 public abstract class AbstractGame {
+    
+    protected final static TeleportCause TeleportCause_WARP = TeleportCause.NETHER_PORTAL;
+   
+    protected final static TeleportCause TeleportCause_FORCE = TeleportCause.END_PORTAL;
     
     @Getter
     private final String name;
@@ -277,7 +282,7 @@ public abstract class AbstractGame {
     }
     
     public void playerTeleport(PlayerTeleportEvent event) {
-        if(!teleportAllowed) {
+        if((!teleportAllowed && !event.getCause().equals(TeleportCause_FORCE))) {
             event.setCancelled(true);
         }
     }
@@ -285,11 +290,20 @@ public abstract class AbstractGame {
     public void playerToggleFlight(PlayerToggleFlightEvent event) {
         if(!flightAllowed) {
             event.getPlayer().setFlying(false);
-Logger.getGlobal().info("ToggleFlight");
             event.setCancelled(true);
         }
     }
     
+    public void forceTeleport(Player player, Location loc) {
+        //boolean teleport = teleportAllowed;
+        player.teleport(loc, TeleportCause_FORCE);
+        //teleportAllowed = teleport;
+    }
+    
+    public void warp(Player player, Location loc) {
+        player.teleport(loc, TeleportCause_WARP);
+    }
+
     
     public boolean joinAllowed() {
         return announced;
@@ -301,7 +315,8 @@ Logger.getGlobal().info("ToggleFlight");
     }
     
     public boolean isInvited(OfflinePlayer player) {
-        return BukkitUtil.getOfflinePlayer(invitedPlayers, player)!=null;
+        return BukkitUtil.getOfflinePlayer(invitedPlayers, player)!=null 
+                || BukkitUtil.isSame(player, manager);
     }
     
     public void invite(OfflinePlayer player) {
@@ -317,7 +332,7 @@ Logger.getGlobal().info("ToggleFlight");
         }
         flightAllowed = false;
     }
-
+    
     public String getGameChatTag(Player player) {
         if(PluginData.isManager(player)) {
             return ChatColor.DARK_AQUA + "<Manager "; 

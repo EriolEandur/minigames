@@ -3,7 +3,7 @@ main: com.mcmiddleearth.minigames.MiniGamesPlugin
 version: 0.1
 description: MiniGames plugin
 load: POSTWORLD
-# depend: [Multiverse-Core]
+softdepend: [Multiverse-Core]
 commands:
     game:
         description: manage MiniGames plugin

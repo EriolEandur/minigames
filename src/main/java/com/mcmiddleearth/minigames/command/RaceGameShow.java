@@ -32,6 +32,7 @@ public class RaceGameShow extends AbstractGameCommand{
             RaceGame raceGame = (RaceGame) game;
             if(!raceGame.isStarted()) {
                 sendNotStartedMessage(cs);
+                return;
             }
             if(args.length<1) {
                 raceGame.showAuto();

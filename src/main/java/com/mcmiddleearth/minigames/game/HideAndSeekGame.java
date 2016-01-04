@@ -61,6 +61,7 @@ public class HideAndSeekGame extends AbstractGame {
     
     public HideAndSeekGame(Player manager, String name) {
         super(manager, name, GameType.HIDE_AND_SEEK, new HideAndSeekGameScoreboard());
+        setTeleportAllowed(false);
         announceGame();
     }
     
@@ -147,8 +148,8 @@ public class HideAndSeekGame extends AbstractGame {
     
     @Override
     public void addPlayer(Player player) {
-            super.addPlayer(player);
-            player.teleport(getWarp());
+        super.addPlayer(player);
+        forceTeleport(player,getWarp());
     }
     
     @Override 

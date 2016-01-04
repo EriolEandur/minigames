@@ -48,6 +48,7 @@ public class GameCreate extends AbstractGameCommand{
                 case RACE:
                     PluginData.stopSpectating((Player)cs);
                     game = new RaceGame((Player) cs, args[1]);
+                    sendRaceGameCreateMessage(cs);
                     break;
                 case LORE_QUIZ:
                     PluginData.stopSpectating((Player)cs);
@@ -63,7 +64,7 @@ public class GameCreate extends AbstractGameCommand{
     }
     
     public void sendQuizGameCreateMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You created a new Lore Quiz.");
+        MessageUtil.sendInfoMessage(cs, "You created a new Lore Quiz game.");
     }
 
     private void sendInvalidGameTypeErrorMessage(CommandSender cs) {
@@ -72,6 +73,10 @@ public class GameCreate extends AbstractGameCommand{
     
     private void sendGameExistsMessage(CommandSender cs) {
          MessageUtil.sendErrorMessage(cs, "A game with that name already exists.");
+    }
+
+    private void sendRaceGameCreateMessage(CommandSender cs) {
+        MessageUtil.sendInfoMessage(cs, "You created a new Race game.");
     }
 
  }

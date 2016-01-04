@@ -24,6 +24,8 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -111,7 +113,7 @@ public class RaceGame extends AbstractGame {
     @Override
     public void addPlayer(Player player) {
         super.addPlayer(player);
-        player.teleport(getWarp());
+        forceTeleport(player,getWarp());
         ((RaceGameScoreboard) getBoard()).addPlayer(player.getName());
     }
     
@@ -125,6 +127,16 @@ public class RaceGame extends AbstractGame {
     @Override
     public boolean joinAllowed() {
         return super.joinAllowed() && !started;
+    }
+    
+    @Override
+    public void playerTeleport(PlayerTeleportEvent event) {
+        super.playerTeleport(event);
+        // block warping of racing players to the checkpoints of the race
+        // even if teleportation is allowed
+        if(started && event.getCause().equals(TeleportCause_WARP)) {
+            event.setCancelled(true);
+        }
     }
     
     public void steady() {
@@ -189,7 +201,7 @@ public class RaceGame extends AbstractGame {
                     teleportLoc.setY(teleportLoc.getBlockY()+0.5);
                     teleportLoc.setZ(teleportLoc.getBlockZ()+0.5);
                     teleportLoc.setYaw(start.getLocation().getYaw());
-                    player.teleport(teleportLoc);
+                    forceTeleport(player,teleportLoc);
                 }
                 for(Location loc: cageLocations) {
                     Material material;

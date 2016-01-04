@@ -28,13 +28,23 @@ public class GameInvite extends AbstractGameCommand{
     protected void execute(CommandSender cs, String... args) {
         AbstractGame game = getGame((Player) cs);
         if(game!=null && isManager((Player) cs, game)) {
-            OfflinePlayer player = Bukkit.getOfflinePlayer(args[0]);
-            game.invite(player);
-            sendPlayerInvited(cs, player);
+            Player player = Bukkit.getPlayer(args[0]);
+            if(player != null) {
+                game.invite(player);
+                sendPlayerInvited(cs, player, game);
+            }
+            else {
+                sendNotFoundMessage(cs);
+            }
         }
     }
     
-    private void sendPlayerInvited(CommandSender cs, OfflinePlayer player) {
+    private void sendPlayerInvited(CommandSender cs, Player player, AbstractGame game) {
         MessageUtil.sendInfoMessage(cs, "You invited "+player.getName()+" to your game.");
+            MessageUtil.sendInfoMessage(player, cs.getName()+" invited you to the game "+game.getName()+".");
+    }
+
+    private void sendNotFoundMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "Player not found, you need to type in the full name and the player needs to be online.");
     }
 }

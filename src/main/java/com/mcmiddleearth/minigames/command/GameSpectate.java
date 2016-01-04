@@ -27,6 +27,7 @@ public class GameSpectate extends AbstractGameCommand{
     protected void execute(CommandSender cs, String... args) {
         if(args[0].equalsIgnoreCase("!off")) {
             PluginData.stopSpectating((Player)cs);
+            return;
         }
         if(!isAlreadyInGame((Player)cs) && !isAlreadyManager((Player) cs)) {
             AbstractGame game = PluginData.getGame(args[0]);

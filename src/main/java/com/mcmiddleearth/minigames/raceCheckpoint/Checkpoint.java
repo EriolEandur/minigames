@@ -93,7 +93,7 @@ public class Checkpoint {
 
     public boolean isCheckLocation(Location loc) {
         for(Location search : checkLocList) {
-            if(BukkitUtil.isSameBlock(search,loc)) {
+            if(loc.distance(search)<2) {//BukkitUtil.isSameBlock(search,loc)) {
                 return true;
             }
         }
