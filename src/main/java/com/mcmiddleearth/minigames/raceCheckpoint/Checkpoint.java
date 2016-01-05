@@ -219,6 +219,9 @@ public class Checkpoint {
     private void loadMarkerFromFile(String markerName) throws FileNotFoundException {
         File file = new File(markerDir,markerName+"."+markerExt);
         if(!file.exists()) {
+            marker.clear();
+            checkLocList.clear();
+            checkLocList.add(location);
             throw new FileNotFoundException(markerName+".mkr file not found.");
         }
         try(FileReader fw = new FileReader(file); 
