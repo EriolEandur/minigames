@@ -21,10 +21,10 @@ permissions:
             minigames.user: true
     minigames.staff:
         description: Gives enforcers access to /game delete command
-        default: true
+        default: op
     minigames.manager:
         description: Gives guides access to minigames commands for managing games
-        default: true
+        default: op
     minigames.user:
         description: Gives access miniGames commands for players
-        default: true
+        default: op
