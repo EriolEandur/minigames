@@ -325,12 +325,11 @@ public abstract class AbstractGame {
     
     public void setFlightAllowed(boolean allowed) {
         if(this.flightAllowed && !allowed)  {
-            flightAllowed = false;
             for(Player player : getOnlinePlayers()) {
                 player.setFlying(false);
             }
         }
-        flightAllowed = false;
+        flightAllowed = allowed;
     }
     
     public String getGameChatTag(Player player) {

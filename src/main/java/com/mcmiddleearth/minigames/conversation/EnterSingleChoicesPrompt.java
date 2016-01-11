@@ -17,7 +17,7 @@
 package com.mcmiddleearth.minigames.conversation;
 
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 
 /**
