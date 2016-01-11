@@ -18,6 +18,7 @@ package com.mcmiddleearth.minigames.raceCheckpoint;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.EntityUtil;
 import com.mcmiddleearth.minigames.utils.FileUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,6 +39,11 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.Painting;
 
 /**
  *
@@ -54,6 +60,7 @@ public class Checkpoint {
     private static final File markerDir = new File(PluginData.getRaceDir(),"markerData");
     
     private static final String restoreExt = "res";
+    private static final String restoreEntityExt = "ent";
     
     @Getter
     private static final String markerExt = "mkr";
@@ -154,6 +161,7 @@ public class Checkpoint {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "placing Marker, marker file not found.", ex);
         }
+        //List<Entity> entities = new ArrayList<>();
         try(FileWriter fw = new FileWriter(restoreFile); 
             PrintWriter writer = new PrintWriter(fw)) {
                 writer.println(location.getWorld().getName());
@@ -161,11 +169,15 @@ public class Checkpoint {
                     Block block = blockState.getBlock();
                     writer.println(block.getX()+" "+block.getY()+" "+block.getZ()+ " "
                                    + block.getType() + " " + block.getData());
+                    //addNewEntities(entities,block.getWorld().getNearbyEntities(block.getLocation(), 3.0, 3.0, 3.0)); noSuchMethod runtime exception
                 }
         } catch (IOException ex) {
             Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "saving restore data", ex);
             return;
         }
+        saveEntities(new File(restoreDir, name+"_frame."+restoreEntityExt), ItemFrame.class);
+        saveEntities(new File(restoreDir, name+"_painting."+restoreEntityExt), Painting.class);
+        saveEntities(new File(restoreDir, name+"_armor."+restoreEntityExt), ArmorStand.class);
         for(BlockState blockState : marker) {
             blockState.update(true, false);
         }
@@ -187,6 +199,14 @@ public class Checkpoint {
             }
         }
         restoreBlocks(restoreFile);
+        restoreFile = new File(restoreDir, name+"."+restoreEntityExt);
+        if(!restoreFile.exists()) {
+            Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "RestoreFile for entities is missing.");
+            return;
+        }
+        restoreEntities(new File(restoreDir, name+"_painting."+restoreEntityExt));
+        restoreEntities(new File(restoreDir, name+"_frame."+restoreEntityExt));
+        restoreEntities(new File(restoreDir, name+"_armor."+restoreEntityExt));
     }
     
     private static void restoreBlocks(File restoreFile) {
@@ -214,6 +234,45 @@ public class Checkpoint {
             return;
         }
         restoreFile.delete();
+    }
+    
+    private static void restoreEntities(File restoreFile) {
+        try {
+            EntityUtil.restore(restoreFile, new ArrayList<Entity>());
+        } catch (IOException | InvalidConfigurationException ex) {
+            Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private static void addNewEntity(List<Entity> entityList, Entity newEntity) {
+        for(Entity search: entityList) {
+            if(newEntity.getUniqueId().equals(search.getUniqueId())) {
+                return;
+            }
+        }
+        entityList.add(newEntity);
+    }
+    
+    private void saveEntities(File restoreFile, Class entityClass) {
+        List<Entity> entityList = new ArrayList<>();
+        List<Entity> nearEntities = new ArrayList<>();
+        entityList.addAll(location.getWorld().getEntitiesByClass(entityClass));
+        for(Entity entity: entityList) {
+            for(BlockState markerBlock: marker) {
+                if(entity.getLocation().distance(markerBlock.getLocation())<2.1) {
+                    addNewEntity(nearEntities,entity);
+                }
+            }
+        }
+        try {
+            EntityUtil.store(restoreFile, nearEntities);
+            for(Entity entity: nearEntities) {
+                entity.remove();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
  
     private void loadMarkerFromFile(String markerName) throws FileNotFoundException {
