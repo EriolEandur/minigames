@@ -59,7 +59,8 @@ public class BukkitUtil {
             && loc1.getBlockY()==loc2.getBlockY() 
             && loc1.getBlockZ()==loc2.getBlockZ(); 
     }
-        public static boolean isTransparent(Location loc) {
+        
+    public static boolean isTransparent(Location loc) {
         Material mat = loc.getBlock().getType();
         switch(mat) {
             case AIR:
