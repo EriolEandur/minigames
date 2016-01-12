@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
+import lombok.Setter;
 import org.bukkit.Art;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -43,6 +44,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Painting;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 
@@ -51,6 +53,12 @@ import org.bukkit.util.EulerAngle;
  * @author Eriol_Eandur
  */
 public class EntityUtil {
+    
+    private static JavaPlugin plugin;
+    
+    public static void init(JavaPlugin pluginInstance) {
+        plugin = pluginInstance;
+    }
     
     public static void store(File file, Entity entity) throws IOException{
         List<Entity> list = new ArrayList<>();
@@ -232,13 +240,9 @@ public class EntityUtil {
                 final Rotation rotation = Rotation.valueOf(data.getString("rotation"));
                 frame = spawnItemFrame(loc,face,rotation, item);
                 if(frame == null) {
-                    final Location fLoc = loc;
-                    BukkitRunnable later = new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            spawnItemFrame(fLoc,face, rotation,item);
-                        }};
-                    later.runTaskLater(MiniGamesPlugin.getPluginInstance(), 2);
+                    CreateItemFrameLaterTask later = new CreateItemFrameLaterTask(loc, face, rotation, item);
+                    later.setTask(later);
+                    later.runTaskTimer(plugin, 1,1);
                 }
             }
             else {
@@ -246,6 +250,39 @@ public class EntityUtil {
                 frame.setRotation(Rotation.valueOf(data.getString("rotation")));
             }
             return frame;
+        }
+    }
+    
+    private static class CreateItemFrameLaterTask extends BukkitRunnable {
+        
+        @Setter
+        BukkitRunnable task;
+        
+        int tries = 0;
+
+        Location fLoc;
+        BlockFace fFace;
+        Rotation rotation;
+        ItemStack item;
+        
+        public CreateItemFrameLaterTask (Location loc, BlockFace face, Rotation pRotation, ItemStack pItem) {
+            fLoc = loc;
+            fFace = face;
+            rotation = pRotation;
+            item = pItem;
+        }
+        
+        @Override
+        public void run() {
+            ItemFrame itemFrame = spawnItemFrame(fLoc,fFace, rotation, item);
+            tries ++;
+            if(itemFrame !=null) {
+                task.cancel();
+            }
+            else if(tries > 20) {
+                Logger.getGlobal().info("Cannot create ItemFrame");
+                task.cancel();
+            }
         }
     }
     
@@ -258,7 +295,6 @@ public class EntityUtil {
             return frame;
         }
         catch(NullPointerException | IllegalArgumentException e) {
-            Logger.getGlobal().info("Cannot create ItemFrame");
             return null;
         }
     }
@@ -285,28 +321,54 @@ public class EntityUtil {
             if(painting==null) {
                 painting = spawnPainting(loc, art, face);
                 if(painting == null) {
-                    final Art fArt = art; final Location fLoc = loc; final BlockFace fFace = face;
-                    BukkitRunnable later = new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            spawnPainting(fLoc,fArt,fFace);
-                        }};
-                    later.runTaskLater(MiniGamesPlugin.getPluginInstance(), 2);
+                    CreatePaintingLaterTask later = new CreatePaintingLaterTask(loc, art, face);
+                    later.setTask(later);
+                    later.runTaskTimer(plugin, 1, 1);
                 }
             }
             return painting;
         }
     }
     
+    private static class CreatePaintingLaterTask extends BukkitRunnable {
+        
+        @Setter
+        BukkitRunnable task;
+        
+        int tries = 0;
+
+        Location fLoc;
+        Art fArt;
+        BlockFace fFace;
+        
+        public CreatePaintingLaterTask (Location loc, Art art, BlockFace face) {
+            fLoc = loc;
+            fArt = art;
+            fFace = face;
+        }
+        
+        @Override
+        public void run() {
+            Painting painting = spawnPainting(fLoc,fArt,fFace);
+            tries ++;
+            if(painting !=null) {
+                task.cancel();
+            }
+            else if(tries > 20) {
+                Logger.getGlobal().info("Cannot create Painting");
+                task.cancel();
+            }
+        }
+    }
+    
     private static Painting spawnPainting(Location loc, Art art, BlockFace face) {
-        Painting painting = null;
+        Painting painting;
         try {
             painting = (Painting) loc.getWorld().spawnEntity(loc, EntityType.PAINTING);
             painting.setFacingDirection(face);
             painting.setArt(art, true);
         }
         catch(NullPointerException | IllegalArgumentException e) {
-            Logger.getGlobal().info("Cannot create Painting");
             return null;
         }
         return painting;
