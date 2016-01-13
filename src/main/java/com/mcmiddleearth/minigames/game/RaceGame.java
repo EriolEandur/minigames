@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -25,7 +26,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -191,12 +191,13 @@ public class RaceGame extends AbstractGame {
     private void cagePlayer(boolean cage) {
         Checkpoint start = checkpointManager.getStart();
         List<Location> checkList = start.getCheckLocList();
-        //List<Location> cageLocations = getCageLocations(start);
         if(!cageLocations.isEmpty()) {
             ListIterator<Location> listIterator = checkList.listIterator();
+Logger.getGlobal().info("checkList size "+checkList.size());
             for(Player player: getOnlinePlayers()) {
                 if(cage) {
                     Location teleportLoc = listIterator.next();
+Logger.getGlobal().info("index "+listIterator.nextIndex()+teleportLoc.toString());
                     teleportLoc.setX(teleportLoc.getBlockX()+0.5);
                     teleportLoc.setY(teleportLoc.getBlockY()+0.5);
                     teleportLoc.setZ(teleportLoc.getBlockZ()+0.5);
@@ -221,6 +222,10 @@ public class RaceGame extends AbstractGame {
                     }
                     player.sendBlockChange(loc, material, value);
                 }
+                if(!listIterator.hasNext()) {
+                    listIterator=checkList.listIterator();
+                }
+                listIterator.next();
                 if(!listIterator.hasNext()) {
                     listIterator=checkList.listIterator();
                 }
