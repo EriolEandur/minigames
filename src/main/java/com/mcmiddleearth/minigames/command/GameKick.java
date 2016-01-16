@@ -6,7 +6,7 @@
 package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -48,7 +48,7 @@ public class GameKick extends AbstractGameCommand{
             } else {
                 game.removePlayer(player);
                 sendPlayerRemovedMessage(cs, player, game);
-                Player kickedPlayer = BukkitUtil.getOnlinePlayer(player);
+                Player kickedPlayer = PlayerUtil.getOnlinePlayer(player);
                 if(kickedPlayer!=null) {
                     if(args.length>1) {
                         sendKickedPlayerMessage(kickedPlayer, cs, " for "+args[1]);

@@ -9,7 +9,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,7 +41,7 @@ public abstract class AbstractGameCommand extends AbstractCommand {
     }
     
     protected boolean isManager(Player player, AbstractGame game) {
-        if(BukkitUtil.isSame(game.getManager(),player)) {
+        if(PlayerUtil.isSame(game.getManager(),player)) {
             return true;
         }
         else {
@@ -59,7 +59,7 @@ public abstract class AbstractGameCommand extends AbstractCommand {
     }
             
     protected boolean isAlreadyManagerOfOtherGame(Player player, AbstractGame game) {
-        if(!BukkitUtil.isSame(game.getManager(),player) && PluginData.isManager(player)) {
+        if(!PlayerUtil.isSame(game.getManager(),player) && PluginData.isManager(player)) {
             sendAlreadyManagerOfOtherGameErrorMessage(player);
             return true;
         }

@@ -47,14 +47,14 @@ public class MessageUtil {
     public static void sendAllInfoMessage(CommandSender sender, AbstractGame game, String message) {
         for(Player onlinePlayer : game.getOnlinePlayers()) {
             if(onlinePlayer!=null) {
-                if(!((sender instanceof Player) && BukkitUtil.isSame((Player) sender,onlinePlayer))) {
+                if(!((sender instanceof Player) && PlayerUtil.isSame((Player) sender,onlinePlayer))) {
                     onlinePlayer.sendMessage(ChatColor.AQUA + PREFIX + message);
                 } 
             }
         }
-        Player manager = BukkitUtil.getOnlinePlayer(game.getManager());
+        Player manager = PlayerUtil.getOnlinePlayer(game.getManager());
         if(manager!=null && !PluginData.isInGame(manager)) {
-            if(!((sender instanceof Player) && BukkitUtil.isSame((Player) sender,manager))) {
+            if(!((sender instanceof Player) && PlayerUtil.isSame((Player) sender,manager))) {
                 manager.sendMessage(ChatColor.AQUA + PREFIX + message);
             }
         }

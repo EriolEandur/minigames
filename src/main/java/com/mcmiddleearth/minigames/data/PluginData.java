@@ -10,7 +10,7 @@ import com.mcmiddleearth.minigames.conversation.ConfirmationFactory;
 import com.mcmiddleearth.minigames.conversation.CreateQuestionConversationFactory;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
-import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.io.File;
 import java.util.ArrayList;
@@ -63,11 +63,11 @@ public class PluginData {
     
     public static AbstractGame getGame(Player player) {
         for(AbstractGame game : games) {
-            if(BukkitUtil.isSame(game.getManager(),player)) {
+            if(PlayerUtil.isSame(game.getManager(),player)) {
                 return game;
             }
             for(OfflinePlayer search: game.getPlayers()) {
-                if(BukkitUtil.isSame(search,player)) {
+                if(PlayerUtil.isSame(search,player)) {
                     return game;
                 }
             }
@@ -110,7 +110,7 @@ public class PluginData {
     
     public static boolean isManager(Player player) {
         for(AbstractGame game : games) {
-            if(BukkitUtil.isSame(game.getManager(),player)) {
+            if(PlayerUtil.isSame(game.getManager(),player)) {
                 return true;
             }
         }
@@ -128,7 +128,7 @@ public class PluginData {
 
     public static boolean getGameChat(OfflinePlayer player) {
         for(OfflinePlayer search: noGameChat) {
-            if(BukkitUtil.isSame(search,player)) {
+            if(PlayerUtil.isSame(search,player)) {
                 return false;
             }
         }

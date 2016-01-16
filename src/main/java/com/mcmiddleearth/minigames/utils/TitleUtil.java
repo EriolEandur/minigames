@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -63,7 +62,7 @@ public class TitleUtil {
     
     public static void showTitleAll(List<Player> playerList, List<Player> except, String color, String title, String subtitle) {
         for(Player player: playerList) {
-            if(!BukkitUtil.isPlayerInList(except, player)) {
+            if(!PlayerUtil.isPlayerInList(except, player)) {
                 showTitle(player,color,title, subtitle);
             }
         }
@@ -71,7 +70,7 @@ public class TitleUtil {
     
     public static void showTitleAll(List<Player> playerList, Player except, String color, String title, String subtitle) {
         for(Player player: playerList) {
-            if(!BukkitUtil.isSame(player, except)) {
+            if(!PlayerUtil.isSame(player, except)) {
                 showTitle(player,color,title, subtitle);
             }
         }
@@ -79,7 +78,7 @@ public class TitleUtil {
 
     public static void setTitleAll(List<Player> playerList, Player except, String color, String title) {
         for(Player player: playerList) {
-            if(!BukkitUtil.isSame(player, except)) {
+            if(!PlayerUtil.isSame(player, except)) {
                 setTitle(player,color,title);
             }
         }
@@ -87,7 +86,7 @@ public class TitleUtil {
 
     public static void setSubtitleAll(List<Player> playerList, Player except, String subtitle) {
         for(Player player: playerList) {
-            if(!BukkitUtil.isSame(player, except)) {
+            if(!PlayerUtil.isSame(player, except)) {
                 setSubtitle(player,subtitle);
             }
         }
@@ -95,7 +94,7 @@ public class TitleUtil {
 
     public static void setTimesAll(List<Player> playerList, Player except, int fadeIn, int stay, int fadeOut) {
         for(Player player: playerList) {
-            if(!BukkitUtil.isSame(player, except)) {
+            if(!PlayerUtil.isSame(player, except)) {
                 setTimes(player,fadeIn, stay, fadeOut);
             }
         }

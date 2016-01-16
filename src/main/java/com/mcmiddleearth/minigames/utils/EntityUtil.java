@@ -16,7 +16,6 @@
  */
 package com.mcmiddleearth.minigames.utils;
 
-import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,13 +71,13 @@ public class EntityUtil {
         config.save(file);
     }
     
-    public static void store(Configuration config, Collection<Entity> entities) {
+    public static void store(ConfigurationSection config, Collection<Entity> entities) {
         for(Entity entity: entities) {
             store(config, entity, entity.getEntityId()+"");
         }
     }
     
-    public static void store(Configuration config, Entity entity, String key){
+    public static void store(ConfigurationSection config, Entity entity, String key){
         if(entity instanceof Painting) {
             config.set(key, serializePainting((Painting) entity));
         }
@@ -96,7 +95,7 @@ public class EntityUtil {
         return restore(config, entityList);
     }
     
-    public static boolean restore(Configuration config, List<Entity> entityList) {
+    public static boolean restore(ConfigurationSection config, List<Entity> entityList) {
         boolean result = true;
         for(String entityKey: config.getKeys(false)) {
             Entity entity = restore(config, entityKey);
@@ -110,7 +109,7 @@ public class EntityUtil {
         return result;
     }
     
-    public static Entity restore(Configuration config, String entityKey){
+    public static Entity restore(ConfigurationSection config, String entityKey){
         ConfigurationSection entityData = config.getConfigurationSection(entityKey);
         EntityType type = EntityType.valueOf(entityData.getString("type"));
         switch(type) {

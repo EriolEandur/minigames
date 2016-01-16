@@ -10,7 +10,8 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
 import com.mcmiddleearth.minigames.scoreboard.RaceGameScoreboard;
-import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.BlockUtil;
+import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.TitleUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -208,7 +209,7 @@ Logger.getGlobal().info("index "+listIterator.nextIndex()+teleportLoc.toString()
                     Material material;
                     byte value;
                     if(cage) {
-                        if(BukkitUtil.isTransparent(loc)) {
+                        if(BlockUtil.isTransparent(loc)) {
                             material=Material.BARRIER;
                         }
                         else {
@@ -277,7 +278,7 @@ Logger.getGlobal().info("index "+listIterator.nextIndex()+teleportLoc.toString()
     
     private int getNextCheckpoint(OfflinePlayer player) {
         for(OfflinePlayer search: nextCheckpoints.keySet()) {
-            if(BukkitUtil.isSame(search, player)) {
+            if(PlayerUtil.isSame(search, player)) {
                 return nextCheckpoints.get(search);
             }
         }
@@ -287,7 +288,7 @@ Logger.getGlobal().info("index "+listIterator.nextIndex()+teleportLoc.toString()
     
     private void incrementCheckpoint(OfflinePlayer player) {
         for(OfflinePlayer search: nextCheckpoints.keySet()) {
-            if(BukkitUtil.isSame(search, player)) {
+            if(PlayerUtil.isSame(search, player)) {
                 nextCheckpoints.put(search, nextCheckpoints.get(search)+1);
                 return;
             }

@@ -15,7 +15,7 @@ import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
 import com.mcmiddleearth.minigames.quizQuestion.SingleChoiceQuestion;
 import com.mcmiddleearth.minigames.scoreboard.QuizGameScoreboard;
-import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import com.mcmiddleearth.minigames.utils.TitleUtil;
 import java.io.File;
@@ -76,7 +76,7 @@ public class QuizGame extends AbstractGame {
    
     @Override
     public String getGameChatTag(Player player) {
-        if(BukkitUtil.isSame(getManager(), player)) {
+        if(PlayerUtil.isSame(getManager(), player)) {
             return ChatColor.DARK_AQUA + "<Presentator ";
         }
         else {

@@ -8,7 +8,7 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
-import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -48,8 +48,8 @@ public class HaSGameSeeker extends AbstractGameCommand{
 
     private void sendSeekerSetMessage(CommandSender cs, OfflinePlayer seeker) {
         MessageUtil.sendInfoMessage(cs, seeker.getName() +" will be the next seeker.");
-        if(BukkitUtil.getOnlinePlayer(seeker)!=null)
-            MessageUtil.sendInfoMessage(BukkitUtil.getOnlinePlayer(seeker), 
+        if(PlayerUtil.getOnlinePlayer(seeker)!=null)
+            MessageUtil.sendInfoMessage(PlayerUtil.getOnlinePlayer(seeker), 
                                         "You are assigned to be the next seeker.");
     }
 

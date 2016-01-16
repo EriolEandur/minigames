@@ -8,7 +8,7 @@ package com.mcmiddleearth.minigames.game;
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.scoreboard.GameScoreboard;
-import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,8 +126,8 @@ public abstract class AbstractGame {
     }
     
     public void setManager(OfflinePlayer manager) {
-        if(manager != null && BukkitUtil.getOnlinePlayer(manager)!=null) {
-            Player oldManager = BukkitUtil.getOnlinePlayer(manager);
+        if(manager != null && PlayerUtil.getOnlinePlayer(manager)!=null) {
+            Player oldManager = PlayerUtil.getOnlinePlayer(manager);
             if(!PluginData.isInGame(oldManager)) {
                 oldManager.setScoreboard(Bukkit.getServer().getScoreboardManager().getMainScoreboard());
             }
@@ -156,7 +156,7 @@ public abstract class AbstractGame {
     public List<Player> getOnlinePlayers() {
         List<Player> online = new ArrayList<>();
         for(OfflinePlayer player : players) {
-            Player onlinePlayer = BukkitUtil.getOnlinePlayer(player);
+            Player onlinePlayer = PlayerUtil.getOnlinePlayer(player);
             if(onlinePlayer!=null) {
                 online.add(onlinePlayer);
             }
@@ -180,7 +180,7 @@ public abstract class AbstractGame {
     
     public void removeSpectator(Player player) {
         for(OfflinePlayer search: spectators) {
-            if(BukkitUtil.isSame(search, player)) {
+            if(PlayerUtil.isSame(search, player)) {
                 spectators.remove(search);
                 player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
                 return;
@@ -190,7 +190,7 @@ public abstract class AbstractGame {
     
     public boolean isSpectating(Player player) {
         for(OfflinePlayer search: spectators) {
-            if(BukkitUtil.isSame(search, player)) {
+            if(PlayerUtil.isSame(search, player)) {
                 return true;
             }
         }
@@ -199,21 +199,21 @@ public abstract class AbstractGame {
     
     public void removePlayer(OfflinePlayer player) {
         for(OfflinePlayer search : players) {
-            if(BukkitUtil.isSame(search,player)) {
+            if(PlayerUtil.isSame(search,player)) {
                 players.remove(search);
                 break;
             }
         }
         getBoard().decrementPlayer();
-        Player onlinePlayer = BukkitUtil.getOnlinePlayer(player);
-        if(onlinePlayer!=null && !BukkitUtil.isSame(onlinePlayer,manager)) {
+        Player onlinePlayer = PlayerUtil.getOnlinePlayer(player);
+        if(onlinePlayer!=null && !PlayerUtil.isSame(onlinePlayer,manager)) {
             onlinePlayer.setScoreboard(Bukkit.getServer().getScoreboardManager().getMainScoreboard());
         }
     }
     
     public boolean isBanned(OfflinePlayer player) {
         for(OfflinePlayer search : bannedPlayers) {
-            if(BukkitUtil.isSame(search,player)) {
+            if(PlayerUtil.isSame(search,player)) {
                 return true;
             }
         }
@@ -222,7 +222,7 @@ public abstract class AbstractGame {
     
     public boolean isInGame(OfflinePlayer player) {
         for(OfflinePlayer search: players) {
-            if(BukkitUtil.isSame(search,player)) {
+            if(PlayerUtil.isSame(search,player)) {
                 return true;
             }
         }
@@ -315,8 +315,8 @@ public abstract class AbstractGame {
     }
     
     public boolean isInvited(OfflinePlayer player) {
-        return BukkitUtil.getOfflinePlayer(invitedPlayers, player)!=null 
-                || BukkitUtil.isSame(player, manager);
+        return PlayerUtil.getOfflinePlayer(invitedPlayers, player)!=null 
+                || PlayerUtil.isSame(player, manager);
     }
     
     public void invite(OfflinePlayer player) {

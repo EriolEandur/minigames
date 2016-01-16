@@ -6,7 +6,7 @@
 package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.BukkitUtil;
+import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -35,7 +35,7 @@ public class GameUnban extends AbstractGameCommand{
             else {
                 game.setUnbanned(player);
                 sendPlayerUnbannedMessage(cs, player);
-                Player unbannedPlayer = BukkitUtil.getOnlinePlayer(player);
+                Player unbannedPlayer = PlayerUtil.getOnlinePlayer(player);
                 if(unbannedPlayer!=null) {
                     sendUnbannedPlayerMessage(unbannedPlayer, game.getName());
                 }
