@@ -30,7 +30,7 @@ public class GameScoreboard {
         scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
         playerCountObjective = scoreboard.registerNewObjective("PlayerCount", "dummy");
         playerCountObjective.setDisplayName(name);
-        playerCountScore = playerCountObjective.getScore(ChatColor.BLUE+"player ");
+        playerCountScore = playerCountObjective.getScore(ChatColor.BLUE+"players ");
         playerCountScore.setScore(0);
         playerCountObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
     }

@@ -58,7 +58,7 @@ public class GameJoin extends AbstractGameCommand{
     
     public void sendPlayerJoinMessage(CommandSender cs, AbstractGame game) {
         MessageUtil.sendInfoMessage(cs, "You joined the minigame "+ game.getName()
-                                   +". Please use the game chat whith /gc <message>");
+                                   +". Please use the game chat with /gc <message>");
         MessageUtil.sendAllInfoMessage(cs, game, cs.getName()+" joined the game.");
     }
 

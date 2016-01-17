@@ -139,6 +139,7 @@ public class PluginData {
         for(AbstractGame game: games) {
             if(game.isSpectating(player)) {
                 MessageUtil.sendAllInfoMessage(player, game, player.getName()+" stopped spectating.");
+                MessageUtil.sendInfoMessage(player, "You stopped spectating.");
                 game.removeSpectator(player);
                 return;
             }

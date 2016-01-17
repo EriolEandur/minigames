@@ -1,6 +1,6 @@
 name: MiniGames
 main: com.mcmiddleearth.minigames.MiniGamesPlugin
-version: 0.1
+version: 1.0
 description: MiniGames plugin
 load: POSTWORLD
 softdepend: [Multiverse-Core]

@@ -258,6 +258,7 @@ public abstract class AbstractGame {
         Location to = event.getTo();
         Location from = event.getFrom();
         if(to.distance(getWarp())>allowedRadius(event.getPlayer())) {
+            MessageUtil.sendInfoMessage(event.getPlayer(), "You are not allowed to leave game area.");
             Vector vel = to.toVector().subtract(event.getFrom().toVector());
             Vector radial = event.getPlayer().getLocation().toVector().subtract(getWarp().toVector());
             Vector tangential = new Vector(radial.getZ(),radial.getY(), -radial.getX());
@@ -277,7 +278,8 @@ public abstract class AbstractGame {
                 radial = radial.subtract(radialOld);
                 newTo = newTo.add(radial);
             }
-            event.setTo(newTo);
+            //event.setTo(newTo); does not work as causes a teleport event which is blocks by method below.
+            event.getPlayer().teleport(newTo, TeleportCause_FORCE);
         }
     }
     

@@ -40,8 +40,8 @@ public class HideAndSeekGameScoreboard extends GameScoreboard {
         seekingObjective = scoreboard.registerNewObjective("SeekingTime", "dummy");
         seekingObjective.setDisplayName(title+"?");
         seekingTimeScore = seekingObjective.getScore(ChatColor.YELLOW+"seeking time remaining: ");
-        hiddenPlayerScore = seekingObjective.getScore(ChatColor.RED+"hidden Player: ");
-        locatedPlayerScore = seekingObjective.getScore(ChatColor.GREEN+"located Player: ");
+        hiddenPlayerScore = seekingObjective.getScore(ChatColor.RED+"hidden Players: ");
+        locatedPlayerScore = seekingObjective.getScore(ChatColor.GREEN+"located Players: ");
     }
     
     public void startHiding(String seeker, int hidingTime) {
