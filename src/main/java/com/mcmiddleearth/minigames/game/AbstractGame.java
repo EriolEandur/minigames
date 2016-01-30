@@ -258,7 +258,8 @@ public abstract class AbstractGame {
         Location to = event.getTo();
         Location from = event.getFrom();
         if(to.distance(getWarp())>allowedRadius(event.getPlayer())) {
-            MessageUtil.sendInfoMessage(event.getPlayer(), "You are not allowed to leave game area.");
+            //event.setCancelled(true);
+            //sendLeaveNotAllowed(event.getPlayer());
             Vector vel = to.toVector().subtract(event.getFrom().toVector());
             Vector radial = event.getPlayer().getLocation().toVector().subtract(getWarp().toVector());
             Vector tangential = new Vector(radial.getZ(),radial.getY(), -radial.getX());
@@ -270,22 +271,44 @@ public abstract class AbstractGame {
                                           from.getY()+tangential.getY(),
                                           from.getZ()+tangential.getZ(),
                                           to.getYaw(), to.getPitch());
+            Vector radialOld = radial.clone();
+            Vector radialNorm = radial.multiply(1/radial.length()).clone();
             if(newTo.distance(getWarp())>allowedRadius(event.getPlayer())) {
-                Vector radialOld = radial.clone();
-                Vector radialNorm = radial.multiply(1/radial.length()).clone();
                 radial = radial.multiply(allowedRadius(event.getPlayer()));
                 radial = radial.subtract(radialNorm.multiply(0.01));
                 radial = radial.subtract(radialOld);
                 newTo = newTo.add(radial);
             }
-            //event.setTo(newTo); does not work as causes a teleport event which is blocks by method below.
-            event.getPlayer().teleport(newTo, TeleportCause_FORCE);
+            final Player play = event.getPlayer();
+            if(!newTo.getBlock().isEmpty()) {
+                newTo.setY(newTo.getBlockY()+1);
+            }
+            final Location loc = newTo.clone();
+            radialNorm = radialNorm.multiply(-0.4);
+            //radialNorm.setY(0);
+            if(!loc.clone().add(radialNorm.clone().multiply(3)).getBlock().isEmpty()) {
+                radialNorm.setY(0);
+            }
+            if(!loc.clone().add(radialNorm.clone().multiply(3)).getBlock().isEmpty()) {
+                radialNorm = new Vector(0,0,0);
+            }
+            final Vector push = radialNorm;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    play.teleport(loc, TeleportCause_FORCE);  
+                    play.setVelocity(push);
+                }
+            }.runTaskLater(MiniGamesPlugin.getPluginInstance(), 1);
         }
     }
     
     public void playerTeleport(PlayerTeleportEvent event) {
-        if((!teleportAllowed && !event.getCause().equals(TeleportCause_FORCE))) {
+        if((!teleportAllowed && !event.getCause().equals(TeleportCause_FORCE))
+                             && !event.getCause().equals(PlayerTeleportEvent.TeleportCause.UNKNOWN)) {
             event.setCancelled(true);
+//Logger.getGlobal().info(event.getCause().name());
+            sendTeleportNotAllowed(event.getPlayer());
         }
     }
     
@@ -293,6 +316,7 @@ public abstract class AbstractGame {
         if(!flightAllowed) {
             event.getPlayer().setFlying(false);
             event.setCancelled(true);
+            sendFlightNotAllowed(event.getPlayer());
         }
     }
     
@@ -350,5 +374,17 @@ public abstract class AbstractGame {
     
     public void sendGameEndMessage(Player sender) {
         MessageUtil.sendAllInfoMessage(sender, this, "The game "+ getName()+" ended.");
+    }
+
+    private void sendLeaveNotAllowed(Player player) {
+        MessageUtil.sendErrorMessage(player, "You are not allowed to leave game area.");
+    }
+
+    private void sendTeleportNotAllowed(Player player) {
+        MessageUtil.sendErrorMessage(player, "You are not allowed to teleport in this game.");
+    }
+
+    private void sendFlightNotAllowed(Player player) {
+        MessageUtil.sendErrorMessage(player, "You are not allowed to fly in this game.");
     }
 }

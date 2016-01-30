@@ -43,7 +43,7 @@ public class PlayerListener implements Listener{
             PluginData.getGame(event.getPlayer()).playerJoinServer(event);
         }
         else if(PluginData.gameRunning()) {
-            MessageUtil.sendInfoMessage(event.getPlayer(),"There is game going on. For more information type /game check.");
+            MessageUtil.sendInfoMessage(event.getPlayer(),"There is a game going on. For more information type /game check.");
         }
     }
     

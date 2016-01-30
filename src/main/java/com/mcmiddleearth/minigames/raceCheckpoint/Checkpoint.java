@@ -322,6 +322,26 @@ public class Checkpoint {
                         else if(type.equals(Material.TORCH)) {
                             data = adaptData(data, rotation, new byte[]{3,2,4,1});
                         }
+                        else if(type.equals(Material.SMOOTH_STAIRS)
+                                || type.equals(Material.ACACIA_STAIRS)
+                                || type.equals(Material.DARK_OAK_STAIRS)
+                                || type.equals(Material.RED_SANDSTONE_STAIRS)
+                                || type.equals(Material.QUARTZ_STAIRS)
+                                || type.equals(Material.JUNGLE_WOOD_STAIRS)
+                                || type.equals(Material.BIRCH_WOOD_STAIRS)
+                                || type.equals(Material.SANDSTONE_STAIRS)
+                                || type.equals(Material.NETHER_BRICK_STAIRS)
+                                || type.equals(Material.COBBLESTONE_STAIRS)
+                                || type.equals(Material.SPRUCE_WOOD_STAIRS)
+                                || type.equals(Material.WOOD_STAIRS)
+                                || type.equals(Material.BRICK_STAIRS)) {
+                            if(data==3 || data==0 || data==2 || data==1) {
+                                data = adaptData(data, rotation, new byte[]{3,0,2,1});
+                            }
+                            else if(data==7 || data==4 || data==6 || data==5){
+                                data = adaptData(data, rotation, new byte[]{7,4,6,5});
+                            }
+                        }
                         BlockState state = block.getState();
                         state.setType(type);
                         state.setRawData(data); 

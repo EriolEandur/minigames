@@ -127,7 +127,6 @@ Logger.getGlobal().info("insert question");
             }
         }
         return false;
-        //return nextQuestion<questions.size();
     }
     
     public AbstractQuestion getNextQuestion() {
@@ -139,23 +138,17 @@ Logger.getGlobal().info("insert question");
                         questionsLeft++;
                     }
                 }
-Logger.getGlobal().info("getnextQuestion random questions left"+ questionsLeft);            
                 int rand = (int) Math.round(Math.floor(questionsLeft*Math.random()));
-Logger.getGlobal().info("getnextQuestion random number "+ rand+" next "+nextQuestion);            
                 nextQuestion = 0;
                 while(questions.get(nextQuestion).isAnswered()) {
                     nextQuestion++;
-Logger.getGlobal().info("getnextQuestion random search for free A "+ nextQuestion);            
                 }
                 for(int i=0; i<rand; i++) {
                     nextQuestion++;
-Logger.getGlobal().info("getnextQuestion random next free "+ nextQuestion);            
                     while(questions.get(nextQuestion).isAnswered()) {
                         nextQuestion++;
-Logger.getGlobal().info("getnextQuestion random search for free B "+ nextQuestion);            
                     }
                 }
-Logger.getGlobal().info("getnextQuestion random "+ nextQuestion);            
             }
             return questions.get(nextQuestion);
         }
@@ -214,7 +207,7 @@ Logger.getGlobal().info("getnextQuestion random "+ nextQuestion);
         }
         if(winner.size()>0 && (allowEqual || winner.size()==1)) {
             for(Player player: winner) {
-                TitleUtil.showTitle(player, "gold", "Congrats","You won the quizgame");
+                TitleUtil.showTitle(player, "gold", "Congrats","You won the quiz game.");
                 String winnerNames = winner.get(0).getName();
                 for(int i=1;i<winner.size()-1;i++) {
                     winnerNames = winnerNames + ", "+winner.get(i).getName();
