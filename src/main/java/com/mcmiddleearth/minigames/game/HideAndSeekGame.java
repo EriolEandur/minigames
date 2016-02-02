@@ -86,7 +86,7 @@ public class HideAndSeekGame extends AbstractGame {
         sendStartHideMessage();
         Location loc = getWarp().clone();
         loc.setPitch(80);
-        ((Player) seeker).teleport(loc);
+        forceTeleport((Player) seeker,loc);
         seekTask = new BukkitRunnable() {
             @Override
             public void run() {
@@ -120,7 +120,7 @@ public class HideAndSeekGame extends AbstractGame {
             if(hiddenPlayers.contains(player)) {
                 unhidePlayer(player);
             }
-            player.teleport(getWarp());
+            forceTeleport(player,getWarp());
         }
         this.seeking = false;
         this.hiding = false;

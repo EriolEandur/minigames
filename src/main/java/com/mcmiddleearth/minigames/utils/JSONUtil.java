@@ -74,8 +74,8 @@ public class JSONUtil {
         Location loc =  new Location(world,  (Double) jObject.get("x"), 
                                              (Double) jObject.get("y"), 
                                              (Double) jObject.get("z"), 
-                                             ((Double) jObject.get("pitch")).floatValue(),
-                                             ((Double) jObject.get("yaw")).floatValue());
+                                             ((Double) jObject.get("yaw")).floatValue(),
+                                             ((Double) jObject.get("pitch")).floatValue());
         return loc;
     }
     

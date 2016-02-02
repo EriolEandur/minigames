@@ -40,7 +40,7 @@ public enum BlockRotation {
     }
     
     public static BlockRotation getBlockRotation(double yaw) {
-        while(yaw < 180) {
+        while(yaw < -180) {
             yaw += 360;
         }
         while(yaw > 180) {

@@ -12,7 +12,7 @@ import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -59,6 +59,8 @@ public abstract class AbstractGame {
     private final List<OfflinePlayer> spectators = new ArrayList<>();
     
     private final List<OfflinePlayer> invitedPlayers = new ArrayList<>();
+    
+    private final List<UUID> leaveMessaged = new ArrayList<>();
     
     @Getter
     private final Location warp;
@@ -259,7 +261,17 @@ public abstract class AbstractGame {
         Location from = event.getFrom();
         if(to.distance(getWarp())>allowedRadius(event.getPlayer())) {
             //event.setCancelled(true);
-            //sendLeaveNotAllowed(event.getPlayer());
+            if(!leaveMessaged.contains(event.getPlayer().getUniqueId())) {
+                sendLeaveNotAllowed(event.getPlayer());
+                final UUID uuid = event.getPlayer().getUniqueId();
+                leaveMessaged.add(uuid);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        leaveMessaged.remove(uuid);
+                    }
+                }.runTaskLater(MiniGamesPlugin.getPluginInstance(), 200);
+            }
             Vector vel = to.toVector().subtract(event.getFrom().toVector());
             Vector radial = event.getPlayer().getLocation().toVector().subtract(getWarp().toVector());
             Vector tangential = new Vector(radial.getZ(),radial.getY(), -radial.getX());
@@ -307,7 +319,6 @@ public abstract class AbstractGame {
         if((!teleportAllowed && !event.getCause().equals(TeleportCause_FORCE))
                              && !event.getCause().equals(PlayerTeleportEvent.TeleportCause.UNKNOWN)) {
             event.setCancelled(true);
-//Logger.getGlobal().info(event.getCause().name());
             sendTeleportNotAllowed(event.getPlayer());
         }
     }

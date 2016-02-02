@@ -18,8 +18,6 @@ package com.mcmiddleearth.minigames.raceCheckpoint;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.utils.BlockUtil;
-import com.mcmiddleearth.minigames.utils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.EntityUtil;
 import com.mcmiddleearth.minigames.utils.FileUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,16 +31,12 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
@@ -86,24 +80,20 @@ public class Checkpoint {
     public Checkpoint(Location loc, String name, String markerName) {
         this.location = loc;
         this.name = name;
-        if(markerName!=null) {
-            this.markerName = markerName;
-        }
         try {
-            loadMarkerFromFile(markerName);
+            setMarker(markerName);
         } catch (FileNotFoundException ex) {
             try {
-                loadMarkerFromFile(defaultMarker);
+                setMarker(defaultMarker);
             } catch (FileNotFoundException ex1) {
                 Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "Default marker not found.", ex1);
             }
         }
-        placeMarker();
     }
 
     public boolean isCheckLocation(Location loc) {
         for(Location search : checkLocList) {
-            if(loc.distance(search)<2) {//BukkitUtil.isSameBlock(search,loc)) {
+            if(loc.distance(search)<2) {
                 return true;
             }
         }
@@ -128,15 +118,17 @@ public class Checkpoint {
         }
     }
     
-    public void setMarker(String name) throws FileNotFoundException {
+    public final void setMarker(String name) throws FileNotFoundException {
         if(name != null) {
+            if(! new File(markerDir,markerName+"."+markerExt).exists()) {
+                throw new FileNotFoundException(markerName+".mkr file not found.");
+            }
             markerName = name;
         }
         else {
             markerName = defaultMarker;
         }
         removeMarker();
-        loadMarkerFromFile(markerName);
         placeMarker();
     }
     
@@ -160,9 +152,10 @@ public class Checkpoint {
             return;
         }
         try {
-            loadMarkerFromFile(markerName);
+            loadMarkerFromFile();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "placing Marker failed: marker file not found.", ex);
+            return;
         }
         List<Object> objects = new ArrayList<>();
         for(BlockState blockState: marker) {
@@ -247,12 +240,9 @@ public class Checkpoint {
         return nearEntities;
     }
     
-    private void loadMarkerFromFile(String markerName) throws FileNotFoundException {
+    private void loadMarkerFromFile() throws FileNotFoundException{
         File file = new File(markerDir,markerName+"."+markerExt);
         if(!file.exists()) {
-            marker.clear();
-            checkLocList.clear();
-            checkLocList.add(location);
             throw new FileNotFoundException(markerName+".mkr file not found.");
         }
         try {
@@ -424,8 +414,6 @@ public class Checkpoint {
         try(FileWriter fw = new FileWriter(file); 
             PrintWriter writer = new PrintWriter(fw)) {
                 writer.println("YAW "+loc.getYaw());
-        //FileConfiguration config = new YamlConfiguration();
-        //config.set("yaw", loc.getYaw());
         List<Object> blocks  = new ArrayList<>();
                 for(int i = -CheckpointManager.NEAR_DISTANCE;
                         i< CheckpointManager.NEAR_DISTANCE; i++) {
@@ -443,9 +431,6 @@ public class Checkpoint {
                         }
                     }
                 }
-        //BlockUtil.store(config.createSection("marker"),blocks);
-        //try {
-        //    config.save(file);
         } catch (IOException ex) {
             Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "in saving marker file.", ex);
         }

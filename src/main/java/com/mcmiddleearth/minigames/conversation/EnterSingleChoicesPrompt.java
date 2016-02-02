@@ -29,7 +29,7 @@ class EnterSingleChoicesPrompt extends EnterMultipleChoicesPrompt {
     @Override
     public String getPromptText(ConversationContext cc) {
         cc.setSessionData("input", true);
-        return "[Hint] Type in chat the letter of the correct answer.";
+        return ChatColor.DARK_GREEN+"[Hint] Type in chat the letter of the correct answer.";
     }
 
     @Override

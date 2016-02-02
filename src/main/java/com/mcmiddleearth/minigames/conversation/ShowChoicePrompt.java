@@ -18,6 +18,7 @@ package com.mcmiddleearth.minigames.conversation;
 
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.SingleChoiceQuestion;
+import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
@@ -47,8 +48,8 @@ class ShowChoicePrompt extends MessagePrompt {
         ChoiceQuestion question = ((ChoiceQuestion)cc.getSessionData("question"));
         int choiceIndex = (Integer) cc.getSessionData("ChoiceIndex");
         cc.setSessionData("ChoiceIndex", choiceIndex+1);
-        return "["+ChoiceQuestion.getAnswerCharacter(choiceIndex)+"] "
-                + ((String[])cc.getSessionData("Choices"))[choiceIndex].substring(1);
+        return ChatColor.GOLD+"["+ChoiceQuestion.getAnswerCharacter(choiceIndex)+"] "+
+               ChatColor.AQUA+((String[])cc.getSessionData("Choices"))[choiceIndex].substring(1);
     }
 
 }

@@ -40,7 +40,7 @@ class EnterNumericPrompt extends NumericPrompt {
     @Override
     public String getPromptText(ConversationContext cc) {
         cc.setSessionData("input", true);
-        return "[Hint] Type in chat a whole number.";
+        return ChatColor.DARK_GREEN+"[Hint] Type in chat a whole number.";
     }
     
     @Override

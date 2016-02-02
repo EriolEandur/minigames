@@ -11,6 +11,7 @@ import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
 import com.mcmiddleearth.minigames.scoreboard.RaceGameScoreboard;
 import com.mcmiddleearth.minigames.utils.BlockUtil;
+import com.mcmiddleearth.minigames.utils.MessageUtil;
 import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.TitleUtil;
 import java.util.ArrayList;
@@ -18,9 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -71,6 +72,7 @@ public class RaceGame extends AbstractGame {
             if(checkpointManager.getFinish().isCheckLocation(event.getPlayer().getLocation())
                     && getNextCheckpoint(event.getPlayer())==checkpointManager.getCheckpoints().size()+1) {
                 incrementCheckpoint(event.getPlayer());
+                event.getPlayer().playEffect(checkpointManager.getFinish().getLocation(),Effect.CLICK2,0);
                 if(autoShow) {
                     ((RaceGameScoreboard)getBoard()).showFinish();
                 }
@@ -88,6 +90,8 @@ public class RaceGame extends AbstractGame {
                 if(check.isCheckLocation(event.getPlayer().getLocation())
                         && checkId == getNextCheckpoint(event.getPlayer())) {
                     incrementCheckpoint(event.getPlayer());
+                    MessageUtil.sendInfoMessage(event.getPlayer(),"You reached checkpoint "+checkId+".");
+                    event.getPlayer().playEffect(check.getLocation(),Effect.CLICK2,0);
                     if(autoShow) {
                         ((RaceGameScoreboard)getBoard()).showCheckpoint(checkId);
                     }
@@ -194,11 +198,9 @@ public class RaceGame extends AbstractGame {
         List<Location> checkList = start.getCheckLocList();
         if(!cageLocations.isEmpty()) {
             ListIterator<Location> listIterator = checkList.listIterator();
-Logger.getGlobal().info("checkList size "+checkList.size());
             for(Player player: getOnlinePlayers()) {
                 if(cage) {
                     Location teleportLoc = listIterator.next();
-Logger.getGlobal().info("index "+listIterator.nextIndex()+teleportLoc.toString());
                     teleportLoc.setX(teleportLoc.getBlockX()+0.5);
                     teleportLoc.setY(teleportLoc.getBlockY()+0.5);
                     teleportLoc.setZ(teleportLoc.getBlockZ()+0.5);

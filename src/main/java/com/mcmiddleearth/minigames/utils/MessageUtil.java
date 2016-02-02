@@ -7,9 +7,6 @@ package com.mcmiddleearth.minigames.utils;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import java.lang.reflect.Constructor;
-import java.util.List;
-import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,8 +22,13 @@ public class MessageUtil {
     
     @Getter
     private static final String PREFIX   = "[MiniGames] ";
+    
+    @Getter
     private static final String NOPREFIX = "    ";
     private static final String CHATPREFIX = "[GameChat] ";
+    
+    @Getter
+    private static final ChatColor INFOCOLOR = ChatColor.AQUA;
     
     public static void sendErrorMessage(CommandSender sender, String message) {
         if (sender instanceof Player) {
@@ -68,6 +70,13 @@ public class MessageUtil {
         }
     }
     
+    public static void sendClickableMessage(Player sender, String message, String onClickCommand) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw "+ sender.getName()+" "
+                    +"{ text:\""+message+"\", "
+                      +"clickEvent:{ action:run_command,"
+                                   + "value:\""+ onClickCommand +"\"}}");
+    }
+        
     public static void sendChatMessage(CommandSender sender, Player recipient, String message) {
         if (!(sender instanceof Player)) {
             recipient.sendMessage(ChatColor.AQUA + CHATPREFIX

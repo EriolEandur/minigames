@@ -32,7 +32,7 @@ class EnterMultipleChoicesPrompt extends ValidatingPrompt {
     @Override
     public String getPromptText(ConversationContext cc) {
         cc.setSessionData("input", true);
-        return "[Hint] Type in the letters of the correct answers.";
+        return ChatColor.DARK_GREEN+"[Hint] Type in the letters of the correct answers.";
     }
 
     @Override

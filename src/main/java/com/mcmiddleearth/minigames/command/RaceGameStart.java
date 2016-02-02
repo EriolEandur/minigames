@@ -36,6 +36,7 @@ public class RaceGameStart extends AbstractGameCommand{
             RaceGame raceGame = (RaceGame) game;
             if(raceGame.isStarted()) {
                 sendAlreadySteadyMessage(cs);
+                return;
             }
             if(raceGame.getPlayers().size()<2) {
                 sendNotEnoughPlayerMessage(cs);

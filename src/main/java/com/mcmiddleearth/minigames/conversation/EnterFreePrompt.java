@@ -16,6 +16,7 @@
  */
 package com.mcmiddleearth.minigames.conversation;
 
+import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -29,7 +30,7 @@ class EnterFreePrompt extends StringPrompt {
     @Override
     public String getPromptText(ConversationContext cc) {
         cc.setSessionData("input", true);
-        return "[Hint] Type your answer in chat.";
+        return ChatColor.DARK_GREEN+"[Hint] Type your answer in chat.";
     }
 
     @Override

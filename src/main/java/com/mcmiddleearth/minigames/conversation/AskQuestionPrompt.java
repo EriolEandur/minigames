@@ -21,6 +21,7 @@ import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.FreeQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
+import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
 import org.bukkit.conversations.Prompt;
@@ -53,7 +54,7 @@ public class AskQuestionPrompt extends MessagePrompt{
 
     @Override
     public String getPromptText(ConversationContext cc) {
-        return "[Question] "+((AbstractQuestion)cc.getSessionData("question")).getQuestion();
+        return ChatColor.YELLOW+"[Question] "+ChatColor.GOLD+((AbstractQuestion)cc.getSessionData("question")).getQuestion();
     }
     
 }

@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -33,12 +34,15 @@ public class GameFiles extends AbstractCommand{
     
     @Override
     protected void execute(CommandSender cs, String... args) {
+        String command = null;
         File[] files;
         if(args[0].equalsIgnoreCase("quiz")) {
             files = PluginData.getQuestionDir().listFiles(FileUtil.getFileExtFilter("json"));
+            command = "/game loadquiz ";
         }
         else if(args[0].equalsIgnoreCase("race")) {
             files = PluginData.getRaceDir().listFiles(FileUtil.getFileExtFilter("json"));
+            command = "/game loadrace ";
         }
         else if(args[0].equalsIgnoreCase("marker")) {
             files = Checkpoint.getMarkerDir().listFiles(FileUtil.getFileExtFilter(Checkpoint.getMarkerExt()));
@@ -64,7 +68,7 @@ public class GameFiles extends AbstractCommand{
         }
         sendHeaderMessage(cs, args[0], page, maxPage);
         for(int i = files.length-1-(page-1)*10; i >= 0 && i > files.length-1-(page-1)*10-10; i--) {
-            sendEntryMessage(cs, files[i].getName(), getDescription(files[i]));
+            sendEntryMessage(cs, files[i].getName(), getDescription(files[i]), command);
         }
     }
     
@@ -94,15 +98,21 @@ public class GameFiles extends AbstractCommand{
         MessageUtil.sendInfoMessage(cs, "Saved "+type+" data files [page " +page+"/"+maxPage+"]");
     }
 
-    private void sendEntryMessage(CommandSender cs, String fileName, String description) {
+    private void sendEntryMessage(CommandSender cs, String fileName, String description, String command) {
         String name = fileName.substring(0, fileName.lastIndexOf('.'));
         while(name.length()<15) {
             name = name.concat(" ");
         }
-        MessageUtil.sendNoPrefixInfoMessage(cs, name+description);
+        if(command != null) {
+            MessageUtil.sendClickableMessage((Player)cs, MessageUtil.getINFOCOLOR()+MessageUtil.getNOPREFIX()
+                                                +name+description, command+fileName.substring(0, fileName.lastIndexOf('.')));
+        }
+        else {
+            MessageUtil.sendNoPrefixInfoMessage(cs, name+description);
+        }
     }
 
     private void sendInvalidDataTypeMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Invalid data type. Try /game files quiz|race");
+        MessageUtil.sendErrorMessage(cs, "Invalid file type. Try /game files quiz|race|marker");
     }
 }

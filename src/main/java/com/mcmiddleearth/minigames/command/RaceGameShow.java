@@ -54,7 +54,7 @@ public class RaceGameShow extends AbstractGameCommand{
                     }
                     else {
                         raceGame.showCheckpoint(checkId);
-                        sendShowCheckMessage(cs);
+                        sendShowCheckMessage(cs, checkId);
                     }
                 }
                 catch(NumberFormatException e) {
@@ -69,7 +69,7 @@ public class RaceGameShow extends AbstractGameCommand{
     }
 
     private void sendAutoCheckpointMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Automatically showing checkponts.");
+        MessageUtil.sendErrorMessage(cs, "Automatically showing rank list for most recent checkpont.");
     }
 
     private void sendShowStartMessage(CommandSender cs) {
@@ -80,8 +80,8 @@ public class RaceGameShow extends AbstractGameCommand{
         MessageUtil.sendErrorMessage(cs, "Showing finish rank list now.");
     }
 
-    private void sendShowCheckMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Showing checkpoint list now.");
+    private void sendShowCheckMessage(CommandSender cs,int id) {
+        MessageUtil.sendErrorMessage(cs, "Showing intermediate rank list at checkpoint "+id+".");
     }
 
     private void sendNotANumberMessage(CommandSender cs) {
