@@ -63,8 +63,7 @@ public class RaceGameSave extends AbstractGameCommand implements Confirmationabl
             raceGame.getCheckpointManager().saveRace(file, description);
             sendRaceSavedMessage(player);
         } catch (IOException ex) {
-            sendIOErrorMessage(player);
-            Logger.getLogger(RaceGameSave.class.getName()).log(Level.SEVERE, null, ex);
+            sendIOErrorMessage(player, ex.getMessage());
         }
     }
     
@@ -73,8 +72,8 @@ public class RaceGameSave extends AbstractGameCommand implements Confirmationabl
         sendAbordMessage(player);
     }
 
-    private void sendIOErrorMessage(Player player) {
-        MessageUtil.sendErrorMessage(player, "There was an error. Nothing was saved.");
+    private void sendIOErrorMessage(Player player, String msg) {
+        MessageUtil.sendErrorMessage(player, "There was an error: "+msg+" Nothing was saved.");
     }
 
     private void sendRaceSavedMessage(Player player) {

@@ -252,7 +252,7 @@ public class CheckpointManager {
     
     public void saveRace(File file, String description) throws IOException {
         if(start==null || finish ==null) {
-            throw new IOException("no start/finish");
+            throw new IOException("No start/finish.");
         }
         JSONObject jStart = jCheckpoint(start);
         JSONObject jFinish = jCheckpoint(finish);

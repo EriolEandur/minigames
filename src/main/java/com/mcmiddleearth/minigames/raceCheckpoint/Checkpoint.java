@@ -81,10 +81,10 @@ public class Checkpoint {
         this.location = loc;
         this.name = name;
         try {
-            setMarker(markerName);
+            setMarker(markerName,false);
         } catch (FileNotFoundException ex) {
             try {
-                setMarker(defaultMarker);
+                setMarker(defaultMarker,false);
             } catch (FileNotFoundException ex1) {
                 Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "Default marker not found.", ex1);
             }
@@ -119,6 +119,10 @@ public class Checkpoint {
     }
     
     public final void setMarker(String name) throws FileNotFoundException {
+        setMarker(name,true);
+    }
+    
+    private final void setMarker(String name, boolean removeOldMarker) throws FileNotFoundException {
         if(name != null) {
             if(! new File(markerDir,markerName+"."+markerExt).exists()) {
                 throw new FileNotFoundException(markerName+".mkr file not found.");
@@ -128,7 +132,9 @@ public class Checkpoint {
         else {
             markerName = defaultMarker;
         }
-        removeMarker();
+        if(removeOldMarker) {
+            removeMarker();
+        }
         placeMarker();
     }
     

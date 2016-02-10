@@ -1,0 +1,31 @@
+{
+    "questions":[
+        {
+            "Answer":"answer",
+            "Type":"Free",
+            "Question":"free question"
+        },{
+            "Answer":1111,
+            "Type":"number",
+            "Precision":10,
+            "Question":"number question"
+        },{
+            "Type":"Single",
+            "Choices":[
+                "possible anwer A",
+                "possible answer B",
+                "possible answer C",
+                "possible answer D"],
+            "Question":"single choice question",
+            "Correct":"D"
+        },{
+            "Type":"Multi",
+            "Choices":[
+                "possible anwer A",
+                "possible answer B",
+                "possible answer C",
+                "possible answer D"],
+            "Question":"multi choice question",
+            "Correct":"AB"
+        }],
+    "description":"template for json files"}
