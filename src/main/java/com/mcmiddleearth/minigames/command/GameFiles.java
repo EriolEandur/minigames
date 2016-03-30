@@ -104,7 +104,7 @@ public class GameFiles extends AbstractCommand{
             name = name.concat(" ");
         }
         if(command != null) {
-            MessageUtil.sendClickableMessage((Player)cs, MessageUtil.getINFOCOLOR()+MessageUtil.getNOPREFIX()
+            MessageUtil.sendClickableMessage((Player)cs, MessageUtil.INFO+MessageUtil.getNOPREFIX()
                                                 +name+description, command+fileName.substring(0, fileName.lastIndexOf('.')));
         }
         else {

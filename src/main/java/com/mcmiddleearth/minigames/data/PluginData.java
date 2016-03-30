@@ -6,18 +6,24 @@
 package com.mcmiddleearth.minigames.data;
 
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
-import com.mcmiddleearth.minigames.conversation.ConfirmationFactory;
-import com.mcmiddleearth.minigames.conversation.CreateQuestionConversationFactory;
+import com.mcmiddleearth.minigames.conversation.confirmation.ConfirmationFactory;
+import com.mcmiddleearth.minigames.conversation.quiz.CreateQuestionConversationFactory;
 import com.mcmiddleearth.minigames.game.AbstractGame;
+import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -39,6 +45,21 @@ public class PluginData {
     @Getter
     private static final File questionDir = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
                                                     + File.separator + "QuizQuestions");
+    
+    @Getter
+    private static final File questionDataTable = new File(questionDir,"questionTable.dat");
+    
+    @Getter
+    private static final File submittedQuestionsFile = new File(questionDir,"submitted.json");
+    
+    @Getter 
+    static final QuizGame questionSubmitGame = new QuizGame(null, "submitQuestions");
+    
+    @Getter
+    private static final File questionCategoriesFile = new File(questionDir,"questionCategories.dat");
+    
+    @Getter
+    private static final List<String> questionCategories = new ArrayList<>();
     
     @Getter
     private static final File raceDir = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
@@ -158,4 +179,39 @@ public class PluginData {
     public static void cleanup() {
         Checkpoint.cleanup();
     }
+    
+    public static void load() {
+        try {
+            try (Scanner reader = new Scanner(questionCategoriesFile)) {
+                questionCategories.clear();
+                while(reader.hasNext()){
+                    questionCategories.add(reader.nextLine());
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            MiniGamesPlugin.getPluginInstance().getLogger().log(Level.SEVERE, null, ex);
+        }
+        try {
+            questionSubmitGame.loadQuestionsFromJson(submittedQuestionsFile);
+        } catch (FileNotFoundException | ParseException ex) {
+            Logger.getLogger(PluginData.class.getName()).log(Level.INFO, "No submitted questions found.");
+        }
+    }
+    
+    public static boolean areValidCategories(String categories) {
+        for(Character letter: categories.toCharArray()) {
+            boolean found = false;
+            for(String search: questionCategories) {
+                if(search.charAt(0)==letter) {
+                    found = true;
+                    break;
+                }
+            }
+            if(!found) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
 }

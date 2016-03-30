@@ -14,11 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.conversation;
+package com.mcmiddleearth.minigames.conversation.quiz;
 
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
+import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
+import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.StringUtil;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.conversations.Conversation;
@@ -66,13 +69,42 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
             sendAbordMessage(player);
         }
         else {
-            if(((AbstractQuestion)cc.getSessionData("question"))
-                    .isCorrectAnswer((String) cc.getSessionData("answer"))) {
+            AbstractQuestion question = (AbstractQuestion)cc.getSessionData("question");
+            String answer = (String) cc.getSessionData("answer");
+            if(question.isCorrectAnswer(answer)) {
                 ((QuizGame)cc.getSessionData("game")).incrementScore(player);
-                sendSuccessMessage(player);
+                if(question instanceof NumberQuestion 
+                        && StringUtil.parseInt(answer)!=((NumberQuestion)question).getAnswer()) {
+                    sendAlmostCorrectMessage(player, question.getCorrectAnswer());
+                } else {
+                    sendSuccessMessage(player);
+                }
             }
             else {
-                sendFailMessage((Player) cc.getSessionData("player"));
+                if(question instanceof NumberQuestion) {
+                    sendFailNumberQuestionMessage((Player) cc.getSessionData("player"),
+                                                  question.getCorrectAnswer(),
+                                                  ((NumberQuestion)question).getPrecision());
+                } else {
+                    String correctAnswer;
+                    if(question instanceof ChoiceQuestion) {
+                        correctAnswer = question.getCorrectAnswer();
+                        Character[] answerLetters = ChoiceQuestion.parseAnswer(correctAnswer);
+                        correctAnswer = "";
+                        for (Character answerLetter : answerLetters) {
+                            String[] choices = (String[])cc.getSessionData("Choices");
+                            for(int i = 0; i < choices.length;i++) {
+                                if(choices[i].charAt(0)==answerLetter) {
+                                    correctAnswer = correctAnswer+ChoiceQuestion.getAnswerCharacter(i);
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        correctAnswer = question.getCorrectAnswer();
+                    }
+                    sendFailMessage((Player) cc.getSessionData("player"), correctAnswer);  
+                }
             }
         }
         QuizGame game = (QuizGame) cc.getSessionData("game");
@@ -90,8 +122,17 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
         MessageUtil.sendInfoMessage(player, "You answered this Question correctely.");
     }
 
-    private void sendFailMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "You failed to answer this Question correctely.");
+    private void sendFailMessage(Player player, String answer) {
+        MessageUtil.sendInfoMessage(player, "You failed to answer this Question correctely. Correct answer: "+answer);
+    }
+
+    private void sendFailNumberQuestionMessage(Player player, String answer, int precision) {
+        MessageUtil.sendInfoMessage(player, "You failed to answer this Question correctely. Correct answer was "
+                                           +answer+". Allowed deviation from correct answer was "+precision+".");
+    }
+
+    private void sendAlmostCorrectMessage(Player player, String answer) {
+        MessageUtil.sendInfoMessage(player, "Almost! The right answer was "+answer+" but you were close enough.");
     }
 
 }

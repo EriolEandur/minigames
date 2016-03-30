@@ -17,6 +17,7 @@
 package com.mcmiddleearth.minigames.quizQuestion;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -25,13 +26,15 @@ import lombok.Getter;
 public class NumberQuestion extends AbstractQuestion{
     
     @Getter
-    private final int answer;
+    @Setter
+    private int answer;
     
     @Getter
-    private final int precision;
+    @Setter
+    private int precision;
     
-    public NumberQuestion(String question, int answer, int precision) {
-        super(question, QuestionType.NUMBER);
+    public NumberQuestion(String question, int answer, int precision, String categories) {
+        super(question, QuestionType.NUMBER, categories);
         this.answer = answer;
         this.precision = precision;
     }
@@ -49,4 +52,9 @@ public class NumberQuestion extends AbstractQuestion{
             return false;
         }
     }
+    
+    @Override
+    public String getCorrectAnswer() {
+        return answer+"";
+    }    
 }

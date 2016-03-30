@@ -17,9 +17,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -63,7 +65,7 @@ public abstract class AbstractGame {
     private final List<UUID> leaveMessaged = new ArrayList<>();
     
     @Getter
-    private final Location warp;
+    private Location warp = null;
     
     @Getter
     @Setter
@@ -83,7 +85,11 @@ public abstract class AbstractGame {
     @Getter
     @Setter
     private boolean teleportAllowed = true;
-   
+    
+    @Getter
+    @Setter
+    private boolean gm3Allowed = false;
+    
     @Getter
     private final GameScoreboard board;
     
@@ -92,27 +98,29 @@ public abstract class AbstractGame {
     public AbstractGame(Player manager, String name, GameType type, GameScoreboard board) {
         this.name = name;
         this.manager = manager;
-        warp = manager.getLocation();
         this.board = board;
-        manager.setScoreboard(getBoard().getScoreboard());
         this.type = type;
-        BukkitRunnable cleanupTask = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if(!getManager().isOnline()) {
-                    if(!managerOnlineLastTime) {
-                        end(null);
-                        cancel();
+        if(manager!=null) {
+            warp = manager.getLocation();
+            manager.setScoreboard(getBoard().getScoreboard());
+            BukkitRunnable cleanupTask = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if(!getManager().isOnline()) {
+                        if(!managerOnlineLastTime) {
+                            end(null);
+                            cancel();
+                        }
+                        else {
+                            managerOnlineLastTime = false;
+                        }
                     }
                     else {
-                        managerOnlineLastTime = false;
+                        managerOnlineLastTime = true;
                     }
-                }
-                else {
-                    managerOnlineLastTime = true;
-                }
-            }};
-        cleanupTask.runTaskTimer(MiniGamesPlugin.getPluginInstance(), 3000, 3000);
+                }};
+            cleanupTask.runTaskTimer(MiniGamesPlugin.getPluginInstance(), 3000, 3000);
+        }
     }
     
     public void end(Player sender) {
@@ -169,6 +177,9 @@ public abstract class AbstractGame {
     public void addPlayer(Player player) {
         if(!flightAllowed) {
             player.setFlying(false);
+        }
+        if(!gm3Allowed && player.getGameMode().equals(GameMode.SPECTATOR)) {
+            player.setGameMode(GameMode.SURVIVAL);
         }
         players.add(player);
         getBoard().incrementPlayer();
@@ -331,6 +342,13 @@ public abstract class AbstractGame {
         }
     }
     
+    public void playerChangeGameMode(PlayerGameModeChangeEvent event) {
+        if(!gm3Allowed && event.getNewGameMode().equals(GameMode.SPECTATOR)) {
+            event.setCancelled(true);
+            sendGm3NotAllowed(event.getPlayer());
+        }
+    }
+    
     public void forceTeleport(Player player, Location loc) {
         //boolean teleport = teleportAllowed;
         player.teleport(loc, TeleportCause_FORCE);
@@ -348,7 +366,9 @@ public abstract class AbstractGame {
     
     public void announceGame() {
         announced = true;
-        sendAnnounceGameMessage();
+        if(!isPrivat()) {
+            sendAnnounceGameMessage();
+        }
     }
     
     public boolean isInvited(OfflinePlayer player) {
@@ -397,5 +417,9 @@ public abstract class AbstractGame {
 
     private void sendFlightNotAllowed(Player player) {
         MessageUtil.sendErrorMessage(player, "You are not allowed to fly in this game.");
+    }
+
+    private void sendGm3NotAllowed(Player player) {
+        MessageUtil.sendErrorMessage(player, "You are not allowed to switch to spectator mode in this game.");
     }
 }

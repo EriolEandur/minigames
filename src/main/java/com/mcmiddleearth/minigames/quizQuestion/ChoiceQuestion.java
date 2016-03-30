@@ -18,8 +18,8 @@ package com.mcmiddleearth.minigames.quizQuestion;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -29,18 +29,20 @@ import lombok.Getter;
 public class ChoiceQuestion extends AbstractQuestion {
 
     @Getter
-    protected final String[] answers;
+    @Setter
+    protected String[] answers;
     
     protected final boolean[] correctAnswers = new boolean[answerCount];
     
     public final static int answerCount = 4;
     
-    public ChoiceQuestion(String question, String[] answers, String correctAnswers) {
-        this(question, QuestionType.MULTI, answers, correctAnswers);
+    public ChoiceQuestion(String question, String[] answers, String correctAnswers, String categories) {
+        this(question, QuestionType.MULTI, answers, correctAnswers, categories);
     }
 
-    protected ChoiceQuestion(String question, QuestionType type, String[] answers, String correctAnswers) {
-        super(question, type);
+    protected ChoiceQuestion(String question, QuestionType type, String[] answers, String correctAnswers,
+                             String categories) {
+        super(question, type, categories);
         this.answers = answers;
         setCorrectAnswers(correctAnswers);
     }
@@ -49,16 +51,12 @@ public class ChoiceQuestion extends AbstractQuestion {
         String[] result = new String[answerCount];
         for(int i = 0; i< answerCount; i++) {
             int rand = (int) Math.round(Math.floor(answerCount*Math.random()));
-Logger.getGlobal().info("inrandomOrder "+ rand);            
             while(result[rand]!=null) {
-Logger.getGlobal().info("inrandomOrder search"+ rand);            
                 rand++;
                 if(rand==answerCount) {
                     rand=0;
-Logger.getGlobal().info("inrandomOrder to first "+ rand);            
                 }
             }
-Logger.getGlobal().info("inrandomOrder finised "+ rand);            
             result[rand]=getAnswerCharacter(i)+answers[i];
         }
         return result;
@@ -82,7 +80,8 @@ Logger.getGlobal().info("inrandomOrder finised "+ rand);
         }
     }
     
-    public String getCorrectAnswers() {
+    @Override
+    public String getCorrectAnswer() {
         String result = "";
         for(int i = 0;i<answerCount;i++) {
             if(correctAnswers[i]) {

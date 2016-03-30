@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.conversation;
+package com.mcmiddleearth.minigames.conversation.quiz;
 
+import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.NumericPrompt;
 import org.bukkit.conversations.Prompt;
@@ -25,26 +27,38 @@ import org.bukkit.conversations.Prompt;
  *
  * @author Eriol_Eandur
  */
-class EnterPrecisionPrompt extends NumericPrompt {
+class EditNumericPrompt extends NumericPrompt {
 
+    private boolean keep = false; 
+    
     @Override
     protected Prompt acceptValidatedInput(ConversationContext cc, Number number) {
-        cc.setSessionData("precision", number.intValue()+"");
-        return END_OF_CONVERSATION;
+        if(keep) {
+            cc.setSessionData("answer", ((NumberQuestion)EditQuestionConversationFactory.getQuestion(cc)).getAnswer());
+        } else {
+            cc.setSessionData("answer", number.intValue());
+        }
+        return new EditPrecisionPrompt();
     }
 
     @Override
     public String getPromptText(ConversationContext cc) {
-        return MessageUtil.getPREFIX()+"Enter the tolerance for an answer to be called correct.";
+        cc.setSessionData("input", true);
+        return ChatColor.DARK_GREEN+"[Numeric Answer] "+((NumberQuestion)EditQuestionConversationFactory
+                                         .getQuestion(cc)).getCorrectAnswer();
     }
     
     @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
-        return "Invalid input. Enter a whole number.";
+        return ChatColor.RED+"[Invalid input] Type in chat a whole number.";
     }
     
     @Override
     protected boolean isInputValid(ConversationContext cc, String input) {
+        if(input.equalsIgnoreCase("!keep")) {
+            keep = true;
+            return true;
+        }
         try {
             Integer.parseInt(input);
         }

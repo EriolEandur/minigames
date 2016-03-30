@@ -65,7 +65,7 @@ public class RaceGameShow extends AbstractGameCommand{
     }
 
     private void sendNotStartedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You have to started the race first.");
+        MessageUtil.sendErrorMessage(cs, "You have to start the race first.");
     }
 
     private void sendAutoCheckpointMessage(CommandSender cs) {

@@ -10,6 +10,7 @@ import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -63,4 +64,11 @@ public class PlayerListener implements Listener{
         }
     }
     
+    @EventHandler
+    public void playerChangeGameMode(PlayerGameModeChangeEvent event) {
+        if(PluginData.isInGame(event.getPlayer())) {
+            AbstractGame game = PluginData.getGame(event.getPlayer());
+            game.playerChangeGameMode(event);
+        }
+    }
 }

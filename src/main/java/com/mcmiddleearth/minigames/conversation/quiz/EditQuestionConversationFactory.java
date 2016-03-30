@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.conversation;
+package com.mcmiddleearth.minigames.conversation.quiz;
 
 import com.mcmiddleearth.minigames.game.QuizGame;
+import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.FreeQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
-import com.mcmiddleearth.minigames.quizQuestion.SingleChoiceQuestion;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
@@ -35,25 +35,25 @@ import org.bukkit.plugin.Plugin;
  *
  * @author Eriol_Eandur
  */
-public class CreateQuestionConversationFactory implements ConversationAbandonedListener{
+public class EditQuestionConversationFactory implements ConversationAbandonedListener{
     private final ConversationFactory factory;
     
-    public CreateQuestionConversationFactory(Plugin plugin){
+    public EditQuestionConversationFactory(Plugin plugin){
         factory = new ConversationFactory(plugin)
                 .withModality(false)
                 .withPrefix(new CreateQuestionPrefix())
-                .withFirstPrompt(new EnterQuestionPrompt())
+                .withFirstPrompt(new EditQuestionPrompt())
                 .withEscapeSequence("!cancel")
                 .withTimeout(600)
                 .addConversationAbandonedListener(this);
     }
     
-    public void start(Player player, QuizGame game, QuestionType questionType, int questionIndex) {
+    public void start(Player player, QuizGame game, int questionIndex) {
         Conversation conversation = factory.buildConversation(player);
         ConversationContext context = conversation.getContext();
         context.setSessionData("game", game);
         context.setSessionData("player", player);
-        context.setSessionData("questionType", questionType);
+        context.setSessionData("questionType", game.getQuestions().get(questionIndex).getType());
         context.setSessionData("createQuestion", true);
         context.setSessionData("questionIndex", questionIndex);
         conversation.begin();
@@ -68,36 +68,42 @@ public class CreateQuestionConversationFactory implements ConversationAbandonedL
         }
         else {
             sendQuestionCreatedMessage((Player) cc.getSessionData("player"));
-            QuizGame game = (QuizGame)cc.getSessionData("game");
             switch(((QuestionType)cc.getSessionData("questionType"))) {
                 case FREE:
-                    game.addQuestion(new FreeQuestion((String) cc.getSessionData("question"),
-                                                      (String) cc.getSessionData("answer")),
-                                                      (int) cc.getSessionData("questionIndex")); break;
+                    FreeQuestion question = (FreeQuestion) getQuestion(cc);
+                    question.setQuestion((String) cc.getSessionData("question"));
+                    question.setAnswer((String) cc.getSessionData("answer"));
+                    question.setCategories((String) cc.getSessionData("categories"));
+                    break;
                 case NUMBER:
-                    game.addQuestion(new NumberQuestion((String) cc.getSessionData("question"),
-                                                        Integer.parseInt((String) cc.getSessionData("answer")),
-                                                        Integer.parseInt((String) cc.getSessionData("precision"))),
-                                                        (int) cc.getSessionData("questionIndex")); break;
+                    NumberQuestion nQuestion = (NumberQuestion) getQuestion(cc);
+                    nQuestion.setQuestion((String) cc.getSessionData("question"));
+                    nQuestion.setAnswer((Integer) cc.getSessionData("answer"));
+                    nQuestion.setPrecision((Integer) cc.getSessionData("precision"));
+                    nQuestion.setCategories((String) cc.getSessionData("categories"));
+                    break;
                 case MULTI:
-                    game.addQuestion(new ChoiceQuestion((String) cc.getSessionData("question"),
-                                                        (String[]) cc.getSessionData("choices"),
-                                                        (String) cc.getSessionData("answer")),
-                                                        (int) cc.getSessionData("questionIndex")); break;
                 default:
-                    game.addQuestion(new SingleChoiceQuestion((String) cc.getSessionData("question"),
-                                                              (String[]) cc.getSessionData("choices"),
-                                                              (String) cc.getSessionData("answer")),
-                                                              (int) cc.getSessionData("questionIndex")); break;
+                    ChoiceQuestion cQuestion = (ChoiceQuestion) getQuestion(cc);
+                    cQuestion.setQuestion((String) cc.getSessionData("question"));
+                    cQuestion.setCorrectAnswers((String) cc.getSessionData("answer"));
+                    cQuestion.setAnswers((String[]) cc.getSessionData("choices"));
+                    cQuestion.setCategories((String) cc.getSessionData("categories"));
+                    break;
             }
         }
     }
  
+    static AbstractQuestion getQuestion(ConversationContext cc) {
+        return ((QuizGame)cc.getSessionData("game")).getQuestions()
+                            .get((int) cc.getSessionData("questionIndex"));
+    }
+    
     private void sendAbordMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "You cancelled creating a new Question.");
+        MessageUtil.sendInfoMessage(player, "You cancelled editing.");
     }
     
     private void sendQuestionCreatedMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "You added a new question to the quiz.");
+        MessageUtil.sendInfoMessage(player, "Changes saved.");
     }
 }

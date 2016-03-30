@@ -5,6 +5,7 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.Permissions;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -24,44 +25,49 @@ public class GameCommandExecutor implements CommandExecutor {
     private final Map <String, AbstractCommand> commands = new LinkedHashMap <>();
     
     public GameCommandExecutor() {
-        addCommandHandler("create", new GameCreate("minigames.manager"));
-        addCommandHandler("end", new GameEnd("minigames.manager"));
-        addCommandHandler("leave", new GameLeave("minigames.user"));
-        addCommandHandler("join", new GameJoin("minigames.user"));
-        addCommandHandler("check", new GameCheck("minigames.user"));
-        addCommandHandler("info", new GameInfo("minigames.user"));
-        addCommandHandler("help", new GameHelp("minigames.user"));
-        addCommandHandler("kick", new GameKick("minigames.manager"));
-        addCommandHandler("ban", new GameBan("minigames.manager"));
-        addCommandHandler("unban", new GameUnban("minigames.manager"));
-        addCommandHandler("manager", new GameManager("minigames.manager"));
-        addCommandHandler("hide", new HaSGameHide("minigames.manager"));
-        addCommandHandler("seeker", new HaSGameSeeker("minigames.manager"));
-        addCommandHandler("question", new QuizGameQuestion("minigames.manager"));
-        addCommandHandler("send", new QuizGameSend("minigames.manager"));
-        addCommandHandler("ready", new GameReady("minigames.manager"));
-        addCommandHandler("restart", new QuizGameRestart("minigames.manager"));
-        addCommandHandler("savequiz", new QuizGameSave("minigames.manager"));
-        addCommandHandler("loadquiz", new QuizGameLoad("minigames.manager"));
-        addCommandHandler("delete", new GameDelete("minigames.staff"));
-        addCommandHandler("clear", new QuizGameClear("minigames.manager"));
-        addCommandHandler("files", new GameFiles("minigames.manager"));
-        addCommandHandler("set", new RaceGameSet("minigames.manager"));
-        addCommandHandler("remove", new RaceGameRemove("minigames.manager"));
-        addCommandHandler("savemarker", new RaceGameSaveMarker("minigames.manager"));
-        addCommandHandler("marker", new RaceGameMarker("minigames.manager"));
-        addCommandHandler("saverace", new RaceGameSave("minigames.manager"));
-        addCommandHandler("loadrace", new RaceGameLoad("minigames.manager"));
-        addCommandHandler("start", new RaceGameStart("minigames.manager"));
-        addCommandHandler("stop", new RaceGameStop("minigames.manager"));
-        addCommandHandler("warp", new GameWarp("minigames.user"));
-        addCommandHandler("show", new RaceGameShow("minigames.manager"));
-        addCommandHandler("allow", new GameAllow("minigames.manager"));
-        addCommandHandler("deny", new GameDeny("minigames.manager"));
-        addCommandHandler("invite", new GameInvite("minigames.manager"));
-        addCommandHandler("spectate", new GameSpectate("minigames.user"));
-        addCommandHandler("winner", new QuizGameWinner("minigames.manager"));
-        addCommandHandler("random", new QuizGameRandom("minigames.manager"));
+        addCommandHandler("create", new GameCreate(Permissions.MANAGER));
+        addCommandHandler("end", new GameEnd(Permissions.MANAGER));
+        addCommandHandler("leave", new GameLeave(Permissions.USER));
+        addCommandHandler("join", new GameJoin(Permissions.USER));
+        addCommandHandler("check", new GameCheck(Permissions.USER));
+        addCommandHandler("info", new GameInfo(Permissions.USER));
+        addCommandHandler("help", new GameHelp(Permissions.USER));
+        addCommandHandler("kick", new GameKick(Permissions.MANAGER));
+        addCommandHandler("ban", new GameBan(Permissions.MANAGER));
+        addCommandHandler("unban", new GameUnban(Permissions.MANAGER));
+        addCommandHandler("manager", new GameManager(Permissions.MANAGER));
+        addCommandHandler("hide", new HaSGameHide(Permissions.MANAGER));
+        addCommandHandler("seeker", new HaSGameSeeker(Permissions.MANAGER));
+        addCommandHandler("question", new QuizGameQuestion(Permissions.USER));
+        addCommandHandler("send", new QuizGameSend(Permissions.MANAGER));
+        addCommandHandler("ready", new GameReady(Permissions.MANAGER));
+        addCommandHandler("restart", new QuizGameRestart(Permissions.MANAGER));
+        addCommandHandler("savequiz", new QuizGameSave(Permissions.MANAGER));
+        addCommandHandler("loadquiz", new QuizGameLoad(Permissions.MANAGER));
+        addCommandHandler("delete", new GameDelete(Permissions.STAFF));
+        addCommandHandler("clear", new QuizGameClear(Permissions.MANAGER));
+        addCommandHandler("files", new GameFiles(Permissions.MANAGER));
+        addCommandHandler("set", new RaceGameSet(Permissions.MANAGER));
+        addCommandHandler("remove", new RaceGameRemove(Permissions.MANAGER));
+        addCommandHandler("savemarker", new RaceGameSaveMarker(Permissions.MANAGER));
+        addCommandHandler("marker", new RaceGameMarker(Permissions.MANAGER));
+        addCommandHandler("saverace", new RaceGameSave(Permissions.MANAGER));
+        addCommandHandler("loadrace", new RaceGameLoad(Permissions.MANAGER));
+        addCommandHandler("start", new RaceGameStart(Permissions.MANAGER));
+        addCommandHandler("stop", new RaceGameStop(Permissions.MANAGER));
+        addCommandHandler("warp", new GameWarp(Permissions.USER));
+        addCommandHandler("show", new RaceGameShow(Permissions.MANAGER));
+        addCommandHandler("allow", new GameAllow(Permissions.MANAGER));
+        addCommandHandler("deny", new GameDeny(Permissions.MANAGER));
+        addCommandHandler("invite", new GameInvite(Permissions.MANAGER));
+        addCommandHandler("spectate", new GameSpectate(Permissions.USER));
+        addCommandHandler("winner", new QuizGameWinner(Permissions.MANAGER));
+        addCommandHandler("random", new QuizGameRandom(Permissions.MANAGER));
+        addCommandHandler("loadquestions", new QuizGameQuestionsLoad(Permissions.MANAGER));
+        addCommandHandler("submitquestion", new QuizGameQuestionsSubmit(Permissions.USER));
+        addCommandHandler("reviewquestions", new QuizGameQuestionsReview(Permissions.STAFF));
+        addCommandHandler("acceptquestions", new QuizGameQuestionsAccept(Permissions.STAFF));
+        addCommandHandler("showcategories", new QuizGameShowCategories(Permissions.USER));
     }
     
     @Override

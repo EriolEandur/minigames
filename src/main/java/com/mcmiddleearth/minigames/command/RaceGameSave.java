@@ -5,7 +5,7 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.conversation.Confirmationable;
+import com.mcmiddleearth.minigames.conversation.confirmation.Confirmationable;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;

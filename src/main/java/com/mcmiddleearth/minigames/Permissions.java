@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 MCME
+ * Copyright (C) 2016 MCME
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,21 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.conversation;
-
-import org.bukkit.ChatColor;
-import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.ConversationPrefix;
+package com.mcmiddleearth.minigames;
 
 /**
  *
  * @author Eriol_Eandur
  */
-class CreateQuestionPrefix implements ConversationPrefix {
-
-    @Override
-    public String getPrefix(ConversationContext cc) {
-        return ChatColor.AQUA+"";//+MessageUtil.getPREFIX();
-    }
+public class Permissions {
     
+    public static final String STAFF = "minigames.staff";
+
+    public static final String MANAGER = "minigames.manager";
+    
+    public static final String USER = "minigames.user";
 }

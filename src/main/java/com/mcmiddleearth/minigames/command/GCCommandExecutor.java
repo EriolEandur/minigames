@@ -5,6 +5,7 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.Permissions;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import com.mcmiddleearth.minigames.utils.StringUtil;
@@ -25,7 +26,7 @@ public class GCCommandExecutor implements CommandExecutor {
         if(!label.equalsIgnoreCase("gc")) {
             return false;
         }
-        if(!cs.hasPermission("minigames.user")) {
+        if(!cs.hasPermission(Permissions.USER)) {
             sendNoPermsErrorMessage(cs);
             return true;
         }

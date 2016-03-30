@@ -26,19 +26,38 @@ import lombok.Setter;
 public abstract class AbstractQuestion {
     
     @Getter
-    private final String question;
+    @Setter
+    private String question;
     
     @Getter
     private final QuestionType type;
     
     @Getter
+    private String categories = "";
+    
+    @Getter
     @Setter
     private boolean answered = false;
     
-    public AbstractQuestion(String question, QuestionType type) {
+    @Getter
+    @Setter
+    private int id = 0;
+    
+    public AbstractQuestion(String question, QuestionType type, String categories) {
+        if(categories !=null) {
+            this.categories = categories;
+        }
         this.question = question;
         this.type = type;
     }
     
     public abstract boolean isCorrectAnswer(String answer);
+    
+    public abstract String getCorrectAnswer();
+    
+    public void setCategories(String categories) {
+        if(categories!=null) {
+            this.categories=categories;
+        }
+    }
 }

@@ -64,7 +64,7 @@ public abstract class AbstractCommand {
         MessageUtil.sendErrorMessage(cs, "You have to be logged in to run this command.");
     }
     
-    private void sendNoPermsErrorMessage(CommandSender cs) {
+    protected void sendNoPermsErrorMessage(CommandSender cs) {
         MessageUtil.sendErrorMessage(cs, "You don't have permission to run this command.");
     }
     

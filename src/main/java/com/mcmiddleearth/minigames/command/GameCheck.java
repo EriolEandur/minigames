@@ -29,7 +29,7 @@ public class GameCheck extends AbstractCommand{
         } else {
             MessageUtil.sendInfoMessage(cs, "Running minigames:");
             for(AbstractGame game : PluginData.getGames()) {
-                if(game.isAnnounced()) {
+                if(game.isAnnounced() && !game.isPrivat()) {
                     MessageUtil.sendNoPrefixInfoMessage(cs, "§2"+game.getName() + "§b, a §2"
                                                           + game.getType() + "§b game with §2" 
                                                           + game.getManager().getName()+"§b and "

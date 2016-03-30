@@ -108,7 +108,7 @@ public class RaceGameSet extends AbstractGameCommand{
     }
 
     private void sendInvalidLocationMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Your location is too near to another Checkpoint.");
+        MessageUtil.sendErrorMessage(cs, "Your location is too close to another Checkpoint.");
     }
 
     private void sendCheckpointMovedMessage(CommandSender cs) {

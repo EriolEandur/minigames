@@ -22,7 +22,7 @@ public class QuizGameSend extends AbstractGameCommand{
     public QuizGameSend(String... permissionNodes) {
         super(0, true, permissionNodes);
         setShortDescription(": Sends the next question.");
-        setUsageDescription(" [answerTime]: Sends the next question to all participating players. Without a given [answerTime] players will have 60 sec to answer.");
+        setUsageDescription(" [answerTime]: Sends the next question to all participating players. Without a given [answerTime] players will have 30 sec to answer. A specified [answerTime] will be use for all later questions too.");
     }
     
     @Override
@@ -43,13 +43,13 @@ public class QuizGameSend extends AbstractGameCommand{
                 sendNoPlayersErrorMessage(cs);
                 return;
             }
-            int answerTime = 0;
             if(args.length>0) {
                 try{
-                    answerTime = Integer.parseInt(args[0]);
+                    int answerTime = Integer.parseInt(args[0]);
+                    quizGame.setAnswerTime(answerTime);
                 } catch(NumberFormatException e) { }
             }
-            quizGame.sendQuestion(answerTime);
+            quizGame.sendQuestion();
     }
     
  }

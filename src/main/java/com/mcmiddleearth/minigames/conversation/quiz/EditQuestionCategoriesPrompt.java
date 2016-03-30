@@ -14,33 +14,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.conversation;
+package com.mcmiddleearth.minigames.conversation.quiz;
 
-import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
+import com.mcmiddleearth.minigames.data.PluginData;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
+import org.bukkit.conversations.Prompt;
+import static org.bukkit.conversations.Prompt.END_OF_CONVERSATION;
+import org.bukkit.conversations.ValidatingPrompt;
 
 /**
  *
  * @author Eriol_Eandur
  */
-class EnterSingleChoicesPrompt extends EnterMultipleChoicesPrompt {
+class EditQuestionCategoriesPrompt extends ValidatingPrompt {
 
     @Override
     public String getPromptText(ConversationContext cc) {
-        cc.setSessionData("input", true);
-        return ChatColor.DARK_GREEN+"[Hint] Type in chat the letter of the correct answer.";
+        return ChatColor.DARK_GREEN+"[Categories] "
+                       +EditQuestionConversationFactory.getQuestion(cc).getCategories();
     }
 
     @Override
+    protected Prompt acceptValidatedInput(ConversationContext cc, String string) {
+        if(string.equalsIgnoreCase("!keep")) {
+            cc.setSessionData("categories", EditQuestionConversationFactory.getQuestion(cc).getCategories());
+        } else {
+            cc.setSessionData("categories", string);
+        }
+        return END_OF_CONVERSATION;
+    }
+    
+    @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
-        return ChatColor.RED+"[Invalid input] Type in the letter of the correct answer only.";
+        return ChatColor.RED+"[Invalid input] Type in the letters of the question categories, for example: 'abet'";
     }
     
     @Override
     protected boolean isInputValid(ConversationContext cc, String string) {
-       string = string.trim();
-       return string.length()==1 && ChoiceQuestion.isLetterValid(string.charAt(0));
+       return string.equalsIgnoreCase("!keep") || PluginData.areValidCategories(string);
     }
 
     

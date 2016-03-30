@@ -17,6 +17,7 @@
 package com.mcmiddleearth.minigames.quizQuestion;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -25,10 +26,11 @@ import lombok.Getter;
 public class FreeQuestion extends AbstractQuestion{
     
     @Getter
-    private final String answer;
+    @Setter
+    private String answer;
     
-    public FreeQuestion(String question, String answer){
-        super(question, QuestionType.FREE);
+    public FreeQuestion(String question, String answer, String categories){
+        super(question, QuestionType.FREE, categories);
         this.answer = answer;
     }
 
@@ -37,4 +39,8 @@ public class FreeQuestion extends AbstractQuestion{
         return answer.equalsIgnoreCase(this.answer);
     }
     
+    @Override
+    public String getCorrectAnswer() {
+        return answer;
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 MCME
+ * Copyright (C) 2016 MCME
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,25 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.conversation;
+package com.mcmiddleearth.minigames.utils;
 
-import org.bukkit.ChatColor;
-import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.ConversationPrefix;
+import java.util.Random;
 
 /**
  *
  * @author Eriol_Eandur
  */
-class AskQuestionPrefix implements ConversationPrefix {
-
-    @Override
-    public String getPrefix(ConversationContext cc) {
-        if((Boolean)cc.getSessionData("input")) {
-            cc.setSessionData("input", false);
-            return ChatColor.BLUE+"[Your Answer] ";
+public class NumericUtil {
+    
+    public static int getInt(String str) {
+        try {
+            return Integer.parseInt(str);
         }
-        return ChatColor.AQUA+"";//+MessageUtil.getPREFIX();
+        catch(NumberFormatException e) {
+            return -1;
+        }
     }
     
+    public static boolean isInt(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static int getRandom(int lower, int upper) {
+        Random random = new Random();
+        return random.nextInt((upper - lower) + 1) + lower;
+    }
+
+
+
+
 }

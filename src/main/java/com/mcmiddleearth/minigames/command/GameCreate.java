@@ -59,6 +59,9 @@ public class GameCreate extends AbstractGameCommand{
                     sendInvalidGameTypeErrorMessage(cs);
                     return;
             }
+            if(args.length>2 && args[2].equalsIgnoreCase("private")) {
+                game.setPrivat(true);
+            }
             PluginData.addGame(game);
         }
     }

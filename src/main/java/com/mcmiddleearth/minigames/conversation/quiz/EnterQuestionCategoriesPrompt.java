@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.conversation;
+package com.mcmiddleearth.minigames.conversation.quiz;
 
-import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
+import com.mcmiddleearth.minigames.data.PluginData;
+import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -27,39 +28,27 @@ import org.bukkit.conversations.ValidatingPrompt;
  *
  * @author Eriol_Eandur
  */
-class EnterMultipleChoicesPrompt extends ValidatingPrompt {
+class EnterQuestionCategoriesPrompt extends ValidatingPrompt {
 
     @Override
     public String getPromptText(ConversationContext cc) {
-        cc.setSessionData("input", true);
-        return ChatColor.DARK_GREEN+"[Hint] Type in the letters of the correct answers.";
+        return ChatColor.DARK_GREEN+"Type in the letters of the categories this question will be in.";
     }
 
     @Override
     protected Prompt acceptValidatedInput(ConversationContext cc, String string) {
-        if((boolean) cc.getSessionData("createQuestion")) {
-            cc.setSessionData("answer", string);
-        }
-        else {
-            Character[] answerLetters = ChoiceQuestion.parseAnswer(string);
-            String answer = "";
-            for (Character answerLetter : answerLetters) {
-                int answerIndex = ChoiceQuestion.getAnswerIndex(answerLetter);
-                answer = answer+((String[])cc.getSessionData("Choices"))[answerIndex].charAt(0);
-            }
-            cc.setSessionData("answer", answer);
-        }
+        cc.setSessionData("categories", string);
         return END_OF_CONVERSATION;
     }
     
     @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
-        return ChatColor.RED+"[Invalid input] Type in chat the letters of the correct answer. For example type: 'ACD'";
+        return ChatColor.RED+"[Invalid input] Type in the letters of the question categories, for example: 'abet'";
     }
     
     @Override
     protected boolean isInputValid(ConversationContext cc, String string) {
-       return ChoiceQuestion.isAnswerValid(string);
+       return PluginData.areValidCategories(string);
     }
 
     

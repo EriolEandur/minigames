@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.conversation;
+package com.mcmiddleearth.minigames.conversation.quiz;
 
-import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
-import com.mcmiddleearth.minigames.quizQuestion.SingleChoiceQuestion;
+import com.mcmiddleearth.minigames.data.PluginData;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.MessagePrompt;
@@ -27,29 +26,28 @@ import org.bukkit.conversations.Prompt;
  *
  * @author Eriol_Eandur
  */
-class ShowChoicePrompt extends MessagePrompt {
+class ShowCategoryPrompt extends MessagePrompt {
 
     @Override
     protected Prompt getNextPrompt(ConversationContext cc) {
-        ChoiceQuestion question = (ChoiceQuestion)cc.getSessionData("question");
-        if((Integer) cc.getSessionData("ChoiceIndex")<((String[]) cc.getSessionData("Choices")).length) {
-            return new ShowChoicePrompt();
-        }
-        else if(question instanceof SingleChoiceQuestion) {
-            return new EnterSingleChoicesPrompt();
-        }
-        else {
-            return new EnterMultipleChoicesPrompt();
+        if((Integer) cc.getSessionData("categoriesIndex")<PluginData.getQuestionCategories().size()) {
+            return new ShowCategoryPrompt();
+        } else {
+            return new EnterQuestionCategoriesPrompt();
         }
     }
 
     @Override
     public String getPromptText(ConversationContext cc) {
-        ChoiceQuestion question = ((ChoiceQuestion)cc.getSessionData("question"));
-        int choiceIndex = (Integer) cc.getSessionData("ChoiceIndex");
-        cc.setSessionData("ChoiceIndex", choiceIndex+1);
-        return ChatColor.GOLD+"["+ChoiceQuestion.getAnswerCharacter(choiceIndex)+"] "+
-               ChatColor.AQUA+((String[])cc.getSessionData("Choices"))[choiceIndex].substring(1);
+        Integer index = (Integer) cc.getSessionData("categoriesIndex");
+        if(index==null) {
+            cc.setSessionData("categoriesIndex", 0);
+            return ChatColor.DARK_GREEN+"Categories for quiz questions:";
+        } else {
+            index++;
+            cc.setSessionData("categoriesIndex",index);
+            return PluginData.getQuestionCategories().get(index-1);
+        }
     }
 
 }

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.conversation;
+package com.mcmiddleearth.minigames.conversation.quiz;
 
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
@@ -36,7 +36,11 @@ class EnterFreePrompt extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext cc, String string) {
         cc.setSessionData("answer", string);
-        return END_OF_CONVERSATION;
+        if((boolean) cc.getSessionData("createQuestion")) {
+            return new ShowCategoryPrompt();
+        } else {
+            return END_OF_CONVERSATION;
+        }
     }
     
 }

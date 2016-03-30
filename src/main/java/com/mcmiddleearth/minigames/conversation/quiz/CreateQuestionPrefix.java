@@ -14,21 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.quizQuestion;
+package com.mcmiddleearth.minigames.conversation.quiz;
+
+import org.bukkit.ChatColor;
+import org.bukkit.conversations.ConversationContext;
+import org.bukkit.conversations.ConversationPrefix;
 
 /**
  *
  * @author Eriol_Eandur
  */
-public class SingleChoiceQuestion extends ChoiceQuestion{
-    
-    public SingleChoiceQuestion(String question, String[] answers, String correctAnswer,
-                                String categories) {
-        super(question, QuestionType.SINGLE, answers, correctAnswer, categories);
-    }
-    
-    public boolean isCorrectAnswer(char answer) {
-        return isCorrectAnswer(new Character[]{answer});
+class CreateQuestionPrefix implements ConversationPrefix {
+
+    @Override
+    public String getPrefix(ConversationContext cc) {
+        return ChatColor.AQUA+"";//+MessageUtil.getPREFIX();
     }
     
 }
