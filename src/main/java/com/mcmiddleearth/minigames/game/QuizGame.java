@@ -397,7 +397,7 @@ public class QuizGame extends AbstractGame {
                     } catch (ParseException | NoSuchElementException ex) {
                         Logger.getLogger(QuizGame.class.getName()).log(Level.SEVERE, 
                                          "Error reading questions from data file in line "+line
-                                        +". Question skipped. ", ex);
+                                        +". Question skipped. ");
                         line++;
                     }
                 }
@@ -431,7 +431,7 @@ public class QuizGame extends AbstractGame {
                     } catch (ParseException | NoSuchElementException ex) {
                         Logger.getLogger(QuizGame.class.getName()).log(Level.SEVERE, 
                                          "Error reading questions from data file in line "+line
-                                        +". Question skipped. ", ex);
+                                        +". Question skipped. ");
                     }
                 }
                 found=newQuestions.size();
