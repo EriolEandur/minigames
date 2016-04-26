@@ -15,6 +15,7 @@ import com.mcmiddleearth.minigames.utils.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -182,8 +183,11 @@ public class PluginData {
     
     public static void load() {
         try {
-            try (Scanner reader = new Scanner(questionCategoriesFile)) {
+            try (Scanner reader = new Scanner(questionCategoriesFile, StandardCharsets.UTF_8.name())) {
                 questionCategories.clear();
+                if(reader.hasNext()) {
+                    reader.nextLine();
+                }
                 while(reader.hasNext()){
                     questionCategories.add(reader.nextLine());
                 }

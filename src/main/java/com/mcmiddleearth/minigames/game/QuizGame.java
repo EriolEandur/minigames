@@ -303,7 +303,7 @@ public class QuizGame extends AbstractGame {
         JSONObject jFile = new JSONObject();
         jFile.put("questions", jQuestionArray);
         jFile.put("description", description);
-        try(FileWriter fw = new FileWriter(file)) {
+        try(OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8)) {
             jFile.writeJSONString(fw);
         }
     }
@@ -320,7 +320,7 @@ public class QuizGame extends AbstractGame {
                                         throws FileNotFoundException, ParseException {
         try {
             String input;
-            try (Scanner reader = new Scanner(file)) {
+            try (Scanner reader = new Scanner(file, StandardCharsets.UTF_8.name())) {
                 input = "";
                 while(reader.hasNext()){
                     input = input+reader.nextLine();
