@@ -119,15 +119,15 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
     }
 
     private void sendSuccessMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "You answered this Question correctely.");
+        MessageUtil.sendInfoMessage(player, "You answered this Question correctly.");
     }
 
     private void sendFailMessage(Player player, String answer) {
-        MessageUtil.sendInfoMessage(player, "You failed to answer this Question correctely. Correct answer: "+answer);
+        MessageUtil.sendInfoMessage(player, "You failed to answer this Question correctly. Correct answer: "+answer);
     }
 
     private void sendFailNumberQuestionMessage(Player player, String answer, int precision) {
-        MessageUtil.sendInfoMessage(player, "You failed to answer this Question correctely. Correct answer was "
+        MessageUtil.sendInfoMessage(player, "You failed to answer this Question correctly. Correct answer was "
                                            +answer+". Allowed deviation from correct answer was "+precision+".");
     }
 

@@ -22,9 +22,12 @@ import com.mcmiddleearth.minigames.utils.StringUtil;
 import com.mcmiddleearth.minigames.utils.TitleUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -378,7 +381,7 @@ public class QuizGame extends AbstractGame {
         int found = 0;
         try {
             int line = 1;
-            try (Scanner reader = new Scanner(file)) {
+            try (Scanner reader = new Scanner(file, StandardCharsets.UTF_8.name())) {
                 for(Integer questionId: questionIds) {
                     try {
                         while(line<questionId && reader.hasNext()) {
@@ -417,7 +420,7 @@ public class QuizGame extends AbstractGame {
         int found=0;
         try {
             int line = 0;
-            try (Scanner reader = new Scanner(file)) {
+            try (Scanner reader = new Scanner(file, StandardCharsets.UTF_8.name())) {
                 while(reader.hasNext()){
                     try {
                         line++;
@@ -503,7 +506,7 @@ public class QuizGame extends AbstractGame {
     }
     
     private void addQuestionsToDataFile(File file) throws FileNotFoundException, IOException {
-        try (FileWriter fw = new FileWriter(file, true); 
+        try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8); 
              PrintWriter writer = new PrintWriter(fw)) {
             for(AbstractQuestion question: questions) {
                 writer.println(questionToString(question));
@@ -525,9 +528,9 @@ public class QuizGame extends AbstractGame {
         };
         Collections.sort(saveQuestions, comp);
         File tmpFile = new File(file.toString()+".tmp");
-        try (FileWriter fw = new FileWriter(tmpFile, true);
+        try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8);
              PrintWriter writer = new PrintWriter(fw);
-             Scanner reader = new Scanner(file)) {
+             Scanner reader = new Scanner(file, StandardCharsets.UTF_8.name())) {
             int line = 1;
             for(AbstractQuestion question: saveQuestions) {
                 int id = question.getId();
