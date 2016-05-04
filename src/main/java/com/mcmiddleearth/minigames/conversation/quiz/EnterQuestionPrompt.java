@@ -18,7 +18,7 @@ package com.mcmiddleearth.minigames.conversation.quiz;
 
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;

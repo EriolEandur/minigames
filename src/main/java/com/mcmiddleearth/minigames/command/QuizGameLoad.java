@@ -10,7 +10,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import org.bukkit.command.CommandSender;
@@ -25,6 +25,7 @@ public class QuizGameLoad extends AbstractGameCommand{
     
     public QuizGameLoad(String... permissionNodes) {
         super(0, true, permissionNodes);
+        cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Loads questions from a quiz data file.");
         setUsageDescription(" <filename>: Loads all questions from the file <filename>. The questions will be appended to the existing questions.");
     }

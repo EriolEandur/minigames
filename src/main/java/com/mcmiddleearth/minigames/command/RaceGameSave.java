@@ -10,11 +10,9 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,6 +30,7 @@ public class RaceGameSave extends AbstractGameCommand implements Confirmationabl
     
     public RaceGameSave(String... permissionNodes) {
         super(2, true, permissionNodes);
+        cmdGroup = CmdGroup.RACE;
         setShortDescription(": Saves a race to file.");
         setUsageDescription(" <filename> <description>: Saves the race locations with the assigned marker names and a <description> to file <filename>.");
     }

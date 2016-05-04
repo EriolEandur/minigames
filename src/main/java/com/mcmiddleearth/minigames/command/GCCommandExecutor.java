@@ -7,8 +7,9 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.Permissions;
 import com.mcmiddleearth.minigames.data.PluginData;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
-import com.mcmiddleearth.minigames.utils.StringUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.StringUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -61,7 +62,7 @@ public class GCCommandExecutor implements CommandExecutor {
             if(PluginData.getGameChat(search)) {
                 Player player = search;
                 if(player!=null) {
-                    MessageUtil.sendChatMessage(cs, player, StringUtil.concat(args));
+                    MinigamesMessageUtil.sendChatMessage(cs, player, StringUtil.concat(args));
                 }
             }
         }
@@ -88,30 +89,4 @@ public class GCCommandExecutor implements CommandExecutor {
     private void sendGameChatOnMessage(CommandSender cs) {
         MessageUtil.sendInfoMessage(cs,"You switched game chat messages ON.");
     }
-    /**
-     * private game chat
-     * 
-        AbstractGame game = null;
-        if(cs instanceof Player) {
-            game = PluginData.getGame((Player) cs);
-            String message = StringUtil.concat(args);
-        }
-        else {
-            game = PluginData.getGame(args[0]);
-            String message = StringUtil.concat(Arrays.copyOfRange(args, 1, args.length));
-        }
-        if(game == null) {
-            send
-            if(game.getManager().getPlayer()!=null) {
-                MessageUtil.sendChatMessage(cs, game.getManager().getPlayer(), StringUtil.concat(args));
-            }
-            for(OfflinePlayer offPlayer : game.getPlayers()) {
-                if(offPlayer.getPlayer()!=null) {
-                    MessageUtil.sendChatMessage(cs, offPlayer.getPlayer(), StringUtil.concat(args));
-                }
-            }
-        }
-        return true;
-    }     */
-
 }

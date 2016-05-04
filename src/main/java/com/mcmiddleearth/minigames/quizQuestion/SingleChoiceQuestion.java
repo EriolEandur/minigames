@@ -16,6 +16,9 @@
  */
 package com.mcmiddleearth.minigames.quizQuestion;
 
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import org.bukkit.ChatColor;
+
 /**
  *
  * @author Eriol_Eandur
@@ -28,7 +31,22 @@ public class SingleChoiceQuestion extends ChoiceQuestion{
     }
     
     public boolean isCorrectAnswer(char answer) {
-        return isCorrectAnswer(new Character[]{answer});
+        return isCorrectAnswer(new Character[]{answer}); //invalid json in question list messages
     }
-    
+   
+    @Override
+    public String[] getDetails() {
+        return new String[]{MessageUtil.HIGHLIGHT+"[Type]"+MessageUtil.HIGHLIGHT_STRESSED+" SINGLE choice question",
+                            MessageUtil.HIGHLIGHT+"[Question] "+MessageUtil.HIGHLIGHT_STRESSED+getQuestion(),
+            (correctAnswers[0]?ChatColor.DARK_GREEN:MessageUtil.HIGHLIGHT)+"[A] "
+                +(correctAnswers[0]?ChatColor.GREEN:MessageUtil.HIGHLIGHT_STRESSED)+answers[0],
+            (correctAnswers[1]?ChatColor.DARK_GREEN:MessageUtil.HIGHLIGHT)+"[B] "
+                +(correctAnswers[1]?ChatColor.GREEN:MessageUtil.HIGHLIGHT_STRESSED)+answers[1],
+            (correctAnswers[2]?ChatColor.DARK_GREEN:MessageUtil.HIGHLIGHT)+"[C] "
+                +(correctAnswers[2]?ChatColor.GREEN:MessageUtil.HIGHLIGHT_STRESSED)+answers[2],
+            (correctAnswers[3]?ChatColor.DARK_GREEN:MessageUtil.HIGHLIGHT)+"[D] "
+                +(correctAnswers[3]?ChatColor.GREEN:MessageUtil.HIGHLIGHT_STRESSED)+answers[3],
+             MessageUtil.HIGHLIGHT+"[Correct] "+MessageUtil.HIGHLIGHT_STRESSED+getCorrectAnswer()};
+    }
+
 }

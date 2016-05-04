@@ -6,7 +6,8 @@
 package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.game.HideAndSeekGame;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -19,7 +20,7 @@ public class GameAllow extends AbstractGameCommand{
     public GameAllow(String... permissionNodes) {
         super(1, true, permissionNodes);
         setShortDescription(": Allows various actions for a game.");
-        setUsageDescription(" flight|teleport|join|warp|spectate: flight/teleport allows for players in the game to fly or teleport. join allows players to join without invitation. warp allows player to warp to game location. spectate allows players to see scoreboard of the game without participating.");
+        setUsageDescription(" flight|teleport|join|warp|spectate: 'flight'/'teleport' allows for players in the game to fly or teleport. 'join' allows players to join without invitation. warp allows player to warp to game location. spectate allows players to see scoreboard of the game without participating.");
     }
     
     @Override
@@ -43,6 +44,10 @@ public class GameAllow extends AbstractGameCommand{
                 sendFlightAllowedMessage(cs);
             } 
             else if(args[0].equalsIgnoreCase("teleport")) {
+                if(game instanceof HideAndSeekGame) {
+                    sentNotPossibleMessage(cs);
+                    // return;
+                }
                 game.setTeleportAllowed(true);
                 sendTeleportAllowedMessage(cs);
             } 
@@ -74,5 +79,11 @@ public class GameAllow extends AbstractGameCommand{
 
     private void sendInvalidArgumentMessage(CommandSender cs) {
         MessageUtil.sendErrorMessage(cs, "Invalid Argument.");
+    }
+
+    private void sentNotPossibleMessage(CommandSender cs) {
+        MessageUtil.sendErrorMessage(cs, "It is not possible to allow teleport in a "
+                                         +MessageUtil.ERROR_STRESSED+"Hide and Seek"
+                                         +MessageUtil.ERROR+" game.");
     }
 }

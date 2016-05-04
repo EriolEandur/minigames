@@ -14,12 +14,15 @@ import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
-import com.mcmiddleearth.minigames.utils.NumericUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.NumericUtil;
+import com.mcmiddleearth.pluginutils.message.FancyMessage;
+import com.mcmiddleearth.pluginutils.message.MessageType;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.Scanner;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,8 +35,9 @@ public class QuizGameQuestion extends AbstractGameCommand{
     
     public QuizGameQuestion(String... permissionNodes) {
         super(0, true, permissionNodes);
+        cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Manipulates questions of a quiz game.");
-        setUsageDescription(" single|multi|free|number|list|remove [questionID]: Arguments single, multi, free and number will initiate a conversation to create a new question, which will be added to the quiz. Argument 'remove' will delete the questions number [questionID]. Argument list will display a list of all questions of a game.");
+        setUsageDescription(" single|multi|free|number|list|remove [#ID]: Arguments single, multi, free and number will initiate a conversation to create a new question, which will be added to the quiz. Argument 'remove' will delete the questions number [questionID]. Argument list will display a list of all questions of a game.");
     }
     
     @Override
@@ -41,7 +45,6 @@ public class QuizGameQuestion extends AbstractGameCommand{
         if(args.length>0) {
             String[] newArgs = new String[args.length];
             System.arraycopy(args, 1, newArgs, 1, args.length-1);
-//Logger.getGlobal().info(newArgs[1]+" - "+newArgs[2]);
             if(args[0].equalsIgnoreCase("submit")) {
                 newArgs[0]="submitquestion";
                 MiniGamesPlugin.getPluginInstance().getCommand("game").getExecutor().
@@ -157,25 +160,73 @@ public class QuizGameQuestion extends AbstractGameCommand{
             MessageUtil.sendInfoMessage(cs, "No Questions in this game.");
             return;
         }
-        LinkedHashMap<String,String> header = new LinkedHashMap<>();
-        List<LinkedHashMap<String,String>> list = new ArrayList<>();
-        header.put("Questions in this game. ",null);
+        FancyMessage header = new FancyMessage(MessageType.INFO)
+                                    .addSimple("Questions in this game. ");
+        List<FancyMessage> list = new ArrayList<>();
         int id = 1;
         for(AbstractQuestion question : quizGame.getQuestions()) {
-            LinkedHashMap<String,String> entry = new LinkedHashMap<>();
-            String text = question.getQuestion().replaceAll("\"", ";\"");
-            text = text.replace(';', '\\');
-            entry.put(ChatColor.DARK_GREEN+""+id+ChatColor.AQUA+" ["
-                      +(question.getId()==0?"-":question.getId())+"]"
-                      +": "+ChatColor.WHITE+text,"/game question edit "+id);
-            list.add(entry);
+            String questionText = question.getQuestion().replaceAll("\"", ";\"");
+            questionText = questionText.replace(';', '\\');
+            String[] detailText = question.getDetails();
+            list.add(new FancyMessage(MessageType.WHITE)
+                        .addFancy(ChatColor.DARK_GREEN+""+id+ChatColor.AQUA+" ["
+                                    +(question.getId()==0?"-":question.getId())+"]"
+                                    +": ",
+                                "/game question edit "+id,
+                                hoverFormat(detailText))
+                        .addClickable(ChatColor.WHITE+questionText, "/game question edit "+id));
             id++;
         }
-        MessageUtil.sendClickableListMessage((Player)cs, header, list, "/game question list", page);
+        MessageUtil.sendFancyListMessage((Player)cs, header, list, "/game question list", page);
     }
 
     private void sendAlreadyConversionMessage(CommandSender cs) {
         MessageUtil.sendErrorMessage(cs, "You are already in a Conversation.");
     }
     
+    private String hoverFormat(String[] hoverMessage) {
+        class MyScanner {
+            private final Scanner scanner;
+            public String currentToken=null;
+            public MyScanner(String string) {
+                scanner = new Scanner(string);
+                scanner.useDelimiter(" ");
+                if(scanner.hasNext()) {
+                    currentToken = scanner.next();
+                }
+            }
+            public String next() {
+                if(scanner.hasNext()) {
+                    currentToken = scanner.next();
+                } else {
+                    currentToken = null;
+                }
+                return currentToken;
+            }
+            public boolean hasCurrent() {
+                return currentToken != null;
+            }
+            public boolean hasNext() {
+                return scanner.hasNext();
+            }
+        }
+        int LENGTH_OF_LINE = 70;
+        String result = "";
+        for(String str:hoverMessage) {
+            MyScanner scanner = new MyScanner(str);
+            while (scanner.hasCurrent()) {
+                String line = scanner.currentToken+" ";
+                scanner.next();
+                while(scanner.hasCurrent() && line.length()+scanner.currentToken.length()<LENGTH_OF_LINE) {
+                    line = line.concat(scanner.currentToken+" ");
+                    scanner.next();
+                }
+                line = line.concat("\n"+MessageUtil.HIGHLIGHT_STRESSED);
+                result = result.concat(line);
+            }
+        }
+        return result;
+    }
+    
+
  }

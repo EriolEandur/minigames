@@ -8,7 +8,7 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,6 +21,7 @@ public class RaceGameRemove extends AbstractGameCommand{
     
     public RaceGameRemove(String... permissionNodes) {
         super(0, true, permissionNodes);
+        cmdGroup = CmdGroup.RACE;
         setShortDescription(": Removes a race checkpoint.");
         setUsageDescription(" [checkpointID]: Removes the race checkpoint with [checkpointID]. Without argument attempts to remove a nearby (10 blocks) checkpoint.");
     }

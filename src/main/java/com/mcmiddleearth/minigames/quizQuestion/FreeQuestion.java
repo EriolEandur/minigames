@@ -16,6 +16,7 @@
  */
 package com.mcmiddleearth.minigames.quizQuestion;
 
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,5 +43,12 @@ public class FreeQuestion extends AbstractQuestion{
     @Override
     public String getCorrectAnswer() {
         return answer;
+    }
+    
+    @Override
+    public String[] getDetails() {
+        return new String[]{MessageUtil.HIGHLIGHT+"[Type]"+MessageUtil.HIGHLIGHT_STRESSED+" FREE answer question",
+                            MessageUtil.HIGHLIGHT+"[Question] "+MessageUtil.HIGHLIGHT_STRESSED+getQuestion(),
+                            MessageUtil.HIGHLIGHT+"[Answer] "+MessageUtil.HIGHLIGHT_STRESSED+answer};
     }
 }

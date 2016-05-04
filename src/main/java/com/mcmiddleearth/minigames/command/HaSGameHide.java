@@ -8,8 +8,8 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
-import com.mcmiddleearth.minigames.utils.StringUtil;
+import com.mcmiddleearth.pluginutils.StringUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,6 +21,7 @@ public class HaSGameHide extends AbstractGameCommand{
     
     public HaSGameHide(String... permissionNodes) {
         super(1, true, permissionNodes);
+        cmdGroup = CmdGroup.HIDE_AND_SEEK;
         setShortDescription(": Starts a round of Hide and Seek.");
         setUsageDescription(" <radius> [seektime] [hidetime]: The number <radius> determines the size of a sphere which cages the players. When no [seektime] in seconds is given seek time is 300 sec by default. Without a given [hidetime] in seconds, time for hiding is 60 sec.");
     }

@@ -8,7 +8,7 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.util.Calendar;
 import org.bukkit.ChatColor;
@@ -23,6 +23,7 @@ public class QuizGameQuestionsReview extends AbstractGameCommand{
     
     public QuizGameQuestionsReview(String... permissionNodes) {
         super(0, true, permissionNodes);
+        cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Creates a new mini game.");
         setUsageDescription(" quiz|race|hide <gamename>: Creates a lore quiz or a race or a hide and seek game with name <gamename>. The location of the player issuing the command becomes the warp of the game.");
     }
@@ -71,9 +72,9 @@ public class QuizGameQuestionsReview extends AbstractGameCommand{
     
     public void sendQuizGameCreateMessage(CommandSender cs, String filename) {
         MessageUtil.sendInfoMessage(cs, "A quiz game with all submitted questions was created to review.");
-        MessageUtil.sendNoPrefixInfoMessage(cs, "Submitted questions saved in file: "+ filename);
-        MessageUtil.sendNoPrefixInfoMessage(cs, "Don't forget to delete when no loger needed:");
-        MessageUtil.sendNoPrefixInfoMessage(cs, ChatColor.DARK_AQUA+"/game delete quiz "+filename);
+        MessageUtil.sendIndentedInfoMessage(cs, "Submitted questions saved in file: "+ filename);
+        MessageUtil.sendIndentedInfoMessage(cs, "Don't forget to delete when no loger needed:");
+        MessageUtil.sendIndentedInfoMessage(cs, ChatColor.DARK_AQUA+"/game delete quiz "+filename);
     }
 
     private void sendNoQuestionsSubmittedMessage(CommandSender cs) {

@@ -8,9 +8,8 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
-import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.minigames.utils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.PlayerUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

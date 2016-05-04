@@ -17,7 +17,7 @@
 package com.mcmiddleearth.minigames.conversation.quiz;
 
 import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.NumericPrompt;

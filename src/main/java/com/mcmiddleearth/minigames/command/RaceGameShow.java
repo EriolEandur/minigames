@@ -8,7 +8,7 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -20,6 +20,7 @@ public class RaceGameShow extends AbstractGameCommand{
     
     public RaceGameShow(String... permissionNodes) {
         super(0, true, permissionNodes);
+        cmdGroup = CmdGroup.RACE;
         setShortDescription(": Shows rankings for a race.");
         setUsageDescription(" [start|finish|checkpointID]: 'start' shows the starter list to all participating and spectating players. 'finish' shows the final ranking of the game. An numeric argument shows the intermediate ranking at the checkpoin with checkpointID.");
     }

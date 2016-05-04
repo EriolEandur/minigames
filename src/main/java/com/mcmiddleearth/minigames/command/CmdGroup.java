@@ -14,40 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mcmiddleearth.minigames.utils;
+package com.mcmiddleearth.minigames.command;
 
-import java.util.Random;
+import lombok.Getter;
 
 /**
  *
  * @author Eriol_Eandur
  */
-public class NumericUtil {
+public enum CmdGroup {
     
-    public static int getInt(String str) {
-        try {
-            return Integer.parseInt(str);
-        }
-        catch(NumberFormatException e) {
-            return -1;
-        }
+    ALL             (""),
+    GENERAL         ("General"),
+    HIDE_AND_SEEK   ("Hide"),
+    RACE            ("Race"),
+    LORE_QUIZ       ("Quiz");
+
+    @Getter
+    private final String name;
+
+    private CmdGroup(String name) {
+        this.name = name;
     }
     
-    public static boolean isInt(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+    public static CmdGroup getCmdGroup(String name) {
+        for(CmdGroup type: CmdGroup.values()) {
+            if(type.name.equalsIgnoreCase(name)) {
+                return type;
+            }
         }
+        return CmdGroup.ALL;
+    }
+    
+    public boolean isCommandInGroup(AbstractCommand command) {
+        return (this.equals(command.getCmdGroup()) || this.equals(CmdGroup.ALL));
     }
 
-    public static int getRandom(int lower, int upper) {
-        Random random = new Random();
-        return random.nextInt((upper - lower) + 1) + lower;
-    }
-
-
-
-
+    
 }

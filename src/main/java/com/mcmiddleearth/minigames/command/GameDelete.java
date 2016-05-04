@@ -8,9 +8,9 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.conversation.confirmation.Confirmationable;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
-import java.util.logging.Logger;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -45,7 +45,9 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
         }
         if(file.exists()) {
             PluginData.getConfirmationFactory().start((Player) cs, 
-                    "Are you sure to delete "+file.getName()+"? There is no undo.", this);
+                    "Are you sure to delete "
+                            +MessageUtil.HIGHLIGHT_STRESSED+file.getName()
+                            +MessageUtil.HIGHLIGHT+"? There is no undo.", this);
         }
         else {
             sendFileNotFoundMessage(cs);
@@ -64,7 +66,7 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
 
     @Override
     public void cancelled(Player player) {
-        MessageUtil.sendInfoMessage(player, "You cancelled deleting.");
+        MessageUtil.sendInfoMessage(player, "You cancelled deletion.");
     }
 
     private void sendInvalidDataTypeMessage(CommandSender cs) {

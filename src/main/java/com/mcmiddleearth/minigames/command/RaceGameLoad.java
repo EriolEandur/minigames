@@ -10,7 +10,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import org.bukkit.command.CommandSender;
@@ -25,6 +25,7 @@ public class RaceGameLoad extends AbstractGameCommand{
     
     public RaceGameLoad(String... permissionNodes) {
         super(0, true, permissionNodes);
+        cmdGroup = CmdGroup.RACE;
         setShortDescription(": Loads a race from data file.");
         setUsageDescription(" <filename>: Loads race locations and markers from the file <filename>.");
     }

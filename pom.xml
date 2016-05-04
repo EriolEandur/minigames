@@ -12,8 +12,8 @@
     </properties>
     <build>
     <!-- <sourceDirectory>${project.build.directory}/generated-sources/delombok</sourceDirectory> -->
-        
-        <plugins>
+       
+       <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -23,29 +23,36 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok-maven-plugin</artifactId>
-                <version>1.16.6.1</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>delombok</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <addOutputDirectory>false</addOutputDirectory>
-                    <sourceDirectory>src/main/java</sourceDirectory>
-                </configuration>
-            </plugin>        
         </plugins>
+        <resources>
+          <resource>
+            <targetPath>com/mcmiddleearth/pluginutils</targetPath>
+            <filtering>false</filtering>
+            <directory>F:/Lars/NetBeansProjects/PluginUtils/target/classes/com/mcmiddleearth/pluginutils</directory>
+            <includes>
+              <include>**/*.*</include>
+            </includes>
+          </resource>
+          <resource>
+            <directory>${basedir}/src/main/resources</directory>
+            <includes>
+                <include>plugin.yml</include>
+            </includes>
+          </resource>
+        </resources>
     </build>
     <repositories>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>pluginUtil-repo</id>
+            <url>https://github.com/EriolEandur/PluginUtils/</url>
+        </repository>
+        <repository>
+            <id>projectlombok.org</id>
+            <url>http://projectlombok.org/mavenrepo</url>
         </repository>
     </repositories>
     <dependencies>
@@ -68,6 +75,17 @@
             <artifactId>guava</artifactId>
             <version>18.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.mcmiddleearth</groupId>
+            <artifactId>PluginUtils</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

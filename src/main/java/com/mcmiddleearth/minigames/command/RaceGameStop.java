@@ -8,7 +8,7 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -20,6 +20,7 @@ public class RaceGameStop extends AbstractGameCommand{
     
     public RaceGameStop(String... permissionNodes) {
         super(0, true, permissionNodes);
+        cmdGroup = CmdGroup.RACE;
         setShortDescription(": Stops a race.");
         setUsageDescription(": Aborts a already started race. Useful when there is a problem with a checkpoint or to let some other players join the race. Race can be started again.");
     }

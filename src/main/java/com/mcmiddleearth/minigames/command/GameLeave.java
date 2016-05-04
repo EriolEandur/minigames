@@ -5,9 +5,11 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.message.FancyMessage;
+import com.mcmiddleearth.pluginutils.message.MessageType;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -38,12 +40,15 @@ public class GameLeave extends AbstractGameCommand{
     }
     
     public void sendPlayerLeaveMessage(CommandSender cs, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs, "You left the minigame "+game.getName());
-        MessageUtil.sendAllInfoMessage(cs, game, cs.getName() +" left this game.");
+        MessageUtil.sendInfoMessage(cs, "You left the minigame "+game.getName()+".");
+        MinigamesMessageUtil.sendAllInfoMessage(cs, game, cs.getName() +" left this game.");
     }
 
     private void sendManagerCantLeaveErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Use /game end instead.");
+        new FancyMessage(MessageType.ERROR)
+                .addSimple("You are not part of a game. You can end a game you manage with: ")
+                .addClickable(MessageUtil.ERROR_STRESSED+"/game end","/game end")
+                .send((Player) cs);
     }
 
  }

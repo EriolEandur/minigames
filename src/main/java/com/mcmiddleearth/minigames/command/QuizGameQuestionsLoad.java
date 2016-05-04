@@ -9,13 +9,13 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
-import com.mcmiddleearth.minigames.utils.NumericUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.NumericUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,8 +28,9 @@ public class QuizGameQuestionsLoad extends AbstractGameCommand{
     
     public QuizGameQuestionsLoad(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": Loads questions from the MCME question data table.");
-        setUsageDescription(" <categories> [matchAllCategories]: Loads questions from the MCME question data table which match the specified categories (see manual). The questions will be appended to the existing questions. If [MatchAllCategories] is 'true' (default is 'false) a question needs to match all specified categories.");
+        cmdGroup = CmdGroup.LORE_QUIZ;
+        setShortDescription(": Loads questions from the question table.");
+        setUsageDescription(" <categories> [matchAll]: Loads questions from the MCME question data table which match the specified categories (see manual). The questions will be appended to the existing questions. If [MatchAll] is 'true' (default is 'false) a question needs to match all specified categories.");
     }
     
     @Override
@@ -82,22 +83,22 @@ public class QuizGameQuestionsLoad extends AbstractGameCommand{
             MessageUtil.sendErrorMessage(cs, "Sorry, no question found matching your query.");
         } else if(result[0]<10 && result[0]<maxNumber) {
             MessageUtil.sendInfoMessage(cs, ChatColor.GOLD+"Warning!"+MessageUtil.INFO
-                                           +" Only "+ChatColor.DARK_GREEN+result[0]+MessageUtil.INFO                                           +" questions were found matching your query.");
+                                           +" Only "+MessageUtil.STRESSED+result[0]+MessageUtil.INFO                                           +" questions were found matching your query.");
         } else if(result[0]>result[1]) {
-            MessageUtil.sendInfoMessage(cs, "Found "+ChatColor.DARK_GREEN+result[0]+MessageUtil.INFO
-                                            +" Questions. "+ChatColor.DARK_GREEN+result[1]+MessageUtil.INFO
+            MessageUtil.sendInfoMessage(cs, "Found "+MessageUtil.STRESSED+result[0]+MessageUtil.INFO
+                                            +" Questions. "+MessageUtil.STRESSED+result[1]+MessageUtil.INFO
                                             +" questions loaded.");
         } else if(result[0]<maxNumber) {
-            MessageUtil.sendInfoMessage(cs, "Only "+ChatColor.DARK_GREEN+result[0]+MessageUtil.INFO
+            MessageUtil.sendInfoMessage(cs, "Only "+MessageUtil.STRESSED+result[0]+MessageUtil.INFO
                                             +" questions found and loaded.");
         } else {
-            MessageUtil.sendInfoMessage(cs, ""+ChatColor.DARK_GREEN+result[0]+MessageUtil.INFO
+            MessageUtil.sendInfoMessage(cs, ""+MessageUtil.STRESSED+result[0]+MessageUtil.INFO
                                             +" questions loaded from MCME question table.");
         }
     }
 
     private void sendFileNotFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "File not found.");
+        MessageUtil.sendErrorMessage(cs, "Question table file not found.");
     }
 
 }

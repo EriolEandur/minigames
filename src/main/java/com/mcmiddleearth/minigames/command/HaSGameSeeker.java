@@ -8,8 +8,8 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
-import com.mcmiddleearth.minigames.utils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.PlayerUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,6 +22,7 @@ public class HaSGameSeeker extends AbstractGameCommand{
     
     public HaSGameSeeker(String... permissionNodes) {
         super(1, true, permissionNodes);
+        cmdGroup = CmdGroup.HIDE_AND_SEEK;
         setShortDescription(": Appoints the seeker for the next round.");
         setUsageDescription(" <player>: Appoints <player> to be next seeker. Without using this command seeker will be randomly chosen from all players.");
     }

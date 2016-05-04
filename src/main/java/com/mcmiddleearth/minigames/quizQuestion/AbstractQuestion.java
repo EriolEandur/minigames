@@ -60,4 +60,6 @@ public abstract class AbstractQuestion {
             this.categories=categories;
         }
     }
+    
+    public abstract String[] getDetails();
 }

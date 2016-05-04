@@ -7,7 +7,8 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -58,8 +59,8 @@ public class GameJoin extends AbstractGameCommand{
     
     public void sendPlayerJoinMessage(CommandSender cs, AbstractGame game) {
         MessageUtil.sendInfoMessage(cs, "You joined the minigame "+ game.getName()
-                                   +". Please use the game chat with /gc <message>");
-        MessageUtil.sendAllInfoMessage(cs, game, cs.getName()+" joined the game.");
+                                   +". Please use the game chat with "+MessageUtil.STRESSED+"/gc <message>");
+        MinigamesMessageUtil.sendAllInfoMessage(cs, game, cs.getName()+" joined the game.");
     }
 
     public void sendNoSuchGameErrorMessage(CommandSender cs) {

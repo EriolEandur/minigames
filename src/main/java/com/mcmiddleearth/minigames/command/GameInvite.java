@@ -6,7 +6,9 @@
 package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.FancyMessage;
+import com.mcmiddleearth.pluginutils.message.MessageType;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,7 +42,15 @@ public class GameInvite extends AbstractGameCommand{
     
     private void sendPlayerInvited(CommandSender cs, Player player, AbstractGame game) {
         MessageUtil.sendInfoMessage(cs, "You invited "+player.getName()+" to your game.");
-            MessageUtil.sendInfoMessage(player, cs.getName()+" invited you to the game "+game.getName()+".");
+            new FancyMessage(MessageType.INFO)
+                    .addClickable(MessageUtil.STRESSED+cs.getName()
+                                    +MessageUtil.INFO+" invited you to a "
+                                    +MessageUtil.STRESSED+game.getType().toString()
+                                    +MessageUtil.INFO+" game. "
+                                    +MessageUtil.STRESSED+"Click here"
+                                    +MessageUtil.INFO+" to join or type in chat: /game join "+game.getName(),
+                                  "/game join "+game.getName())
+                    .send(player);
     }
 
     private void sendNotFoundMessage(CommandSender cs) {

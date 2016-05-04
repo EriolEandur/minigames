@@ -6,7 +6,8 @@
 package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -57,7 +58,7 @@ public class GameManager extends AbstractGameCommand{
     private void sendNewManagerMessage(CommandSender cs, Player newManager, String name, AbstractGame game) {
         MessageUtil.sendInfoMessage(cs,"You tranfered the management of the game "+name+" to "+newManager.getName()+".");
         MessageUtil.sendInfoMessage(newManager, "You are now manager of the minigame "+name+".");
-        MessageUtil.sendAllInfoMessage(newManager, game, newManager.getName() +" is now managing this game.");
+        MinigamesMessageUtil.sendAllInfoMessage(newManager, game, newManager.getName() +" is now managing this game.");
     }
     
  }

@@ -9,7 +9,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,6 +21,7 @@ public class QuizGameQuestionsSubmit extends AbstractGameCommand{
     
     public QuizGameQuestionsSubmit(String... permissionNodes) {
         super(0, true, permissionNodes);
+        cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Submits a quiz question.");
         setUsageDescription(" single|multi|free|number: Initiates a conversation to create a new question of the specified type. Without a type a single choice question is created.");
     }
@@ -61,7 +62,7 @@ public class QuizGameQuestionsSubmit extends AbstractGameCommand{
         MessageUtil.sendInfoMessage(cs, "Questions in this game:");
         int id = 1;
         for(AbstractQuestion question : quizGame.getQuestions()) {
-            MessageUtil.sendNoPrefixInfoMessage(cs, id+": "+question.getQuestion());
+            MessageUtil.sendIndentedInfoMessage(cs, id+": "+question.getQuestion());
             id++;
         }
     }

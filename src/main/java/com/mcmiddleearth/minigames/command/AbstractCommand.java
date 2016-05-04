@@ -5,7 +5,7 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.command.CommandSender;
@@ -27,6 +27,9 @@ public abstract class AbstractCommand {
     @Getter
     @Setter
     private String usageDescription, shortDescription;
+    
+    @Getter
+    protected CmdGroup cmdGroup = CmdGroup.GENERAL;
     
     public AbstractCommand(int minArgs, boolean playerOnly, String... permissionNodes) {
         this.minArgs = minArgs;

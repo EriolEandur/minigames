@@ -6,8 +6,9 @@
 package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.PlayerUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -67,7 +68,7 @@ public class GameKick extends AbstractGameCommand{
 
     private void sendPlayerRemovedMessage(CommandSender cs, OfflinePlayer player, AbstractGame game) {
         MessageUtil.sendInfoMessage(cs, "You kicked "+player.getName()+" from game.");
-        MessageUtil.sendAllInfoMessage(cs, game, player.getName() +" was removed from this game.");
+        MinigamesMessageUtil.sendAllInfoMessage(cs, game, player.getName() +" was removed from this game.");
     }
 
     private void sendKickedPlayerMessage(Player player, CommandSender kicker, String arg) {
@@ -77,7 +78,7 @@ public class GameKick extends AbstractGameCommand{
 
     private void sendSpectatorRemovedMessage(CommandSender cs, OfflinePlayer player, AbstractGame game) {
         MessageUtil.sendInfoMessage(cs, "You kicked spectator "+player.getName()+" from game.");
-        MessageUtil.sendAllInfoMessage(cs, game, "Spectator " + player.getName() +" was removed from this game.");
+        MinigamesMessageUtil.sendAllInfoMessage(cs, game, "Spectator " + player.getName() +" was removed from this game.");
     }
     
  }

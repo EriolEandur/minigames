@@ -7,7 +7,8 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -20,7 +21,7 @@ public class GameSpectate extends AbstractGameCommand{
     public GameSpectate(String... permissionNodes) {
         super(1, true, permissionNodes);
         setShortDescription(": Spectate at a game.");
-        setUsageDescription(" <gamename>: Switches on spectating a game wich is watching the game scoreboard.");
+        setUsageDescription(" <gamename>: Switches on spectating a game which is watching the game scoreboard. Use optional argument '!off' to stop spectating.");
     }
     
     @Override
@@ -53,9 +54,13 @@ public class GameSpectate extends AbstractGameCommand{
     }
     
     public void sendPlayerSpectatesMessage(CommandSender cs, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs, "You now spectates at the minigame "+ game.getName()
-                                   +". Please use the game chat whith /gc <message>");
-        MessageUtil.sendAllInfoMessage(cs, game, cs.getName()+" now spectates at the game.");
+        MessageUtil.sendInfoMessage(cs, "You now spectate at the "
+                                   +MessageUtil.STRESSED+game.getType().toString()
+                                   +MessageUtil.INFO+" game '"+ game.getName()
+                                   +"'. Please use the game chat whith "
+                                   +MessageUtil.STRESSED+"/gc <message>");
+        MinigamesMessageUtil.sendAllInfoMessage(cs, game, MessageUtil.STRESSED+cs.getName()
+                                                          +MessageUtil.INFO+" now spectates at the game.");
     }
 
     public void sendNoSuchGameErrorMessage(CommandSender cs) {

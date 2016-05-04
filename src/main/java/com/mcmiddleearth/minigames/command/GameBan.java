@@ -6,8 +6,9 @@
 package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -29,12 +30,14 @@ public class GameBan extends AbstractGameCommand{
     protected void execute(CommandSender cs, String... args) {
         AbstractGame game = getGame((Player) cs);
         if(game != null && isManager((Player) cs, game)) {
-            OfflinePlayer[] players = Bukkit.getServer().getOfflinePlayers();
-            OfflinePlayer player = null;
-            for(OfflinePlayer search : players) {
-                if(search.getName().equalsIgnoreCase(args[0])) {
-                    player = search;
-                    break;
+            OfflinePlayer player = Bukkit.getPlayer(args[0]);
+            if(player==null) {
+                OfflinePlayer[] players = Bukkit.getServer().getOfflinePlayers();
+                for(OfflinePlayer search : players) {
+                    if(search.getName().equals(args[0])) {
+                        player = search;
+                        break;
+                    }
                 }
             }
             if(player==null) {
@@ -45,14 +48,14 @@ public class GameBan extends AbstractGameCommand{
                     sendAlreadyBannedMessage(cs);
                 }
                 else {
+Logger.getGlobal().info("banned: "+player.getUniqueId());                    
                     game.removePlayer(player);
-                    if(player instanceof Player) {
-                        game.removeSpectator((Player) player);
-                    }
                     game.setBanned(player);
                     sendPlayerBannedMessage(cs, player, game);
-                    Player bannedPlayer = PlayerUtil.getOnlinePlayer(player);
+                    Player bannedPlayer = Bukkit.getPlayer(player.getUniqueId());
                     if(bannedPlayer!=null) {
+Logger.getGlobal().info("online");                        
+                        game.removeSpectator(bannedPlayer);
                         if(args.length>1) {
                             sendBannedPlayerMessage(bannedPlayer, cs, " for "+args[1]);
                         }
@@ -71,7 +74,7 @@ public class GameBan extends AbstractGameCommand{
 
     private void sendPlayerBannedMessage(CommandSender cs, OfflinePlayer player, AbstractGame game) {
         MessageUtil.sendInfoMessage(cs, "You banned "+player.getName()+" from your game.");
-        MessageUtil.sendAllInfoMessage(cs, game, player.getName() +" was banned from this game.");
+        MinigamesMessageUtil.sendAllInfoMessage(cs, game, player.getName() +" was banned from this game.");
     }
 
     private void sendNoPlayerFoundMessage(CommandSender cs) {

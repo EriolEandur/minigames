@@ -10,7 +10,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -32,6 +32,7 @@ public class QuizGameSave extends AbstractGameCommand implements Confirmationabl
     
     public QuizGameSave(String... permissionNodes) {
         super(2, true, permissionNodes);
+        cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Saves questions to file.");
         setUsageDescription(" <filename> <description>: Saves all questions of the game to file <filename>. A <description> will be saved with the questions.");
     }

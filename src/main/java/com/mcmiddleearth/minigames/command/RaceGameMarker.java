@@ -9,7 +9,8 @@ import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
 import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.FileNotFoundException;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -24,6 +25,7 @@ public class RaceGameMarker extends AbstractGameCommand {
     
     public RaceGameMarker(String... permissionNodes) {
         super(1, true, permissionNodes);
+        cmdGroup = CmdGroup.RACE;
         setShortDescription(": Assigns a race maker to a checkpoint.");
         setUsageDescription(" <filename> start|finish|checkpoint|all: Appoints the marker from file <filename> to start or finish or checkpoints or all race locations. When only <filename> is specified the marker is assigned to a nearby location (10 blocks).");
     }

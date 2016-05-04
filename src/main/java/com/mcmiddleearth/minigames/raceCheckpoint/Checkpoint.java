@@ -17,8 +17,8 @@
 package com.mcmiddleearth.minigames.raceCheckpoint;
 
 import com.mcmiddleearth.minigames.data.PluginData;
-import com.mcmiddleearth.minigames.utils.BlockUtil;
-import com.mcmiddleearth.minigames.utils.FileUtil;
+import com.mcmiddleearth.pluginutils.BlockUtil;
+import com.mcmiddleearth.pluginutils.FileUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

@@ -7,8 +7,12 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.FancyMessage;
+import com.mcmiddleearth.pluginutils.message.MessageType;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -18,8 +22,8 @@ public class GameCheck extends AbstractCommand{
     
     public GameCheck(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": Lists all currently active mini game.");
-        setUsageDescription(": Lists all currently active mini game.");
+        setShortDescription(": Lists all current mini game.");
+        setUsageDescription(": Lists all current mini game.");
     }
     
     @Override
@@ -27,13 +31,22 @@ public class GameCheck extends AbstractCommand{
         if(!PluginData.gameRunning()) {
             MessageUtil.sendInfoMessage(cs, "There are no minigames running. Check again later.");
         } else {
-            MessageUtil.sendInfoMessage(cs, "Running minigames:");
+            MessageUtil.sendInfoMessage(cs, "Running minigames (click to join):");
             for(AbstractGame game : PluginData.getGames()) {
-                if(game.isAnnounced() && !game.isPrivat()) {
-                    MessageUtil.sendNoPrefixInfoMessage(cs, "§2"+game.getName() + "§b, a §2"
-                                                          + game.getType() + "§b game with §2" 
-                                                          + game.getManager().getName()+"§b and "
-                                                          + game.getPlayers().size() + " players.");
+                if(game.isAnnounced()) {
+                    FancyMessage message = new FancyMessage(MessageType.INFO_NO_PREFIX)
+                        .addClickable(ChatColor.DARK_AQUA+game.getName() +": "
+                                      + MessageUtil.STRESSED+game.getType() 
+                                      + MessageUtil.INFO+" with " 
+                                      + MessageUtil.STRESSED+game.getManager().getName(), 
+                                "/game join "+game.getName());
+                    if(game.isPrivat()) {
+                        message.addSimple(" (Private)");
+                    } else {
+                        message.addSimple(" ("+ game.getPlayers().size() 
+                                              + (game.getPlayers().size()==1?" player)":" players)"));
+                    }
+                    message.send((Player)cs);
                 }
             }
         }

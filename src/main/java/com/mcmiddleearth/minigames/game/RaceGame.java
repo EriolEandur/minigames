@@ -10,16 +10,18 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
 import com.mcmiddleearth.minigames.scoreboard.RaceGameScoreboard;
-import com.mcmiddleearth.minigames.utils.BlockUtil;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
-import com.mcmiddleearth.minigames.utils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.TitleUtil;
+import com.mcmiddleearth.pluginutils.BlockUtil;
+import com.mcmiddleearth.pluginutils.PlayerUtil;
+import com.mcmiddleearth.pluginutils.TitleUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.UUID;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -55,7 +57,7 @@ public class RaceGame extends AbstractGame {
     
     private List<Location> cageLocations = new ArrayList<>();
     
-    private final Map<OfflinePlayer,Integer> nextCheckpoints = new HashMap<>();
+    private final Map<UUID,Integer> nextCheckpoints = new HashMap<>();
     
     public RaceGame(Player manager, String name) {
         super(manager, name, GameType.RACE, new RaceGameScoreboard());
@@ -78,11 +80,11 @@ public class RaceGame extends AbstractGame {
                 }
                 ((RaceGameScoreboard)getBoard()).finish(event.getPlayer().getName());
                 finished ++;
-                TitleUtil.showTitle(event.getPlayer(),"gold","FINISH", 
+                TitleUtil.showTitle(event.getPlayer(),ChatColor.GOLD+"FINISH", 
                                             "You are placed "+getPlace()+".");
                 if(finished==1) {
                     TitleUtil.showTitleAll(getOnlinePlayers(),event.getPlayer(),
-                                             "blue",event.getPlayer().getName(),"won the race.");
+                                             ChatColor.BLUE+event.getPlayer().getName(),"won the race.");
                 }
             }
             for(Checkpoint check:checkpointManager.getCheckpoints()) {
@@ -150,20 +152,24 @@ public class RaceGame extends AbstractGame {
         resetNextCheckpoints();
         cageLocations = getCageLocations(checkpointManager.getStart());
         cagePlayer(true);
-        TitleUtil.setTimesAll(getOnlinePlayers(), null, 20,290,0);
-        TitleUtil.setTitleAll(getOnlinePlayers(), null, "red", "start in");
+        //TitleUtil.setTimesAll(getOnlinePlayers(), null, 20,290,0);
+        //TitleUtil.setTitleAll(getOnlinePlayers(), null, ChatColor.RED+"start in");
+        final String title = ChatColor.RED+"start in";
+        TitleUtil.showTitleAll(getOnlinePlayers(), null, title,"",20,300,0);
         timer = 11;
         goTask = new BukkitRunnable() {
             @Override
             public void run() {
                 if(timer>1) {
                     timer--;
-                    TitleUtil.setSubtitleAll(getOnlinePlayers(), null, timer+"");
+                    //TitleUtil.setSubtitleAll(getOnlinePlayers(), null, timer+"");
+                    TitleUtil.showTitleAll(getOnlinePlayers(), null, title, timer+"",0,40,0);
                 }
                 else {
                     cancel();
-                    TitleUtil.setTitleAll(getOnlinePlayers(), null, "green", "GO");
-                    TitleUtil.setSubtitleAll(getOnlinePlayers(), null, "");
+                    //TitleUtil.setTitleAll(getOnlinePlayers(), null, ChatColor.GREEN+"GO");
+                    //TitleUtil.setSubtitleAll(getOnlinePlayers(), null, "");
+                    TitleUtil.showTitleAll(getOnlinePlayers(), null, ChatColor.GREEN+"GO","",0,30,20);
                     go();
                 }
             }
@@ -171,7 +177,7 @@ public class RaceGame extends AbstractGame {
             @Override
             public void cancel() {
                 super.cancel();
-                TitleUtil.setTimesAll(getOnlinePlayers(), null, 0,50,20);
+                //TitleUtil.setTimesAll(getOnlinePlayers(), null, 0,50,20);
             }};
         goTask.runTaskTimer(MiniGamesPlugin.getPluginInstance(), 40, 20);
     }
@@ -273,29 +279,29 @@ public class RaceGame extends AbstractGame {
     
     private void resetNextCheckpoints() {
         nextCheckpoints.clear();
-        for(OfflinePlayer player: getPlayers()) {
+        for(UUID player: getPlayers()) {
             nextCheckpoints.put(player, 1);
         }
     }
     
     private int getNextCheckpoint(OfflinePlayer player) {
-        for(OfflinePlayer search: nextCheckpoints.keySet()) {
-            if(PlayerUtil.isSame(search, player)) {
+        for(UUID search: nextCheckpoints.keySet()) {
+            if(player.getUniqueId().equals(search)) {
                 return nextCheckpoints.get(search);
             }
         }
-        nextCheckpoints.put(player, 1);
+        nextCheckpoints.put(player.getUniqueId(), 1);
         return 1;
     }
     
     private void incrementCheckpoint(OfflinePlayer player) {
-        for(OfflinePlayer search: nextCheckpoints.keySet()) {
-            if(PlayerUtil.isSame(search, player)) {
+        for(UUID search: nextCheckpoints.keySet()) {
+            if(player.getUniqueId().equals(search)) {
                 nextCheckpoints.put(search, nextCheckpoints.get(search)+1);
                 return;
             }
         }
-        nextCheckpoints.put(player, 2);
+        nextCheckpoints.put(player.getUniqueId(), 2);
     }
     
     public boolean playerRacing() {

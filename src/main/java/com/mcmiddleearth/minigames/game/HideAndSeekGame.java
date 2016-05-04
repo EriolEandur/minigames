@@ -7,10 +7,11 @@ package com.mcmiddleearth.minigames.game;
 
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.scoreboard.HideAndSeekGameScoreboard;
-import com.mcmiddleearth.minigames.utils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.DynmapUtil;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
-import com.mcmiddleearth.minigames.utils.TitleUtil;
+import com.mcmiddleearth.pluginutils.PlayerUtil;
+import com.mcmiddleearth.pluginutils.DynmapUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.TitleUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -62,6 +63,7 @@ public class HideAndSeekGame extends AbstractGame {
     public HideAndSeekGame(Player manager, String name) {
         super(manager, name, GameType.HIDE_AND_SEEK, new HideAndSeekGameScoreboard());
         setTeleportAllowed(false);
+        setFlightAllowed(false);
         announceGame();
     }
     
@@ -238,19 +240,19 @@ public class HideAndSeekGame extends AbstractGame {
     }
 
     private void sendStartHideMessage() {
-        TitleUtil.showTitle((Player) seeker, "blue"," FREEZE!!!"," Wait for other players to hide.");
+        TitleUtil.showTitle((Player) seeker, ChatColor.BLUE+" FREEZE!!!"," Wait for other players to hide.");
         for(Player player : getOnlinePlayers()) {
             if(!PlayerUtil.isSame(player,seeker)) {
-                TitleUtil.showTitle(player, "yellow"," HIDE!!!"," ");
+                TitleUtil.showTitle(player, ChatColor.YELLOW+" HIDE!!!"," ");
             }
         }
     }
 
     private void sendStartSeekingMessage() {
-        TitleUtil.showTitle((Player) seeker, "yellow"," SEEK!!!"," Try to find the other players.");
+        TitleUtil.showTitle((Player) seeker, ChatColor.YELLOW+" SEEK!!!"," Try to find the other players.");
         for(Player player : getOnlinePlayers()) {
             if(!PlayerUtil.isSame(player, seeker)) {
-                TitleUtil.showTitle(player, "blue"," FREEZE!!!",seeker.getName() + " is seeking you.");
+                TitleUtil.showTitle(player, ChatColor.BLUE+" FREEZE!!!",seeker.getName() + " is seeking you.");
                 if(PlayerUtil.getOnlinePlayer(player)!=null) {
                     MessageUtil.sendInfoMessage(PlayerUtil.getOnlinePlayer(player), "Hold SHIFT to hide your name tag.");
                 }
@@ -260,28 +262,28 @@ public class HideAndSeekGame extends AbstractGame {
 
     private void sendStopSeekingMessage() {
         if(hiddenPlayers.isEmpty()) {
-                TitleUtil.showTitle((Player) seeker, "green","YOU WON", "You found all players.");
+                TitleUtil.showTitle((Player) seeker, ChatColor.GOLD+"YOU WON", "You found all players.");
             }
             else {
-               TitleUtil.showTitle((Player) seeker, "red", "GAME OVER", "You found not all players.");
+               TitleUtil.showTitle((Player) seeker, ChatColor.BLUE+"GAME OVER", "You found not all players.");
             }
         for(Player player : getOnlinePlayers()) {
             if(!PlayerUtil.isSame(player,seeker)) {
                 if(hiddenPlayers.isEmpty()) {
-                    TitleUtil.showTitle(player, "red","GAME OVER", seeker.getName()+" found all players.");
+                    TitleUtil.showTitle(player, ChatColor.BLUE+"GAME OVER", seeker.getName()+" found all players.");
                 }
                 else if (isHidden(player)) {
-                    TitleUtil.showTitle(player, "green","YOU WON", seeker.getName()+" found you not.");
+                    TitleUtil.showTitle(player, ChatColor.GOLD+"YOU WON", seeker.getName()+" found you not.");
                 }
                 else {
-                    TitleUtil.showTitle(player, "red","GAME OVER", seeker.getName()+" found you but not all players.");
+                    TitleUtil.showTitle(player, ChatColor.BLUE+"GAME OVER", seeker.getName()+" found you but not all players.");
                 }
             }
         }
     }
 
     private void sendSeekerLeavingMessage(Player player) {
-        MessageUtil.sendAllInfoMessage(player, this, "The seeker left.");
+        MinigamesMessageUtil.sendAllInfoMessage(player, this, "The seeker left.");
     }
 
     private void sendPlayerFoundMessage(Player hidden) {

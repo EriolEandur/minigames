@@ -16,10 +16,8 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
-import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -36,7 +34,8 @@ class EditQuestionPrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext cc) {
-        return ChatColor.DARK_GREEN+"[Question] "+EditQuestionConversationFactory.getQuestion(cc).getQuestion();
+        return ChatColor.DARK_GREEN+"[Question] "+EditQuestionConversationFactory.getQuestion(cc).getQuestion()
+                +ChatColor.AQUA + " Type in a new question or '!keep'.";
     }
 
     @Override

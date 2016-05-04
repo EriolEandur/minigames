@@ -8,8 +8,11 @@ package com.mcmiddleearth.minigames.game;
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.scoreboard.GameScoreboard;
-import com.mcmiddleearth.minigames.utils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.PlayerUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.message.FancyMessage;
+import com.mcmiddleearth.pluginutils.message.MessageType;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -54,13 +57,13 @@ public abstract class AbstractGame {
     private final GameType type;
     
     @Getter
-    private final List<OfflinePlayer> players = new ArrayList<>();
+    private final List<UUID> players = new ArrayList<>();
     
-    private final List<OfflinePlayer> bannedPlayers = new ArrayList<>();
+    private final List<UUID> bannedPlayers = new ArrayList<>();
 
-    private final List<OfflinePlayer> spectators = new ArrayList<>();
+    private final List<UUID> spectators = new ArrayList<>();
     
-    private final List<OfflinePlayer> invitedPlayers = new ArrayList<>();
+    private final List<UUID> invitedPlayers = new ArrayList<>();
     
     private final List<UUID> leaveMessaged = new ArrayList<>();
     
@@ -72,7 +75,6 @@ public abstract class AbstractGame {
     private boolean warpAllowed = true;
     
     @Getter
-    @Setter
     private boolean spectateAllowed = true;
     
     @Getter
@@ -146,18 +148,22 @@ public abstract class AbstractGame {
     }
     
     public OfflinePlayer getPlayer(String name) {
-        for(OfflinePlayer player : players) {
-            if(player.getName().equalsIgnoreCase(name)) {
-                return player;
+        Player onlinePlayer = Bukkit.getPlayer(name);
+        if(onlinePlayer!=null && players.contains(onlinePlayer.getUniqueId())) {
+            return onlinePlayer;
+        }
+        for(UUID player : players) {
+            if(Bukkit.getOfflinePlayer(player).getName().equalsIgnoreCase(name)) {
+                return Bukkit.getOfflinePlayer(player);
             }
         }
         return null;
     }
     
     public OfflinePlayer getBannedPlayer(String name) {
-        for(OfflinePlayer player : bannedPlayers) {
-            if(player.getName().equalsIgnoreCase(name)) {
-                return player;
+        for(UUID player : bannedPlayers) {
+            if(Bukkit.getOfflinePlayer(player).getName().equalsIgnoreCase(name)) {
+                return Bukkit.getOfflinePlayer(player);
             }
         }
         return null;
@@ -165,8 +171,8 @@ public abstract class AbstractGame {
     
     public List<Player> getOnlinePlayers() {
         List<Player> online = new ArrayList<>();
-        for(OfflinePlayer player : players) {
-            Player onlinePlayer = PlayerUtil.getOnlinePlayer(player);
+        for(UUID player : players) {
+            Player onlinePlayer = Bukkit.getPlayer(player);
             if(onlinePlayer!=null) {
                 online.add(onlinePlayer);
             }
@@ -181,73 +187,50 @@ public abstract class AbstractGame {
         if(!gm3Allowed && player.getGameMode().equals(GameMode.SPECTATOR)) {
             player.setGameMode(GameMode.SURVIVAL);
         }
-        players.add(player);
+        players.add(player.getUniqueId());
         getBoard().incrementPlayer();
         player.setScoreboard(board.getScoreboard());
     }
     
     public void addSpectator(Player player) {
-        spectators.add(player);
+        spectators.add(player.getUniqueId());
         player.setScoreboard(getBoard().getScoreboard());
     }
     
     public void removeSpectator(Player player) {
-        for(OfflinePlayer search: spectators) {
-            if(PlayerUtil.isSame(search, player)) {
-                spectators.remove(search);
-                player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
-                return;
-            }
+        if(spectators.remove(player.getUniqueId())) {
+            player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
         }
     }
     
     public boolean isSpectating(Player player) {
-        for(OfflinePlayer search: spectators) {
-            if(PlayerUtil.isSame(search, player)) {
-                return true;
-            }
-        }
-        return false;
+        return spectators.contains(player.getUniqueId());
     }
     
     public void removePlayer(OfflinePlayer player) {
-        for(OfflinePlayer search : players) {
-            if(PlayerUtil.isSame(search,player)) {
-                players.remove(search);
-                break;
+        if(players.remove(player.getUniqueId())) {
+            getBoard().decrementPlayer();
+            Player onlinePlayer = PlayerUtil.getOnlinePlayer(player);
+            if(onlinePlayer!=null && !PlayerUtil.isSame(onlinePlayer,manager)) {
+                onlinePlayer.setScoreboard(Bukkit.getServer().getScoreboardManager().getMainScoreboard());
             }
-        }
-        getBoard().decrementPlayer();
-        Player onlinePlayer = PlayerUtil.getOnlinePlayer(player);
-        if(onlinePlayer!=null && !PlayerUtil.isSame(onlinePlayer,manager)) {
-            onlinePlayer.setScoreboard(Bukkit.getServer().getScoreboardManager().getMainScoreboard());
         }
     }
     
     public boolean isBanned(OfflinePlayer player) {
-        for(OfflinePlayer search : bannedPlayers) {
-            if(PlayerUtil.isSame(search,player)) {
-                return true;
-            }
-        }
-        return false;
+        return bannedPlayers.contains(player.getUniqueId());
     }
     
     public boolean isInGame(OfflinePlayer player) {
-        for(OfflinePlayer search: players) {
-            if(PlayerUtil.isSame(search,player)) {
-                return true;
-            }
-        }
-        return false;
+        return players.contains(player.getUniqueId());
     }
 
     public void setBanned(OfflinePlayer player) {
-        bannedPlayers.add(player);
+        bannedPlayers.add(player.getUniqueId());
     }
         
     public void setUnbanned(OfflinePlayer player) {
-        bannedPlayers.remove(player);
+        bannedPlayers.remove(player.getUniqueId());
     }
         
     public void playerJoinServer(PlayerJoinEvent event) {
@@ -269,6 +252,11 @@ public abstract class AbstractGame {
     
     public void playerMove(PlayerMoveEvent event) {
         Location to = event.getTo();
+        if(!to.getWorld().equals(getWarp().getWorld())) {
+            event.getPlayer().teleport(getWarp(), TeleportCause_FORCE);
+            MessageUtil.sendErrorMessage(event.getPlayer(),"You can't go to another world while in this game.");
+            return;
+        }
         Location from = event.getFrom();
         if(to.distance(getWarp())>allowedRadius(event.getPlayer())) {
             //event.setCancelled(true);
@@ -372,12 +360,11 @@ public abstract class AbstractGame {
     }
     
     public boolean isInvited(OfflinePlayer player) {
-        return PlayerUtil.getOfflinePlayer(invitedPlayers, player)!=null 
-                || PlayerUtil.isSame(player, manager);
+        return invitedPlayers.contains(player.getUniqueId());
     }
     
     public void invite(OfflinePlayer player) {
-        invitedPlayers.add(player);
+        invitedPlayers.add(player.getUniqueId());
     }
     
     public void setFlightAllowed(boolean allowed) {
@@ -387,6 +374,21 @@ public abstract class AbstractGame {
             }
         }
         flightAllowed = allowed;
+    }
+    
+    public void setSpectateAllowed(boolean allowed) {
+        if(this.spectateAllowed && !allowed)  {
+            List<UUID> copyOfSpectators = new ArrayList<>();
+            copyOfSpectators.addAll(spectators);
+            for(UUID uuid : copyOfSpectators) {
+                Player player = Bukkit.getPlayer(uuid);
+                if(player!=null) {
+                    removeSpectator(player);
+                    sendNoMoreSpectatingMessage(player);
+                }
+            }
+        }
+        spectateAllowed = allowed;
     }
     
     public String getGameChatTag(Player player) {
@@ -399,12 +401,22 @@ public abstract class AbstractGame {
     }
     
     protected void sendAnnounceGameMessage() {
-        MessageUtil.sendBroadcastMessage("§2"+manager.getName() + "§b started a new §2"+ getType().toString()+"§b game. "
-                                        + "To play that game, type in chat: /game join §2"+getName());
+        MessageUtil.sendBroadcastMessage(new FancyMessage(MessageType.INFO).
+                                             addClickable(MessageUtil.STRESSED+manager.getName() 
+                                                              + MessageUtil.INFO+" started a new "
+                                                              + MessageUtil.STRESSED+getType().toString()
+                                                              + MessageUtil.INFO+" game. "
+                                                              + "To play that game, "
+                                                              + MessageUtil.STRESSED+"click here "
+                                                              + MessageUtil.INFO+"or type in chat: /game join "+getName(),"/game join "+getName()));
+        /*MessageUtil.sendBroadcastMessage("§2"+manager.getName() + "§b started a new §2"
+                                                              + getType().toString()+"§b game. "
+                                                              + "To play that game, click here or type in chat: /game join §2"
+                                                              + getName());*/
     }
     
     public void sendGameEndMessage(Player sender) {
-        MessageUtil.sendAllInfoMessage(sender, this, "The game "+ getName()+" ended.");
+        MinigamesMessageUtil.sendAllInfoMessage(sender, this, "The game "+ getName()+" ended.");
     }
 
     private void sendLeaveNotAllowed(Player player) {
@@ -421,5 +433,10 @@ public abstract class AbstractGame {
 
     private void sendGm3NotAllowed(Player player) {
         MessageUtil.sendErrorMessage(player, "You are not allowed to switch to spectator mode in this game.");
+    }
+
+    private void sendNoMoreSpectatingMessage(Player player) {
+        MessageUtil.sendInfoMessage(player, "Spectating in game '"+MessageUtil.STRESSED+getName()
+                                           +MessageUtil.INFO+"' is no longer allowed.");
     }
 }

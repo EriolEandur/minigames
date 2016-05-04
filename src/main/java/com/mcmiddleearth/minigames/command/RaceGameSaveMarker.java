@@ -8,7 +8,8 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.conversation.confirmation.Confirmationable;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -26,6 +27,7 @@ public class RaceGameSaveMarker extends AbstractCommand implements Confirmationa
     
     public RaceGameSaveMarker(String... permissionNodes) {
         super(1, true, permissionNodes);
+        cmdGroup = CmdGroup.RACE;
         setShortDescription(": Creates and saves a race marker to file.");
         setUsageDescription(" <filename>: Creates and saves a race marker to file <filename>. All non-Air blocks within 10 blocks radius of the player who issues the command are saved to the marker. Use Netherrack for check locations. A racing player needs to move to a check location to be registered at the location. Signs will be labeled for races.");
     }

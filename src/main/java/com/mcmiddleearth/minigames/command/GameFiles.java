@@ -5,20 +5,18 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
-import com.mcmiddleearth.minigames.utils.FileUtil;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.FileUtil;
+import com.mcmiddleearth.pluginutils.NumericUtil;
+import com.mcmiddleearth.pluginutils.message.FancyMessage;
+import com.mcmiddleearth.pluginutils.message.MessageType;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.util.logging.Level;
+import java.io.FileFilter;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -35,6 +33,39 @@ public class GameFiles extends AbstractCommand{
     @Override
     protected void execute(CommandSender cs, String... args) {
         String command = null;
+        int page = 1;
+        if(args.length>1 && NumericUtil.isInt(args[1])) {
+            page = NumericUtil.getInt(args[1]);
+        }
+        File directory;
+        FileFilter filter;
+        FancyMessage header = new FancyMessage(MessageType.INFO);
+        if(args[0].equalsIgnoreCase("quiz")) {
+            directory = PluginData.getQuestionDir();
+            filter = FileUtil.getFileExtFilter("json");
+            command = "/game loadquiz";
+            header.addSimple("Saved "+MessageUtil.STRESSED+"quiz"+MessageUtil.INFO+" files.");
+        }
+        else if(args[0].equalsIgnoreCase("race")) {
+            directory = PluginData.getRaceDir();
+            filter = FileUtil.getFileExtFilter("json");
+            command = "/game loadrace";
+            header.addSimple("Saved "+MessageUtil.STRESSED+"race"+MessageUtil.INFO+" files.");
+        }
+        else if(args[0].equalsIgnoreCase("marker")) {
+            directory = Checkpoint.getMarkerDir();
+            filter =FileUtil.getFileExtFilter(Checkpoint.getMarkerExt());
+            command = "/game marker";
+            header.addSimple("Saved "+MessageUtil.STRESSED+"race marker"+MessageUtil.INFO+" files.");
+        }
+        else {
+            sendInvalidDataTypeMessage(cs);
+            return;
+        }
+        MessageUtil.sendFancyFileListMessage((Player) cs, header, directory, filter, 
+                                             new String[]{page+""}, "/game files "+ args[0], command, true);
+    }
+    /*
         File[] files;
         if(args[0].equalsIgnoreCase("quiz")) {
             files = PluginData.getQuestionDir().listFiles(FileUtil.getFileExtFilter("json"));
@@ -46,6 +77,7 @@ public class GameFiles extends AbstractCommand{
         }
         else if(args[0].equalsIgnoreCase("marker")) {
             files = Checkpoint.getMarkerDir().listFiles(FileUtil.getFileExtFilter(Checkpoint.getMarkerExt()));
+            command = "game marker ";
         }
         else {
             sendInvalidDataTypeMessage(cs);
@@ -104,13 +136,15 @@ public class GameFiles extends AbstractCommand{
             name = name.concat(" ");
         }
         if(command != null) {
-            MessageUtil.sendClickableMessage((Player)cs, MessageUtil.INFO+MessageUtil.getNOPREFIX()
-                                                +name+description, command+fileName.substring(0, fileName.lastIndexOf('.')));
+            new FancyMessage(MessageType.INFO_INDENTED)
+                    .addClickable(name+description, 
+                                  command+fileName.substring(0, fileName.lastIndexOf('.')))
+                    .send((Player)cs);
         }
         else {
-            MessageUtil.sendNoPrefixInfoMessage(cs, name+description);
+            MessageUtil.sendIndentedInfoMessage(cs, name+description);
         }
-    }
+    }*/
 
     private void sendInvalidDataTypeMessage(CommandSender cs) {
         MessageUtil.sendErrorMessage(cs, "Invalid file type. Try /game files quiz|race|marker");

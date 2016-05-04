@@ -5,11 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,6 +20,7 @@ public class QuizGameSend extends AbstractGameCommand{
     
     public QuizGameSend(String... permissionNodes) {
         super(0, true, permissionNodes);
+        cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Sends the next question.");
         setUsageDescription(" [answerTime]: Sends the next question to all participating players. Without a given [answerTime] players will have 30 sec to answer. A specified [answerTime] will be use for all later questions too.");
     }

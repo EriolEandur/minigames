@@ -15,15 +15,14 @@ import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
 import com.mcmiddleearth.minigames.quizQuestion.SingleChoiceQuestion;
 import com.mcmiddleearth.minigames.scoreboard.QuizGameScoreboard;
-import com.mcmiddleearth.minigames.utils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
-import com.mcmiddleearth.minigames.utils.NumericUtil;
-import com.mcmiddleearth.minigames.utils.StringUtil;
-import com.mcmiddleearth.minigames.utils.TitleUtil;
+import com.mcmiddleearth.pluginutils.PlayerUtil;
+import com.mcmiddleearth.pluginutils.NumericUtil;
+import com.mcmiddleearth.pluginutils.StringUtil;
+import com.mcmiddleearth.pluginutils.TitleUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -222,7 +221,7 @@ public class QuizGame extends AbstractGame {
         }
         if(winner.size()>0 && (allowEqual || winner.size()==1)) {
             for(Player player: winner) {
-                TitleUtil.showTitle(player, "gold", "Congrats","You won the quiz game.");
+                TitleUtil.showTitle(player, ChatColor.GOLD+"Congrats","You won the quiz game.");
                 String winnerNames = winner.get(0).getName();
                 for(int i=1;i<winner.size()-1;i++) {
                     winnerNames = winnerNames + ", "+winner.get(i).getName();
@@ -230,10 +229,10 @@ public class QuizGame extends AbstractGame {
                 if(winner.size()>1) {
                     winnerNames = winnerNames + " and "+winner.get(winner.size()-1).getName();
                 }
-                TitleUtil.showTitleAll(getOnlinePlayers(), winner, "blue", "game over", winnerNames+" won the quiz.");
+                TitleUtil.showTitleAll(getOnlinePlayers(), winner, ChatColor.BLUE+"game over", winnerNames+" won the quiz.");
                 Player manager = Bukkit.getPlayer(getManager().getUniqueId());
                 if(manager!=null && !PluginData.isInGame(manager)) {
-                    TitleUtil.showTitle(manager, "blue", "game over", winnerNames+" won the quiz.");
+                    TitleUtil.showTitle(manager, ChatColor.BLUE+"game over", winnerNames+" won the quiz.");
                 }
             }
             return true;

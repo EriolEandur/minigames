@@ -5,11 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,6 +20,7 @@ public class QuizGameRandom extends AbstractGameCommand{
     
     public QuizGameRandom(String... permissionNodes) {
         super(0, true, permissionNodes);
+        cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Defines the order of questions.");
         setUsageDescription(" off|questions|choices|all: 'off' will set all questions and choices to be shown in saved order. 'questions' will show questions in random order. 'choices' will show possibl answers for a question in random order. 'all' or just no argument will show questions and choices in random order");
     }

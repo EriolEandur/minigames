@@ -24,7 +24,7 @@ import com.mcmiddleearth.minigames.quizQuestion.FreeQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
 import com.mcmiddleearth.minigames.quizQuestion.SingleChoiceQuestion;
-import com.mcmiddleearth.minigames.utils.MessageUtil;
+import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
