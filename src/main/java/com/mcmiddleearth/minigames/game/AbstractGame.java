@@ -409,10 +409,6 @@ public abstract class AbstractGame {
                                                               + "To play that game, "
                                                               + MessageUtil.STRESSED+"click here "
                                                               + MessageUtil.INFO+"or type in chat: /game join "+getName(),"/game join "+getName()));
-        /*MessageUtil.sendBroadcastMessage("§2"+manager.getName() + "§b started a new §2"
-                                                              + getType().toString()+"§b game. "
-                                                              + "To play that game, click here or type in chat: /game join §2"
-                                                              + getName());*/
     }
     
     public void sendGameEndMessage(Player sender) {
