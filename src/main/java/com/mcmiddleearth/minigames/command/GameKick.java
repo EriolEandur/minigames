@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.pluginutils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -63,22 +63,22 @@ public class GameKick extends AbstractGameCommand{
     }
 
     private void sendNoPlayerFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "No player with that name in the game.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "No player with that name in the game.");
     }
 
     private void sendPlayerRemovedMessage(CommandSender cs, OfflinePlayer player, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs, "You kicked "+player.getName()+" from game.");
-        MinigamesMessageUtil.sendAllInfoMessage(cs, game, player.getName() +" was removed from this game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You kicked "+player.getName()+" from game.");
+        GameChatUtil.sendAllInfoMessage(cs, game, player.getName() +" was removed from this game.");
     }
 
     private void sendKickedPlayerMessage(Player player, CommandSender kicker, String arg) {
-        MessageUtil.sendInfoMessage(player, "You were kicked from the game by " 
+        PluginData.getMessageUtil().sendInfoMessage(player, "You were kicked from the game by " 
                                            + kicker.getName()+arg+".");
     }
 
     private void sendSpectatorRemovedMessage(CommandSender cs, OfflinePlayer player, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs, "You kicked spectator "+player.getName()+" from game.");
-        MinigamesMessageUtil.sendAllInfoMessage(cs, game, "Spectator " + player.getName() +" was removed from this game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You kicked spectator "+player.getName()+" from game.");
+        GameChatUtil.sendAllInfoMessage(cs, game, "Spectator " + player.getName() +" was removed from this game.");
     }
     
  }

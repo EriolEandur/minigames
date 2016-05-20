@@ -10,7 +10,6 @@ import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -69,23 +68,23 @@ public class GameWarp extends AbstractCommand{
     }
 
     private void sendNoSuchGameErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs,"No game with that name.");
+        PluginData.getMessageUtil().sendErrorMessage(cs,"No game with that name.");
     }
 
     private void sendIdNotValidMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs,"You entered an invalid checkpoint ID.");
+        PluginData.getMessageUtil().sendErrorMessage(cs,"You entered an invalid checkpoint ID.");
     }
 
     private void sendNotANumberMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs,"You have to enter a checkpoint ID (a number)");
+        PluginData.getMessageUtil().sendErrorMessage(cs,"You have to enter a checkpoint ID (a number)");
     }
 
     private void sendInvalidArguments(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs,"You entered invalid arguments for this game.");
+        PluginData.getMessageUtil().sendErrorMessage(cs,"You entered invalid arguments for this game.");
     }
 
     private void sendNotAllowed(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs,"It's not allowed to warp to this game.");
+        PluginData.getMessageUtil().sendErrorMessage(cs,"It's not allowed to warp to this game.");
     }
     
 }

@@ -7,8 +7,7 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -54,25 +53,25 @@ public class GameSpectate extends AbstractGameCommand{
     }
     
     public void sendPlayerSpectatesMessage(CommandSender cs, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs, "You now spectate at the "
-                                   +MessageUtil.STRESSED+game.getType().toString()
-                                   +MessageUtil.INFO+" game '"+ game.getName()
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You now spectate at the "
+                                   +PluginData.getMessageUtil().STRESSED+game.getType().toString()
+                                   +PluginData.getMessageUtil().INFO+" game '"+ game.getName()
                                    +"'. Please use the game chat whith "
-                                   +MessageUtil.STRESSED+"/gc <message>");
-        MinigamesMessageUtil.sendAllInfoMessage(cs, game, MessageUtil.STRESSED+cs.getName()
-                                                          +MessageUtil.INFO+" now spectates at the game.");
+                                   +PluginData.getMessageUtil().STRESSED+"/gc <message>");
+        GameChatUtil.sendAllInfoMessage(cs, game, PluginData.getMessageUtil().STRESSED+cs.getName()
+                                                          +PluginData.getMessageUtil().INFO+" now spectates at the game.");
     }
 
     public void sendNoSuchGameErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "No minigame with that name.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "No minigame with that name.");
     }
 
     private void sendPlayerBannedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You are banned from this minigame.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You are banned from this minigame.");
     }
 
     private void sendSpectateNotAllowedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "It is not allowed to spectate at this game.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "It is not allowed to spectate at this game.");
     }
 
  }

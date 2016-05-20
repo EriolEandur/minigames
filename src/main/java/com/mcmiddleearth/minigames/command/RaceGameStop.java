@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,6 +39,6 @@ public class RaceGameStop extends AbstractGameCommand{
     }
 
     private void sendNotStartedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Race not started yet.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Race not started yet.");
     }
 }

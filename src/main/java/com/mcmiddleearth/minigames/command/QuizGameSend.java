@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -55,14 +55,14 @@ public class QuizGameSend extends AbstractGameCommand{
  }
 
     /*private void sendNotAnnouncedErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You have to announce the game first with /game question done.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You have to announce the game first with /game question done.");
     }*/
 
     private void sendNoPlayersErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "There are no players in game to send the question to.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "There are no players in game to send the question to.");
     }
 
     private void sendNoMoreQuestions(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "There are no more questions for this game.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "There are no more questions for this game.");
     }
 }

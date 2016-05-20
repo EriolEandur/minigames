@@ -9,7 +9,6 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -43,26 +42,26 @@ public class QuizGameQuestionsSubmit extends AbstractGameCommand{
     }
  
     private void sendInvalidQuestionType(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You specified an invalid question type. Valid question types are: /game question [free|number|mulit|single]");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You specified an invalid question type. Valid question types are: /game question [free|number|mulit|single]");
     }
 
     private void sendInvalidIdMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You have to specify a valid question id");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You have to specify a valid question id");
     }
 
     private void sendQuestionRemovedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Question removed.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Question removed.");
     }
 
     private void sendListQuestionsMessage(CommandSender cs, QuizGame quizGame) {
         if(quizGame.getQuestions().isEmpty()) {
-            MessageUtil.sendInfoMessage(cs, "No Questions in this game.");
+            PluginData.getMessageUtil().sendInfoMessage(cs, "No Questions in this game.");
             return;
         }
-        MessageUtil.sendInfoMessage(cs, "Questions in this game:");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Questions in this game:");
         int id = 1;
         for(AbstractQuestion question : quizGame.getQuestions()) {
-            MessageUtil.sendIndentedInfoMessage(cs, id+": "+question.getQuestion());
+            PluginData.getMessageUtil().sendIndentedInfoMessage(cs, id+": "+question.getQuestion());
             id++;
         }
     }

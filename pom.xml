@@ -43,14 +43,6 @@
         </plugins>
         <resources>
           <resource>
-            <targetPath>com/mcmiddleearth/pluginutils</targetPath>
-            <filtering>false</filtering>
-            <directory>F:/Lars/NetBeansProjects/PluginUtils/target/classes/com/mcmiddleearth/pluginutils</directory>
-            <includes>
-              <include>**/*.*</include>
-            </includes>
-          </resource>
-          <resource>
             <directory>${basedir}/src/main/resources</directory>
             <includes>
                 <include>plugin.yml</include>

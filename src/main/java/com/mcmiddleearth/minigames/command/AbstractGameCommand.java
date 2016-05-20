@@ -76,35 +76,35 @@ public abstract class AbstractGameCommand extends AbstractCommand {
     }
     
     protected void sendWrongGameTypeErrorMessage(CommandSender cs, GameType gameType) {
-        MessageUtil.sendErrorMessage(cs, "This is not a "+gameType.toString()+" game.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "This is not a "+gameType.toString()+" game.");
     }
 
     private void sendNotInGameErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You are not part of a mini game.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You are not part of a mini game.");
     }
     
     private void sendAlreadyInGameErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You are already part of a mini game.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You are already part of a mini game.");
     }
 
     private void sendNotManagerErrorMessage(Player player) {
-        MessageUtil.sendErrorMessage(player, "You are not the manager of this game.");
+        PluginData.getMessageUtil().sendErrorMessage(player, "You are not the manager of this game.");
     }
 
     private void sendAlreadyManagerErrorMessage(Player player) {
-        MessageUtil.sendErrorMessage(player, "You are already the manager of a game.");
+        PluginData.getMessageUtil().sendErrorMessage(player, "You are already the manager of a game.");
     }
 
     private void sendAlreadyManagerOfOtherGameErrorMessage(Player player) {
-        MessageUtil.sendErrorMessage(player, "You are already the manager of an other game.");
+        PluginData.getMessageUtil().sendErrorMessage(player, "You are already the manager of an other game.");
     }
     
     protected void sendAlreadyAnnouncedErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "This game was already announced.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "This game was already announced.");
     }
     
     protected void sendNotAnnouncedErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Game needs to be announced first.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Game needs to be announced first.");
     }
 
 

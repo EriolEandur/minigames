@@ -16,7 +16,7 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import com.mcmiddleearth.minigames.data.PluginData;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.NumericPrompt;
 import org.bukkit.conversations.Prompt;
@@ -39,7 +39,7 @@ class EnterPrecisionPrompt extends NumericPrompt {
 
     @Override
     public String getPromptText(ConversationContext cc) {
-        return MessageUtil.getPREFIX()+"Enter the tolerance for an answer to be called correct.";
+        return PluginData.getMessageUtil().getPREFIX()+"Enter the tolerance for an answer to be called correct.";
     }
     
     @Override

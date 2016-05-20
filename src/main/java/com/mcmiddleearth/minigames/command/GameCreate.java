@@ -11,7 +11,6 @@ import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -67,19 +66,19 @@ public class GameCreate extends AbstractGameCommand{
     }
     
     public void sendQuizGameCreateMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You created a new Lore Quiz game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You created a new Lore Quiz game.");
     }
 
     private void sendInvalidGameTypeErrorMessage(CommandSender cs) {
-         MessageUtil.sendErrorMessage(cs, "You specified an invalid game type.");
+         PluginData.getMessageUtil().sendErrorMessage(cs, "You specified an invalid game type.");
     }
     
     private void sendGameExistsMessage(CommandSender cs) {
-         MessageUtil.sendErrorMessage(cs, "A game with that name already exists.");
+         PluginData.getMessageUtil().sendErrorMessage(cs, "A game with that name already exists.");
     }
 
     private void sendRaceGameCreateMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You created a new Race game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You created a new Race game.");
     }
 
  }

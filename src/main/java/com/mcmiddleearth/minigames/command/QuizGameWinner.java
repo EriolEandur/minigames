@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -38,6 +38,6 @@ public class QuizGameWinner extends AbstractGameCommand{
     }
 
     private void sendNoWinnerMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "There is no winner.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "There is no winner.");
     }
 }

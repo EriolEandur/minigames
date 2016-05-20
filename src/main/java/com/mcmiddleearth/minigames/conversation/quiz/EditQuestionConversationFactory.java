@@ -16,13 +16,13 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.FreeQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.conversations.ConversationAbandonedListener;
@@ -100,10 +100,10 @@ public class EditQuestionConversationFactory implements ConversationAbandonedLis
     }
     
     private void sendAbordMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "You cancelled editing.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "You cancelled editing.");
     }
     
     private void sendQuestionCreatedMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "Changes saved.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Changes saved.");
     }
 }

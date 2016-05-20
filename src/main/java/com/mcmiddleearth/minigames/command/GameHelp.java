@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.pluginutils.NumericUtil;
 import com.mcmiddleearth.pluginutils.message.FancyMessage;
 import com.mcmiddleearth.pluginutils.message.MessageType;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,10 +46,10 @@ public class GameHelp extends AbstractCommand{
             if(args.length>pageIndex && NumericUtil.isInt(args[pageIndex])) {
                 page = NumericUtil.getInt(args[pageIndex]);
             }
-            FancyMessage header = new FancyMessage(MessageType.INFO)
+            FancyMessage header = new FancyMessage(MessageType.INFO,PluginData.getMessageUtil())
                                             .addSimple("Help for "
-                                                        +MessageUtil.STRESSED+wantedCmdGroup.name()
-                                                        +MessageUtil.INFO+" commands.");
+                                                        +PluginData.getMessageUtil().STRESSED+wantedCmdGroup.name()
+                                                        +PluginData.getMessageUtil().INFO+" commands.");
             Set<String> keys = commands.keySet();
             List<FancyMessage> list = new ArrayList<>();
             for(String key : keys) {
@@ -68,7 +68,7 @@ public class GameHelp extends AbstractCommand{
                     if(separator < 0) {
                         separator = shortDescription.length();
                     }
-                    FancyMessage message = new FancyMessage(MessageType.WHITE)
+                    FancyMessage message = new FancyMessage(MessageType.WHITE,PluginData.getMessageUtil())
                             .addFancy(ChatColor.DARK_AQUA+"/game "+key+ChatColor.WHITE
                                         +shortDescription.substring(0,separator), 
                                           "/game "+key, hoverFormat("/game "+key+usageDescription));
@@ -79,7 +79,7 @@ public class GameHelp extends AbstractCommand{
                 }
             }
             if(wantedCmdGroup.equals(CmdGroup.ALL) || wantedCmdGroup.equals(CmdGroup.GENERAL)) {
-                list.add(new FancyMessage(MessageType.WHITE)
+                list.add(new FancyMessage(MessageType.WHITE,PluginData.getMessageUtil())
                         .addFancy(ChatColor.DARK_AQUA+"/gc", 
                                   "/gc ",
                                   ChatColor.GOLD+"/gc <message> | !on | !off: \n"
@@ -88,7 +88,7 @@ public class GameHelp extends AbstractCommand{
                                     +ChatColor.YELLOW+"switch !off receiving game chat messages.")
                         .addSimple(ChatColor.WHITE+": Use game chat messages."));
             }
-            MessageUtil.sendFancyListMessage((Player) cs, header, list, "/game help "+wantedCmdGroup.getName(), page);
+            PluginData.getMessageUtil().sendFancyListMessage((Player) cs, header, list, "/game help "+wantedCmdGroup.getName(), page);
         }
         else {
             AbstractCommand command = commands.get(args[0]);
@@ -103,7 +103,7 @@ public class GameHelp extends AbstractCommand{
                 if(description!=null){
                     sendHelpStartMessage(cs);
                     int separator = description.indexOf(":");
-                    new FancyMessage(MessageType.WHITE)
+                    new FancyMessage(MessageType.WHITE,PluginData.getMessageUtil())
                                 .addClickable(ChatColor.DARK_AQUA+"/game "+args[0]
                                                         +(separator>0?description.substring(0, separator):"")
                                                         +ChatColor.WHITE+description.substring(separator), 
@@ -165,19 +165,19 @@ public class GameHelp extends AbstractCommand{
     }
     
     private void sendHelpStartMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Help for minigames command:");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Help for minigames command:");
     }
 
     private void sendNoSuchCommandMessage(CommandSender cs, String arg) {
-        MessageUtil.sendIndentedInfoMessage(cs, "/game "+arg+ChatColor.RED+": There is no such command.");    
+        PluginData.getMessageUtil().sendIndentedInfoMessage(cs, "/game "+arg+ChatColor.RED+": There is no such command.");    
     }
 
     private void sendDescriptionMessage(CommandSender cs, String arg, String description) {
-        MessageUtil.sendIndentedInfoMessage(cs, "/game "+arg+ChatColor.WHITE+description);
+        PluginData.getMessageUtil().sendIndentedInfoMessage(cs, "/game "+arg+ChatColor.WHITE+description);
     }
 
     private void sendNoDescriptionMessage(CommandSender cs, String arg) {
-        MessageUtil.sendIndentedInfoMessage(cs, "/game "+arg+ChatColor.RED+": There is no help for this command.");
+        PluginData.getMessageUtil().sendIndentedInfoMessage(cs, "/game "+arg+ChatColor.RED+": There is no help for this command.");
     }
 
    private void sendManualMessage(CommandSender cs) {
@@ -185,9 +185,9 @@ public class GameHelp extends AbstractCommand{
     }
 
     private void sendChatDescriptionMessage(CommandSender cs) {
-        MessageUtil.sendIndentedInfoMessage(cs, "/gc <message>: Send a game chat message.");
-        MessageUtil.sendIndentedInfoMessage(cs, "/gc !on: Switch on receiving game chat messages.");
-        MessageUtil.sendIndentedInfoMessage(cs, "/gc !off: Switch off receiving game chat messages.");
+        PluginData.getMessageUtil().sendIndentedInfoMessage(cs, "/gc <message>: Send a game chat message.");
+        PluginData.getMessageUtil().sendIndentedInfoMessage(cs, "/gc !on: Switch on receiving game chat messages.");
+        PluginData.getMessageUtil().sendIndentedInfoMessage(cs, "/gc !off: Switch off receiving game chat messages.");
     }
     
  }

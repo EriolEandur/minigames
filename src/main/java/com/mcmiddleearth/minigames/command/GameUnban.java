@@ -5,9 +5,9 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.pluginutils.PlayerUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -48,15 +48,15 @@ public class GameUnban extends AbstractGameCommand{
     }
 
     private void sendNoBannedPlayerFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "No banned player with that name.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "No banned player with that name.");
     }
 
     private void sendPlayerUnbannedMessage(CommandSender cs, OfflinePlayer player) {
-        MessageUtil.sendInfoMessage(cs, "You unbaned "+player.getName()+".");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You unbaned "+player.getName()+".");
     }
 
     private void sendUnbannedPlayerMessage(Player player, String name) {
-        MessageUtil.sendInfoMessage(player, "You are no longer banned from game "+name+".");
+        PluginData.getMessageUtil().sendInfoMessage(player, "You are no longer banned from game "+name+".");
     }
     
  }

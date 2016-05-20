@@ -10,7 +10,6 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -75,15 +74,15 @@ public class QuizGameSave extends AbstractGameCommand implements Confirmationabl
     }
 
     private void sendIOErrorMessage(Player player) {
-        MessageUtil.sendErrorMessage(player, "There was an error. Nothing was saved.");
+        PluginData.getMessageUtil().sendErrorMessage(player, "There was an error. Nothing was saved.");
     }
 
     private void sendQuestionsSavedMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "Questions of the game were saved to disk.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Questions of the game were saved to disk.");
     }
 
     private void sendAbordMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "Saving questions cancelled.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Saving questions cancelled.");
     }
 
 }

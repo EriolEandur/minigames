@@ -10,7 +10,6 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,15 +59,15 @@ public class QuizGameQuestionsAccept extends AbstractGameCommand implements Conf
     }
 
     private void sendIOErrorMessage(Player player) {
-        MessageUtil.sendErrorMessage(player, "There was an error. Nothing was saved.");
+        PluginData.getMessageUtil().sendErrorMessage(player, "There was an error. Nothing was saved.");
     }
 
     private void sendQuestionsSavedMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "Questions of the quiz were accepted.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Questions of the quiz were accepted.");
     }
 
     private void sendAbordMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "Accepting questions cancelled.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Accepting questions cancelled.");
     }
 
 }

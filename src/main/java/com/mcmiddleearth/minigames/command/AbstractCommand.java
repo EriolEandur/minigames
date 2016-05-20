@@ -5,6 +5,7 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -64,15 +65,15 @@ public abstract class AbstractCommand {
     protected abstract void execute(CommandSender cs, String... args);
     
     private void sendPlayerOnlyErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You have to be logged in to run this command.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You have to be logged in to run this command.");
     }
     
     protected void sendNoPermsErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You don't have permission to run this command.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You don't have permission to run this command.");
     }
     
     private void sendMissingArgumentErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You're missing arguments for this command.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You're missing arguments for this command.");
     }
     
     protected boolean hasPermissions(Player p) {

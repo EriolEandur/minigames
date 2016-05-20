@@ -8,8 +8,6 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.conversation.confirmation.Confirmationable;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -42,7 +40,7 @@ public class RaceGameSaveMarker extends AbstractCommand implements Confirmationa
             PluginData.getConfirmationFactory().start((Player) cs, 
                         "A marker file with that name already exists. Overwrite it?", this);
         } catch (IOException ex) {
-            MessageUtil.sendErrorMessage(cs, "Can't save marker. Check if file already exists.");
+            PluginData.getMessageUtil().sendErrorMessage(cs, "Can't save marker. Check if file already exists.");
         }
     }
 
@@ -62,11 +60,11 @@ public class RaceGameSaveMarker extends AbstractCommand implements Confirmationa
     }
     
     private void sendAbordMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "Saving marker cancelled.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Saving marker cancelled.");
     }
     
     private void sendMarkerSavedMessage(CommandSender cs){
-        MessageUtil.sendInfoMessage(cs, "Marker saved");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Marker saved");
     }
 
 }

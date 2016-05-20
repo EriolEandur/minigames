@@ -10,7 +10,6 @@ import com.mcmiddleearth.minigames.command.GameCommandExecutor;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.listener.PlayerListener;
 import com.mcmiddleearth.pluginutils.EntityUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,7 +26,7 @@ public class MiniGamesPlugin extends JavaPlugin{
     public void onEnable() {
         pluginInstance = this;
         EntityUtil.init(this);
-        MessageUtil.setPluginName("MiniGames");
+        PluginData.getMessageUtil().setPluginName("MiniGames");
         PluginData.cleanup();
         PluginData.load();
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);

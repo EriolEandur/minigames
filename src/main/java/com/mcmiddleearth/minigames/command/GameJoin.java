@@ -7,8 +7,7 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -58,25 +57,25 @@ public class GameJoin extends AbstractGameCommand{
     }
     
     public void sendPlayerJoinMessage(CommandSender cs, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs, "You joined the minigame "+ game.getName()
-                                   +". Please use the game chat with "+MessageUtil.STRESSED+"/gc <message>");
-        MinigamesMessageUtil.sendAllInfoMessage(cs, game, cs.getName()+" joined the game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You joined the minigame "+ game.getName()
+                                   +". Please use the game chat with "+PluginData.getMessageUtil().STRESSED+"/gc <message>");
+        GameChatUtil.sendAllInfoMessage(cs, game, cs.getName()+" joined the game.");
     }
 
     public void sendNoSuchGameErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "No minigame with that name.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "No minigame with that name.");
     }
 
     private void sendPlayerBannedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You are banned from this minigame.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You are banned from this minigame.");
     }
 
     private void sendJoinNotAllowedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You can't join this game at the moment, try later.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You can't join this game at the moment, try later.");
     }
 
     private void sendNotInvitedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "The game is private. You can ask the manager to invite you.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "The game is private. You can ask the manager to invite you.");
     }
 
  }

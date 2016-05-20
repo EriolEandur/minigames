@@ -6,7 +6,7 @@
 package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.Permissions;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import com.mcmiddleearth.minigames.data.PluginData;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -88,11 +88,11 @@ public class GameCommandExecutor implements CommandExecutor {
     }
     
     private void sendNoSubcommandErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You're missing subcommand name for this command.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You're missing subcommand name for this command.");
     }
     
     private void sendSubcommandNotFoundErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Subcommand not found.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Subcommand not found.");
     }
     
     private void addCommandHandler(String name, AbstractCommand handler) {

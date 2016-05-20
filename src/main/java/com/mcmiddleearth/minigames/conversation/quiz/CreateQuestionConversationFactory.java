@@ -24,7 +24,6 @@ import com.mcmiddleearth.minigames.quizQuestion.FreeQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
 import com.mcmiddleearth.minigames.quizQuestion.SingleChoiceQuestion;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -111,10 +110,10 @@ public class CreateQuestionConversationFactory implements ConversationAbandonedL
     }
  
     private void sendAbordMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "You cancelled creating a new Question.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "You cancelled creating a new Question.");
     }
     
     private void sendQuestionCreatedMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "You added a new question to the quiz.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "You added a new question to the quiz.");
     }
 }

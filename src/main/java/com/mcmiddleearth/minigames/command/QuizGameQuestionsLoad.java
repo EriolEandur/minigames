@@ -9,9 +9,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
 import com.mcmiddleearth.pluginutils.NumericUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -80,25 +78,25 @@ public class QuizGameQuestionsLoad extends AbstractGameCommand{
 
     private void sendQuestionsLoadedMessage(CommandSender cs, int[] result, int maxNumber) {
         if(result[0]==0) {
-            MessageUtil.sendErrorMessage(cs, "Sorry, no question found matching your query.");
+            PluginData.getMessageUtil().sendErrorMessage(cs, "Sorry, no question found matching your query.");
         } else if(result[0]<10 && result[0]<maxNumber) {
-            MessageUtil.sendInfoMessage(cs, ChatColor.GOLD+"Warning!"+MessageUtil.INFO
-                                           +" Only "+MessageUtil.STRESSED+result[0]+MessageUtil.INFO                                           +" questions were found matching your query.");
+            PluginData.getMessageUtil().sendInfoMessage(cs, ChatColor.GOLD+"Warning!"+PluginData.getMessageUtil().INFO
+                                           +" Only "+PluginData.getMessageUtil().STRESSED+result[0]+PluginData.getMessageUtil().INFO                                           +" questions were found matching your query.");
         } else if(result[0]>result[1]) {
-            MessageUtil.sendInfoMessage(cs, "Found "+MessageUtil.STRESSED+result[0]+MessageUtil.INFO
-                                            +" Questions. "+MessageUtil.STRESSED+result[1]+MessageUtil.INFO
+            PluginData.getMessageUtil().sendInfoMessage(cs, "Found "+PluginData.getMessageUtil().STRESSED+result[0]+PluginData.getMessageUtil().INFO
+                                            +" Questions. "+PluginData.getMessageUtil().STRESSED+result[1]+PluginData.getMessageUtil().INFO
                                             +" questions loaded.");
         } else if(result[0]<maxNumber) {
-            MessageUtil.sendInfoMessage(cs, "Only "+MessageUtil.STRESSED+result[0]+MessageUtil.INFO
+            PluginData.getMessageUtil().sendInfoMessage(cs, "Only "+PluginData.getMessageUtil().STRESSED+result[0]+PluginData.getMessageUtil().INFO
                                             +" questions found and loaded.");
         } else {
-            MessageUtil.sendInfoMessage(cs, ""+MessageUtil.STRESSED+result[0]+MessageUtil.INFO
+            PluginData.getMessageUtil().sendInfoMessage(cs, ""+PluginData.getMessageUtil().STRESSED+result[0]+PluginData.getMessageUtil().INFO
                                             +" questions loaded from MCME question table.");
         }
     }
 
     private void sendFileNotFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Question table file not found.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Question table file not found.");
     }
 
 }

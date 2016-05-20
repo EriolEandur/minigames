@@ -8,9 +8,7 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.conversation.confirmation.Confirmationable;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -46,8 +44,8 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
         if(file.exists()) {
             PluginData.getConfirmationFactory().start((Player) cs, 
                     "Are you sure to delete "
-                            +MessageUtil.HIGHLIGHT_STRESSED+file.getName()
-                            +MessageUtil.HIGHLIGHT+"? There is no undo.", this);
+                            +PluginData.getMessageUtil().HIGHLIGHT_STRESSED+file.getName()
+                            +PluginData.getMessageUtil().HIGHLIGHT+"? There is no undo.", this);
         }
         else {
             sendFileNotFoundMessage(cs);
@@ -57,24 +55,24 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
     @Override
     public void confirmed(Player player) {
         if(file.delete()) {
-            MessageUtil.sendInfoMessage(player, "File deleted.");
+            PluginData.getMessageUtil().sendInfoMessage(player, "File deleted.");
         }
         else {
-            MessageUtil.sendErrorMessage(player, "There was an error deleting the file.");
+            PluginData.getMessageUtil().sendErrorMessage(player, "There was an error deleting the file.");
         }
     }
 
     @Override
     public void cancelled(Player player) {
-        MessageUtil.sendInfoMessage(player, "You cancelled deletion.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "You cancelled deletion.");
     }
 
     private void sendInvalidDataTypeMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Invalid data type. Try /game delete quiz|race|marker");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid data type. Try /game delete quiz|race|marker");
     }
     
     private void sendFileNotFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "File not found.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "File not found.");
     }
     
 }

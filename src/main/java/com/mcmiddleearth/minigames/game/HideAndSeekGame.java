@@ -6,12 +6,12 @@
 package com.mcmiddleearth.minigames.game;
 
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.scoreboard.HideAndSeekGameScoreboard;
 import com.mcmiddleearth.pluginutils.PlayerUtil;
 import com.mcmiddleearth.pluginutils.DynmapUtil;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import com.mcmiddleearth.pluginutils.TitleUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -254,7 +254,7 @@ public class HideAndSeekGame extends AbstractGame {
             if(!PlayerUtil.isSame(player, seeker)) {
                 TitleUtil.showTitle(player, ChatColor.BLUE+" FREEZE!!!",seeker.getName() + " is seeking you.");
                 if(PlayerUtil.getOnlinePlayer(player)!=null) {
-                    MessageUtil.sendInfoMessage(PlayerUtil.getOnlinePlayer(player), "Hold SHIFT to hide your name tag.");
+                    PluginData.getMessageUtil().sendInfoMessage(PlayerUtil.getOnlinePlayer(player), "Hold SHIFT to hide your name tag.");
                 }
             }
         }
@@ -283,12 +283,12 @@ public class HideAndSeekGame extends AbstractGame {
     }
 
     private void sendSeekerLeavingMessage(Player player) {
-        MinigamesMessageUtil.sendAllInfoMessage(player, this, "The seeker left.");
+        GameChatUtil.sendAllInfoMessage(player, this, "The seeker left.");
     }
 
     private void sendPlayerFoundMessage(Player hidden) {
-        MessageUtil.sendInfoMessage(hidden, seeker.getName() +" found you.");
-        MessageUtil.sendInfoMessage((Player) seeker, "You found "+ hidden.getName() + ".");
+        PluginData.getMessageUtil().sendInfoMessage(hidden, seeker.getName() +" found you.");
+        PluginData.getMessageUtil().sendInfoMessage((Player) seeker, "You found "+ hidden.getName() + ".");
     }
     
     

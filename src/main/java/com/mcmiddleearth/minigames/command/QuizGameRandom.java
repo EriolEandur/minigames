@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -51,22 +51,22 @@ public class QuizGameRandom extends AbstractGameCommand{
     }
 
     private void sendNoWinnerMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "There is no winner.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "There is no winner.");
     }
 
     private void sendRandomOffMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Questions and choices will be presented in proper order.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Questions and choices will be presented in proper order.");
     }
 
     private void sendRandomQuestionsMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Questions will be sended in random order.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Questions will be sended in random order.");
     }
     
     private void sendRandomChoicesMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Choices will be presented in random order.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Choices will be presented in random order.");
     }
     
     private void sendRandomAllMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Questions and Choises will be presented in random order.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Questions and Choises will be presented in random order.");
     }
 }

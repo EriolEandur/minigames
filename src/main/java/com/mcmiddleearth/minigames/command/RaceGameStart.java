@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -48,9 +48,9 @@ public class RaceGameStart extends AbstractGameCommand{
     }
 
     private void sendNotEnoughPlayerMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You need at least two players for a race.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You need at least two players for a race.");
     }
     private void sendAlreadySteadyMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You already started the race.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You already started the race.");
     }
 }

@@ -7,7 +7,6 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -38,36 +37,36 @@ public class GameInfo extends AbstractGameCommand{
         } else {
             game = PluginData.getGame(args[0]);
             if(game!=null) {
-                messageHead=MessageUtil.STRESSED+game.getName()+MessageUtil.INFO+" is a ";
+                messageHead=PluginData.getMessageUtil().STRESSED+game.getName()+PluginData.getMessageUtil().INFO+" is a ";
             }
         }
         if(game == null) {
             sendGameNotFoundMessage(cs);
         } else {
-            MessageUtil.sendInfoMessage(cs, messageHead 
-                                            +MessageUtil.STRESSED+ game.getType() 
-                                            +MessageUtil.INFO + " game.");
-            MessageUtil.sendNoPrefixInfoMessage(cs, "Game manager is " 
-                                                    +MessageUtil.STRESSED+ game.getManager().getName()
-                                                    +MessageUtil.INFO+"." ); 
+            PluginData.getMessageUtil().sendInfoMessage(cs, messageHead 
+                                            +PluginData.getMessageUtil().STRESSED+ game.getType() 
+                                            +PluginData.getMessageUtil().INFO + " game.");
+            PluginData.getMessageUtil().sendNoPrefixInfoMessage(cs, "Game manager is " 
+                                                    +PluginData.getMessageUtil().STRESSED+ game.getManager().getName()
+                                                    +PluginData.getMessageUtil().INFO+"." ); 
             if(game.getPlayers().size()<=0) {
-                MessageUtil.sendNoPrefixInfoMessage(cs, "No players within the game.");
+                PluginData.getMessageUtil().sendNoPrefixInfoMessage(cs, "No players within the game.");
             }
             else {
-                MessageUtil.sendNoPrefixInfoMessage(cs, "Players in the game are:");
+                PluginData.getMessageUtil().sendNoPrefixInfoMessage(cs, "Players in the game are:");
                 String playerNames="";
                 for(UUID player : game.getPlayers()) {
-                    playerNames = playerNames.concat(MessageUtil.INFO+", "
-                                                     +MessageUtil.STRESSED
+                    playerNames = playerNames.concat(PluginData.getMessageUtil().INFO+", "
+                                                     +PluginData.getMessageUtil().STRESSED
                                                      +Bukkit.getOfflinePlayer(player).getName());
                 }
-                MessageUtil.sendNoPrefixInfoMessage(cs, playerNames.substring(4));
+                PluginData.getMessageUtil().sendNoPrefixInfoMessage(cs, playerNames.substring(4));
             }
         }
     }
 
     private void sendGameNotFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "No game found by that name.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "No game found by that name.");
     }
     
  }

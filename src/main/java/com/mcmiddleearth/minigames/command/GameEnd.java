@@ -5,8 +5,8 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,6 +34,6 @@ public class GameEnd extends AbstractGameCommand{
     }
     
     public void sendGameEndMessage(CommandSender cs, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs, "You ended your minigame.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You ended your minigame.");
     }
  }

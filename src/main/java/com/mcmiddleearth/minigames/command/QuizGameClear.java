@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -37,7 +37,7 @@ public class QuizGameClear extends AbstractGameCommand{
     }
 
     private void sendClearedGameMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You removed all questions from this Lore Quiz.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You removed all questions from this Lore Quiz.");
     }
     
 }

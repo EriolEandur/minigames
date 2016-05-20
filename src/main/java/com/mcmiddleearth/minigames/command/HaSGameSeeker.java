@@ -5,11 +5,11 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
 import com.mcmiddleearth.pluginutils.PlayerUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -44,13 +44,13 @@ public class HaSGameSeeker extends AbstractGameCommand{
     }
     
     private void sendPlayerNotFoundErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Player not found.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Player not found.");
     }
 
     private void sendSeekerSetMessage(CommandSender cs, OfflinePlayer seeker) {
-        MessageUtil.sendInfoMessage(cs, seeker.getName() +" will be the next seeker.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, seeker.getName() +" will be the next seeker.");
         if(PlayerUtil.getOnlinePlayer(seeker)!=null)
-            MessageUtil.sendInfoMessage(PlayerUtil.getOnlinePlayer(seeker), 
+            PluginData.getMessageUtil().sendInfoMessage(PlayerUtil.getOnlinePlayer(seeker), 
                                         "You are assigned to be the next seeker.");
     }
 

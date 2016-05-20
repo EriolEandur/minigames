@@ -9,7 +9,6 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.pluginutils.message.FancyMessage;
 import com.mcmiddleearth.pluginutils.message.MessageType;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,16 +28,16 @@ public class GameCheck extends AbstractCommand{
     @Override
     protected void execute(CommandSender cs, String... args) {
         if(!PluginData.gameRunning()) {
-            MessageUtil.sendInfoMessage(cs, "There are no minigames running. Check again later.");
+            PluginData.getMessageUtil().sendInfoMessage(cs, "There are no minigames running. Check again later.");
         } else {
-            MessageUtil.sendInfoMessage(cs, "Running minigames (click to join):");
+            PluginData.getMessageUtil().sendInfoMessage(cs, "Running minigames (click to join):");
             for(AbstractGame game : PluginData.getGames()) {
                 if(game.isAnnounced()) {
-                    FancyMessage message = new FancyMessage(MessageType.INFO_NO_PREFIX)
+                    FancyMessage message = new FancyMessage(MessageType.INFO_NO_PREFIX,PluginData.getMessageUtil())
                         .addClickable(ChatColor.DARK_AQUA+game.getName() +": "
-                                      + MessageUtil.STRESSED+game.getType() 
-                                      + MessageUtil.INFO+" with " 
-                                      + MessageUtil.STRESSED+game.getManager().getName(), 
+                                      + PluginData.getMessageUtil().STRESSED+game.getType() 
+                                      + PluginData.getMessageUtil().INFO+" with " 
+                                      + PluginData.getMessageUtil().STRESSED+game.getManager().getName(), 
                                 "/game join "+game.getName());
                     if(game.isPrivat()) {
                         message.addSimple(" (Private)");

@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -85,35 +85,35 @@ public class RaceGameSet extends AbstractGameCommand{
     }
 
     private void sendStartSetMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Start location saved.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Start location saved.");
     }
 
     private void sendFinishSetMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Finish location saved.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Finish location saved.");
     }
 
     private void sendCheckpointAddedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Checkpoint saved.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Checkpoint saved.");
     }
 
     private void sendIdNotValidMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You did not specify a valid Checkpoint ID.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You did not specify a valid Checkpoint ID.");
     }
 
     private void sendNotANumberMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Not a number.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Not a number.");
     }
 
     private void sendInvalidArgumentMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Invalid Argument. Usage: /game set start|finish|checkpoint.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid Argument. Usage: /game set start|finish|checkpoint.");
     }
 
     private void sendInvalidLocationMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Your location is too close to another Checkpoint.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Your location is too close to another Checkpoint.");
     }
 
     private void sendCheckpointMovedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Checkpoint moved to your location.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Checkpoint moved to your location.");
     }
     
 }

@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -66,26 +66,26 @@ public class RaceGameShow extends AbstractGameCommand{
     }
 
     private void sendNotStartedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You have to start the race first.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You have to start the race first.");
     }
 
     private void sendAutoCheckpointMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Automatically showing rank list for most recent checkpont.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Automatically showing rank list for most recent checkpont.");
     }
 
     private void sendShowStartMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Showing starter list now.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Showing starter list now.");
     }
 
     private void sendShowFinishMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Showing finish rank list now.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Showing finish rank list now.");
     }
 
     private void sendShowCheckMessage(CommandSender cs,int id) {
-        MessageUtil.sendErrorMessage(cs, "Showing intermediate rank list at checkpoint "+id+".");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Showing intermediate rank list at checkpoint "+id+".");
     }
 
     private void sendNotANumberMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You have to specify the ID of a checkpoint.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You have to specify the ID of a checkpoint.");
     }
 }

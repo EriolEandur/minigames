@@ -5,8 +5,8 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -50,21 +50,21 @@ public class GameDeny extends AbstractGameCommand{
     }
     
     private void sendWarpAllowedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You denied all players to warp to this game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You denied all players to warp to this game.");
     }
 
     private void sendJoinAllowedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Only invited players may join the game now.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Only invited players may join the game now.");
     }
 
     private void sendSpectateAllowedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You denied all players to spectate to this game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You denied all players to spectate to this game.");
     }
     private void sendFlightAllowedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You denied players of this game to fly.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You denied players of this game to fly.");
     }
 
     private void sendTeleportAllowedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You denied players of this game to teleport (using commands like /tpa and /warp).");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You denied players of this game to teleport (using commands like /tpa and /warp).");
     }
  }

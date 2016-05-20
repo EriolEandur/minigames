@@ -5,11 +5,11 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
 import com.mcmiddleearth.pluginutils.StringUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -51,7 +51,7 @@ public class HaSGameHide extends AbstractGameCommand{
     }
 
     private void sendNotEnoughPlayerErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Not enough players in game. Minimum is two.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Not enough players in game. Minimum is two.");
     }
     
  }

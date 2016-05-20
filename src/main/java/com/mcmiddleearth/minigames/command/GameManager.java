@@ -5,9 +5,9 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -48,17 +48,17 @@ public class GameManager extends AbstractGameCommand{
     }
 
     private void sendPlayerNotFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Player not found.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Player not found.");
     }
 
     private void sendNoPermissionMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Player has no permission to manage a game (default: Guides only)");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Player has no permission to manage a game (default: Guides only)");
     }
 
     private void sendNewManagerMessage(CommandSender cs, Player newManager, String name, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs,"You tranfered the management of the game "+name+" to "+newManager.getName()+".");
-        MessageUtil.sendInfoMessage(newManager, "You are now manager of the minigame "+name+".");
-        MinigamesMessageUtil.sendAllInfoMessage(newManager, game, newManager.getName() +" is now managing this game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs,"You tranfered the management of the game "+name+" to "+newManager.getName()+".");
+        PluginData.getMessageUtil().sendInfoMessage(newManager, "You are now manager of the minigame "+name+".");
+        GameChatUtil.sendAllInfoMessage(newManager, game, newManager.getName() +" is now managing this game.");
     }
     
  }

@@ -5,12 +5,11 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
 import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.FileNotFoundException;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -77,39 +76,39 @@ public class RaceGameMarker extends AbstractGameCommand {
     }
 
     private void sendStartMarkerMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Start marker loaded.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Start marker loaded.");
     }
 
     private void sendFinishMarkerMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Finish marker loaded.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Finish marker loaded.");
     }
 
     private void sendCheckMarkerMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Markers for all checkpoints loaded.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Markers for all checkpoints loaded.");
     }
 
     private void sendMarkerMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Marker for this Checkpoint loaded.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Marker for this Checkpoint loaded.");
     }
     
     private void sendInvalidArgumentMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Invalid Argument. Try: /game marker <filename> [start|finish|checkpoint|all]");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid Argument. Try: /game marker <filename> [start|finish|checkpoint|all]");
     }
 
     private void sendFileNotFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Marker file not found.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Marker file not found.");
     }
 
     private void sendNotNearMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You are not near a checkpoint.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You are not near a checkpoint.");
     }
 
     private void sendNotWhileSteadyMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You can't change markers while players are steady.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You can't change markers while players are steady.");
     }
 
     private void sendAllMarkerMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "All Markers loaded.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "All Markers loaded.");
     }
 
 }

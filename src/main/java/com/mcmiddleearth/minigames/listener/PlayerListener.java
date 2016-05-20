@@ -9,7 +9,6 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.pluginutils.message.FancyMessage;
 import com.mcmiddleearth.pluginutils.message.MessageType;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
@@ -46,9 +45,9 @@ public class PlayerListener implements Listener{
             PluginData.getGame(event.getPlayer()).playerJoinServer(event);
         }
         else if(PluginData.gameRunning()) {
-            new FancyMessage(MessageType.INFO)
+            new FancyMessage(MessageType.INFO,PluginData.getMessageUtil())
                 .addClickable("There is a game going on. For more information "
-                                +MessageUtil.STRESSED+"click here"+MessageUtil.INFO+" or type /game check.",
+                                +PluginData.getMessageUtil().STRESSED+"click here"+PluginData.getMessageUtil().INFO+" or type /game check.",
                         "/game check")
                 .send(event.getPlayer());
         }

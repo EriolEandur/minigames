@@ -9,10 +9,9 @@ import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.scoreboard.GameScoreboard;
 import com.mcmiddleearth.pluginutils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import com.mcmiddleearth.pluginutils.message.FancyMessage;
 import com.mcmiddleearth.pluginutils.message.MessageType;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -254,7 +253,7 @@ public abstract class AbstractGame {
         Location to = event.getTo();
         if(!to.getWorld().equals(getWarp().getWorld())) {
             event.getPlayer().teleport(getWarp(), TeleportCause_FORCE);
-            MessageUtil.sendErrorMessage(event.getPlayer(),"You can't go to another world while in this game.");
+            PluginData.getMessageUtil().sendErrorMessage(event.getPlayer(),"You can't go to another world while in this game.");
             return;
         }
         Location from = event.getFrom();
@@ -401,38 +400,38 @@ public abstract class AbstractGame {
     }
     
     protected void sendAnnounceGameMessage() {
-        MessageUtil.sendBroadcastMessage(new FancyMessage(MessageType.INFO).
-                                             addClickable(MessageUtil.STRESSED+manager.getName() 
-                                                              + MessageUtil.INFO+" started a new "
-                                                              + MessageUtil.STRESSED+getType().toString()
-                                                              + MessageUtil.INFO+" game. "
+        PluginData.getMessageUtil().sendBroadcastMessage(new FancyMessage(MessageType.INFO,PluginData.getMessageUtil()).
+                                             addClickable(PluginData.getMessageUtil().STRESSED+manager.getName() 
+                                                              + PluginData.getMessageUtil().INFO+" started a new "
+                                                              + PluginData.getMessageUtil().STRESSED+getType().toString()
+                                                              + PluginData.getMessageUtil().INFO+" game. "
                                                               + "To play that game, "
-                                                              + MessageUtil.STRESSED+"click here "
-                                                              + MessageUtil.INFO+"or type in chat: /game join "+getName(),"/game join "+getName()));
+                                                              + PluginData.getMessageUtil().STRESSED+"click here "
+                                                              + PluginData.getMessageUtil().INFO+"or type in chat: /game join "+getName(),"/game join "+getName()));
     }
     
     public void sendGameEndMessage(Player sender) {
-        MinigamesMessageUtil.sendAllInfoMessage(sender, this, "The game "+ getName()+" ended.");
+        GameChatUtil.sendAllInfoMessage(sender, this, "The game "+ getName()+" ended.");
     }
 
     private void sendLeaveNotAllowed(Player player) {
-        MessageUtil.sendErrorMessage(player, "You are not allowed to leave game area.");
+        PluginData.getMessageUtil().sendErrorMessage(player, "You are not allowed to leave game area.");
     }
 
     private void sendTeleportNotAllowed(Player player) {
-        MessageUtil.sendErrorMessage(player, "You are not allowed to teleport in this game.");
+        PluginData.getMessageUtil().sendErrorMessage(player, "You are not allowed to teleport in this game.");
     }
 
     private void sendFlightNotAllowed(Player player) {
-        MessageUtil.sendErrorMessage(player, "You are not allowed to fly in this game.");
+        PluginData.getMessageUtil().sendErrorMessage(player, "You are not allowed to fly in this game.");
     }
 
     private void sendGm3NotAllowed(Player player) {
-        MessageUtil.sendErrorMessage(player, "You are not allowed to switch to spectator mode in this game.");
+        PluginData.getMessageUtil().sendErrorMessage(player, "You are not allowed to switch to spectator mode in this game.");
     }
 
     private void sendNoMoreSpectatingMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "Spectating in game '"+MessageUtil.STRESSED+getName()
-                                           +MessageUtil.INFO+"' is no longer allowed.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Spectating in game '"+PluginData.getMessageUtil().STRESSED+getName()
+                                           +PluginData.getMessageUtil().INFO+"' is no longer allowed.");
     }
 }

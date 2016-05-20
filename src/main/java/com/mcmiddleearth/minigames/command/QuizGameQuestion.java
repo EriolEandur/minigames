@@ -14,13 +14,10 @@ import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
 import com.mcmiddleearth.pluginutils.NumericUtil;
 import com.mcmiddleearth.pluginutils.message.FancyMessage;
 import com.mcmiddleearth.pluginutils.message.MessageType;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Scanner;
 import org.bukkit.ChatColor;
@@ -144,23 +141,23 @@ public class QuizGameQuestion extends AbstractGameCommand{
     }
  
     private void sendInvalidQuestionType(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You specified an invalid question type. Valid question types are: /game question [free|number|mulit|single]");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You specified an invalid question type. Valid question types are: /game question [free|number|mulit|single]");
     }
 
     private void sendInvalidIdMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You have to specify a valid question id");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You have to specify a valid question id");
     }
 
     private void sendQuestionRemovedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Question removed.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Question removed.");
     }
 
     private void sendListQuestionsMessage(CommandSender cs, QuizGame quizGame, int page) {
         if(quizGame.getQuestions().isEmpty()) {
-            MessageUtil.sendInfoMessage(cs, "No Questions in this game.");
+            PluginData.getMessageUtil().sendInfoMessage(cs, "No Questions in this game.");
             return;
         }
-        FancyMessage header = new FancyMessage(MessageType.INFO)
+        FancyMessage header = new FancyMessage(MessageType.INFO,PluginData.getMessageUtil())
                                     .addSimple("Questions in this game. ");
         List<FancyMessage> list = new ArrayList<>();
         int id = 1;
@@ -168,7 +165,7 @@ public class QuizGameQuestion extends AbstractGameCommand{
             String questionText = question.getQuestion().replaceAll("\"", ";\"");
             questionText = questionText.replace(';', '\\');
             String[] detailText = question.getDetails();
-            list.add(new FancyMessage(MessageType.WHITE)
+            list.add(new FancyMessage(MessageType.WHITE,PluginData.getMessageUtil())
                         .addFancy(ChatColor.DARK_GREEN+""+id+ChatColor.AQUA+" ["
                                     +(question.getId()==0?"-":question.getId())+"]"
                                     +": ",
@@ -177,11 +174,11 @@ public class QuizGameQuestion extends AbstractGameCommand{
                         .addClickable(ChatColor.WHITE+questionText, "/game question edit "+id));
             id++;
         }
-        MessageUtil.sendFancyListMessage((Player)cs, header, list, "/game question list", page);
+        PluginData.getMessageUtil().sendFancyListMessage((Player)cs, header, list, "/game question list", page);
     }
 
     private void sendAlreadyConversionMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You are already in a Conversation.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You are already in a Conversation.");
     }
     
     private String hoverFormat(String[] hoverMessage) {
@@ -221,7 +218,7 @@ public class QuizGameQuestion extends AbstractGameCommand{
                     line = line.concat(scanner.currentToken+" ");
                     scanner.next();
                 }
-                line = line.concat("\n"+MessageUtil.HIGHLIGHT_STRESSED);
+                line = line.concat("\n"+PluginData.getMessageUtil().HIGHLIGHT_STRESSED);
                 result = result.concat(line);
             }
         }

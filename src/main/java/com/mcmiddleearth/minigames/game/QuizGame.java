@@ -19,7 +19,6 @@ import com.mcmiddleearth.pluginutils.PlayerUtil;
 import com.mcmiddleearth.pluginutils.NumericUtil;
 import com.mcmiddleearth.pluginutils.StringUtil;
 import com.mcmiddleearth.pluginutils.TitleUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -651,7 +650,7 @@ public class QuizGame extends AbstractGame {
     }
     
     private void sendManagerWinnerInfo(Player manager) {
-        MessageUtil.sendInfoMessage(manager, "There is no single winner. You can add more questions or announce multiple winners with /game winner");
+        PluginData.getMessageUtil().sendInfoMessage(manager, "There is no single winner. You can add more questions or announce multiple winners with /game winner");
 
     }
 

@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.pluginutils.message.FancyMessage;
 import com.mcmiddleearth.pluginutils.message.MessageType;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,19 +41,19 @@ public class GameInvite extends AbstractGameCommand{
     }
     
     private void sendPlayerInvited(CommandSender cs, Player player, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs, "You invited "+player.getName()+" to your game.");
-            new FancyMessage(MessageType.INFO)
-                    .addClickable(MessageUtil.STRESSED+cs.getName()
-                                    +MessageUtil.INFO+" invited you to a "
-                                    +MessageUtil.STRESSED+game.getType().toString()
-                                    +MessageUtil.INFO+" game. "
-                                    +MessageUtil.STRESSED+"Click here"
-                                    +MessageUtil.INFO+" to join or type in chat: /game join "+game.getName(),
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You invited "+player.getName()+" to your game.");
+            new FancyMessage(MessageType.INFO,PluginData.getMessageUtil())
+                    .addClickable(PluginData.getMessageUtil().STRESSED+cs.getName()
+                                    +PluginData.getMessageUtil().INFO+" invited you to a "
+                                    +PluginData.getMessageUtil().STRESSED+game.getType().toString()
+                                    +PluginData.getMessageUtil().INFO+" game. "
+                                    +PluginData.getMessageUtil().STRESSED+"Click here"
+                                    +PluginData.getMessageUtil().INFO+" to join or type in chat: /game join "+game.getName(),
                                   "/game join "+game.getName())
                     .send(player);
     }
 
     private void sendNotFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Player not found, you need to type in the full name and the player needs to be online.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Player not found, you need to type in the full name and the player needs to be online.");
     }
 }

@@ -5,10 +5,10 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -61,19 +61,19 @@ public class RaceGameRemove extends AbstractGameCommand{
     }
 
     private void sendRemovedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Checkpoint removed.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Checkpoint removed.");
     }
 
     private void sendNotNearMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "No Checkpoint found near you.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "No Checkpoint found near you.");
     }
 
     private void sendIdNotValidException(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "No Checkpoint with that ID.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "No Checkpoint with that ID.");
     }
 
     private void sendNotANumberException(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Not a number.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Not a number.");
     }
 
 }

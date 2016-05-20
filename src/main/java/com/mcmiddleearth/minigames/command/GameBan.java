@@ -5,9 +5,9 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -69,20 +69,20 @@ Logger.getGlobal().info("online");
     }
 
     private void sendBannedPlayerMessage(Player bannedPlayer, CommandSender player, String string) {
-        MessageUtil.sendInfoMessage(bannedPlayer, "You were banned by "+player.getName()+" from the minigame" + string+".");
+        PluginData.getMessageUtil().sendInfoMessage(bannedPlayer, "You were banned by "+player.getName()+" from the minigame" + string+".");
     }
 
     private void sendPlayerBannedMessage(CommandSender cs, OfflinePlayer player, AbstractGame game) {
-        MessageUtil.sendInfoMessage(cs, "You banned "+player.getName()+" from your game.");
-        MinigamesMessageUtil.sendAllInfoMessage(cs, game, player.getName() +" was banned from this game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You banned "+player.getName()+" from your game.");
+        GameChatUtil.sendAllInfoMessage(cs, game, player.getName() +" was banned from this game.");
     }
 
     private void sendNoPlayerFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "No player with that name.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "No player with that name.");
     }
 
     private void sendAlreadyBannedMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Player is already banned.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Player is already banned.");
     }
     
  }

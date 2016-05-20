@@ -11,10 +11,8 @@ import com.mcmiddleearth.pluginutils.FileUtil;
 import com.mcmiddleearth.pluginutils.NumericUtil;
 import com.mcmiddleearth.pluginutils.message.FancyMessage;
 import com.mcmiddleearth.pluginutils.message.MessageType;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.FileFilter;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,30 +37,30 @@ public class GameFiles extends AbstractCommand{
         }
         File directory;
         FileFilter filter;
-        FancyMessage header = new FancyMessage(MessageType.INFO);
+        FancyMessage header = new FancyMessage(MessageType.INFO,PluginData.getMessageUtil());
         if(args[0].equalsIgnoreCase("quiz")) {
             directory = PluginData.getQuestionDir();
             filter = FileUtil.getFileExtFilter("json");
             command = "/game loadquiz";
-            header.addSimple("Saved "+MessageUtil.STRESSED+"quiz"+MessageUtil.INFO+" files.");
+            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED+"quiz"+PluginData.getMessageUtil().INFO+" files.");
         }
         else if(args[0].equalsIgnoreCase("race")) {
             directory = PluginData.getRaceDir();
             filter = FileUtil.getFileExtFilter("json");
             command = "/game loadrace";
-            header.addSimple("Saved "+MessageUtil.STRESSED+"race"+MessageUtil.INFO+" files.");
+            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED+"race"+PluginData.getMessageUtil().INFO+" files.");
         }
         else if(args[0].equalsIgnoreCase("marker")) {
             directory = Checkpoint.getMarkerDir();
             filter =FileUtil.getFileExtFilter(Checkpoint.getMarkerExt());
             command = "/game marker";
-            header.addSimple("Saved "+MessageUtil.STRESSED+"race marker"+MessageUtil.INFO+" files.");
+            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED+"race marker"+PluginData.getMessageUtil().INFO+" files.");
         }
         else {
             sendInvalidDataTypeMessage(cs);
             return;
         }
-        MessageUtil.sendFancyFileListMessage((Player) cs, header, directory, filter, 
+        PluginData.getMessageUtil().sendFancyFileListMessage((Player) cs, header, directory, filter, 
                                              new String[]{page+""}, "/game files "+ args[0], command, true);
     }
     /*
@@ -147,6 +145,6 @@ public class GameFiles extends AbstractCommand{
     }*/
 
     private void sendInvalidDataTypeMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Invalid file type. Try /game files quiz|race|marker");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid file type. Try /game files quiz|race|marker");
     }
 }

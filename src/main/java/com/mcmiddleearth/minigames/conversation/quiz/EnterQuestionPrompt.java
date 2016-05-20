@@ -16,9 +16,9 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -34,7 +34,7 @@ class EnterQuestionPrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext cc) {
-        return MessageUtil.getPREFIX()+"Enter the question.";
+        return PluginData.getMessageUtil().getPREFIX()+"Enter the question.";
     }
 
     @Override

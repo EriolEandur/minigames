@@ -7,7 +7,7 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.Permissions;
 import com.mcmiddleearth.minigames.data.PluginData;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import com.mcmiddleearth.pluginutils.StringUtil;
 import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.Bukkit;
@@ -62,7 +62,7 @@ public class GCCommandExecutor implements CommandExecutor {
             if(PluginData.getGameChat(search)) {
                 Player player = search;
                 if(player!=null) {
-                    MinigamesMessageUtil.sendChatMessage(cs, player, StringUtil.concat(args));
+                    GameChatUtil.sendChatMessage(cs, player, StringUtil.concat(args));
                 }
             }
         }
@@ -70,23 +70,23 @@ public class GCCommandExecutor implements CommandExecutor {
     }
 
     private void sendNoPermsErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You don't have permission to run this command.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You don't have permission to run this command.");
     }
     
     private void sendNoMessageErrorMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You can send a game chat message with /gc <message>. "
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You can send a game chat message with /gc <message>. "
                                          +"You can switch on/off game chat with /gc !on|!off");
     }
 
     private void sendNoPlayerMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "You need to be a player to issue this command.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You need to be a player to issue this command.");
     }
 
     private void sendGameChatOffMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs,"You switched game chat messages OFF.");
+        PluginData.getMessageUtil().sendInfoMessage(cs,"You switched game chat messages OFF.");
     }
 
     private void sendGameChatOnMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs,"You switched game chat messages ON.");
+        PluginData.getMessageUtil().sendInfoMessage(cs,"You switched game chat messages ON.");
     }
 }

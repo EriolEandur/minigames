@@ -16,12 +16,12 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
 import com.mcmiddleearth.pluginutils.StringUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.conversations.Conversation;
@@ -115,24 +115,24 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
     }
 
     private void sendAbordMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "Time to answer expired.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Time to answer expired.");
     }
 
     private void sendSuccessMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "You answered this Question correctly.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "You answered this Question correctly.");
     }
 
     private void sendFailMessage(Player player, String answer) {
-        MessageUtil.sendInfoMessage(player, "You failed to answer this Question correctly. Correct answer: "+answer);
+        PluginData.getMessageUtil().sendInfoMessage(player, "You failed to answer this Question correctly. Correct answer: "+answer);
     }
 
     private void sendFailNumberQuestionMessage(Player player, String answer, int precision) {
-        MessageUtil.sendInfoMessage(player, "You failed to answer this Question correctly. Correct answer was "
+        PluginData.getMessageUtil().sendInfoMessage(player, "You failed to answer this Question correctly. Correct answer was "
                                            +answer+". Allowed deviation from correct answer was "+precision+".");
     }
 
     private void sendAlmostCorrectMessage(Player player, String answer) {
-        MessageUtil.sendInfoMessage(player, "Almost! The right answer was "+answer+" but you were close enough.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Almost! The right answer was "+answer+" but you were close enough.");
     }
 
 }

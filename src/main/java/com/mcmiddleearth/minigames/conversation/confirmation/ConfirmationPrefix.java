@@ -16,7 +16,7 @@
  */
 package com.mcmiddleearth.minigames.conversation.confirmation;
 
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import com.mcmiddleearth.minigames.data.PluginData;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationPrefix;
 
@@ -28,7 +28,7 @@ class ConfirmationPrefix implements ConversationPrefix {
 
     @Override
     public String getPrefix(ConversationContext cc) {
-        return MessageUtil.HIGHLIGHT+MessageUtil.getPREFIX();
+        return PluginData.getMessageUtil().HIGHLIGHT+PluginData.getMessageUtil().getPREFIX();
     }
     
 }

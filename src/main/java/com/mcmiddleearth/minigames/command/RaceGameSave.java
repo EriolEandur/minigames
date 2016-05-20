@@ -10,7 +10,6 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.IOException;
 import org.bukkit.command.CommandSender;
@@ -72,15 +71,15 @@ public class RaceGameSave extends AbstractGameCommand implements Confirmationabl
     }
 
     private void sendIOErrorMessage(Player player, String msg) {
-        MessageUtil.sendErrorMessage(player, "There was an error: "+msg+" Nothing was saved.");
+        PluginData.getMessageUtil().sendErrorMessage(player, "There was an error: "+msg+" Nothing was saved.");
     }
 
     private void sendRaceSavedMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "Race was saved to disk.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Race was saved to disk.");
     }
 
     private void sendAbordMessage(Player player) {
-        MessageUtil.sendInfoMessage(player, "Saving race cancelled.");
+        PluginData.getMessageUtil().sendInfoMessage(player, "Saving race cancelled.");
     }
 
 }

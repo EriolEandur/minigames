@@ -5,9 +5,9 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -58,32 +58,32 @@ public class GameAllow extends AbstractGameCommand{
     }
     
     private void sendWarpAllowedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You allowed all players to warp to this game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You allowed all players to warp to this game.");
     }
 
     private void sendJoinAllowedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You allowed all players to join this game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You allowed all players to join this game.");
     }
     
     private void sendSpectateAllowedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You allowed all players to spectate to this game.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You allowed all players to spectate to this game.");
     }
 
     private void sendFlightAllowedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You allowed players of this game to fly.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You allowed players of this game to fly.");
     }
 
     private void sendTeleportAllowedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "You allowed players of this game to teleport (using commands like /tpa and /warp).");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You allowed players of this game to teleport (using commands like /tpa and /warp).");
     }
 
     private void sendInvalidArgumentMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "Invalid Argument.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid Argument.");
     }
 
     private void sentNotPossibleMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "It is not possible to allow teleport in a "
-                                         +MessageUtil.ERROR_STRESSED+"Hide and Seek"
-                                         +MessageUtil.ERROR+" game.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "It is not possible to allow teleport in a "
+                                         +PluginData.getMessageUtil().ERROR_STRESSED+"Hide and Seek"
+                                         +PluginData.getMessageUtil().ERROR+" game.");
     }
 }

@@ -12,7 +12,7 @@ import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.pluginutils.PlayerUtil;
-import com.mcmiddleearth.minigames.utils.MinigamesMessageUtil;
+import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
@@ -33,6 +32,9 @@ import org.json.simple.parser.ParseException;
  * @author Eriol_Eandur
  */
 public class PluginData {
+    
+    @Getter
+    private final static MessageUtil messageUtil = new MessageUtil();
     
     @Getter
     private static CreateQuestionConversationFactory createQuestionFactory;
@@ -160,8 +162,8 @@ public class PluginData {
     public static void stopSpectating(Player player) {
         for(AbstractGame game: games) {
             if(game.isSpectating(player)) {
-                MinigamesMessageUtil.sendAllInfoMessage(player, game, player.getName()+" stopped spectating.");
-                MessageUtil.sendInfoMessage(player, "You stopped spectating.");
+                GameChatUtil.sendAllInfoMessage(player, game, player.getName()+" stopped spectating.");
+                PluginData.getMessageUtil().sendInfoMessage(player, "You stopped spectating.");
                 game.removeSpectator(player);
                 return;
             }

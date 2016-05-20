@@ -10,7 +10,6 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.RaceGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import org.bukkit.command.CommandSender;
@@ -53,15 +52,15 @@ public class RaceGameLoad extends AbstractGameCommand{
     }
 
     private void sendQuestionsLoadedMessage(CommandSender cs) {
-        MessageUtil.sendInfoMessage(cs, "Race loaded from file.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Race loaded from file.");
     }
 
     private void sendFileNotFoundMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "File not found.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "File not found.");
     }
 
     private void sendInvalidFileMessage(CommandSender cs) {
-        MessageUtil.sendErrorMessage(cs, "The file contains invalid data.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "The file contains invalid data.");
     }
 
 }

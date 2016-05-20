@@ -11,9 +11,7 @@ import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
 import com.mcmiddleearth.minigames.scoreboard.RaceGameScoreboard;
 import com.mcmiddleearth.pluginutils.BlockUtil;
-import com.mcmiddleearth.pluginutils.PlayerUtil;
 import com.mcmiddleearth.pluginutils.TitleUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +19,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.UUID;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -92,7 +89,7 @@ public class RaceGame extends AbstractGame {
                 if(check.isCheckLocation(event.getPlayer().getLocation())
                         && checkId == getNextCheckpoint(event.getPlayer())) {
                     incrementCheckpoint(event.getPlayer());
-                    MessageUtil.sendInfoMessage(event.getPlayer(),"You reached checkpoint "+checkId+".");
+                    PluginData.getMessageUtil().sendInfoMessage(event.getPlayer(),"You reached checkpoint "+checkId+".");
                     event.getPlayer().playEffect(check.getLocation(),Effect.CLICK2,0);
                     if(autoShow) {
                         ((RaceGameScoreboard)getBoard()).showCheckpoint(checkId);

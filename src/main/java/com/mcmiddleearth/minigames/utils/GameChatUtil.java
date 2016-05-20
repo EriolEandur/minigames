@@ -19,7 +19,6 @@ package com.mcmiddleearth.minigames.utils;
 import com.mcmiddleearth.pluginutils.PlayerUtil;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,7 +28,7 @@ import org.bukkit.entity.Player;
  * @author Eriol_Eandur
  */
 
-public class MinigamesMessageUtil {
+public class GameChatUtil {
     
     private static final String CHATPREFIX = "";//[GameChat] ";
 
@@ -37,14 +36,14 @@ public class MinigamesMessageUtil {
         for(Player onlinePlayer : game.getOnlinePlayers()) {
             if(onlinePlayer!=null) {
                 if(!((sender instanceof Player) && PlayerUtil.isSame((Player) sender,onlinePlayer))) {
-                    onlinePlayer.sendMessage(MessageUtil.INFO + MessageUtil.getPREFIX() + message);
+                    onlinePlayer.sendMessage(PluginData.getMessageUtil().INFO + PluginData.getMessageUtil().getPREFIX() + message);
                 } 
             }
         }
         Player manager = PlayerUtil.getOnlinePlayer(game.getManager());
         if(manager!=null && !PluginData.isInGame(manager)) {
             if(!((sender instanceof Player) && PlayerUtil.isSame((Player) sender,manager))) {
-                manager.sendMessage(MessageUtil.INFO + MessageUtil.getPREFIX() + message);
+                manager.sendMessage(PluginData.getMessageUtil().INFO + PluginData.getMessageUtil().getPREFIX() + message);
             }
         }
     }
