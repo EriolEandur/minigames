@@ -448,12 +448,15 @@ public class Checkpoint {
             for(File file: files) {
                 try {
                     //restoreBlocks(file);
-                    BlockUtil.restore(file, new ArrayList<Entity>(), new ArrayList<BlockState>(),true);
-                    file.delete();
+                    if(!BlockUtil.restore(file, new ArrayList<Entity>(), new ArrayList<BlockState>(),true)) {
+                        throw new IOException();
+                    }
                 } catch (IOException | InvalidConfigurationException ex) {
-                    Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "Exception at restoring blocks.", ex);
+                    Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "Exception while deleting race markers. Restore data file is still in minigames/race/restoredata. Will try again to restore with next server start/reload", ex);
+                    return;
                 }
-        }
+                file.delete();
+            }
         }
     }
     
