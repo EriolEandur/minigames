@@ -9,7 +9,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.HideAndSeekGame;
-import com.mcmiddleearth.pluginutils.StringUtil;
+import com.mcmiddleearth.pluginutil.StringUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

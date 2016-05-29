@@ -11,9 +11,9 @@ import com.mcmiddleearth.minigames.conversation.quiz.CreateQuestionConversationF
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
-import com.mcmiddleearth.pluginutils.PlayerUtil;
+import com.mcmiddleearth.pluginutil.PlayerUtil;
 import com.mcmiddleearth.minigames.utils.GameChatUtil;
-import com.mcmiddleearth.pluginutils.message.MessageUtil;
+import com.mcmiddleearth.pluginutil.message.MessageUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;

@@ -14,9 +14,9 @@ import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
-import com.mcmiddleearth.pluginutils.NumericUtil;
-import com.mcmiddleearth.pluginutils.message.FancyMessage;
-import com.mcmiddleearth.pluginutils.message.MessageType;
+import com.mcmiddleearth.pluginutil.NumericUtil;
+import com.mcmiddleearth.pluginutil.message.FancyMessage;
+import com.mcmiddleearth.pluginutil.message.MessageType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -34,7 +34,7 @@ public class QuizGameQuestion extends AbstractGameCommand{
         super(0, true, permissionNodes);
         cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Manipulates questions of a quiz game.");
-        setUsageDescription(" single|multi|free|number|list|remove [#ID]: Arguments single, multi, free and number will initiate a conversation to create a new question, which will be added to the quiz. Argument 'remove' will delete the questions number [questionID]. Argument list will display a list of all questions of a game.");
+        setUsageDescription(" single|multi|free|number|list|remove [#ID]: Arguments single, multi, free and number will initiate a conversation to create a new question, which will be added to the quiz. Argument 'remove' will delete the questions number [questionID]. Argument 'list' will display a list of all questions of a game.");
     }
     
     @Override
@@ -59,6 +59,11 @@ public class QuizGameQuestion extends AbstractGameCommand{
                 return;
             }else if(args[0].equalsIgnoreCase("load")) {
                 newArgs[0]="loadquestions";
+                MiniGamesPlugin.getPluginInstance().getCommand("game").getExecutor().
+                                onCommand(cs, null, "game", newArgs);
+                return;
+            }else if(args[0].equalsIgnoreCase("clear")) {
+                newArgs[0]="clear";
                 MiniGamesPlugin.getPluginInstance().getCommand("game").getExecutor().
                                 onCommand(cs, null, "game", newArgs);
                 return;
@@ -162,8 +167,8 @@ public class QuizGameQuestion extends AbstractGameCommand{
         List<FancyMessage> list = new ArrayList<>();
         int id = 1;
         for(AbstractQuestion question : quizGame.getQuestions()) {
-            String questionText = question.getQuestion().replaceAll("\"", ";\"");
-            questionText = questionText.replace(';', '\\');
+            String questionText = question.getQuestion();//.replaceAll("\"", ";\""); is done by fancy message now
+            //questionText = questionText.replace(';', '\\');
             String[] detailText = question.getDetails();
             list.add(new FancyMessage(MessageType.WHITE,PluginData.getMessageUtil())
                         .addFancy(ChatColor.DARK_GREEN+""+id+ChatColor.AQUA+" ["

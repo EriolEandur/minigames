@@ -21,7 +21,8 @@ import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
-import com.mcmiddleearth.pluginutils.StringUtil;
+import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
+import com.mcmiddleearth.pluginutil.StringUtil;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.conversations.Conversation;
@@ -65,12 +66,17 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
     public void conversationAbandoned(ConversationAbandonedEvent abandonedEvent) {
         ConversationContext cc = abandonedEvent.getContext();
         Player player = (Player) cc.getSessionData("player");
+        AbstractQuestion question = (AbstractQuestion)cc.getSessionData("question");
+        String answer = (String) cc.getSessionData("answer");
         if (!abandonedEvent.gracefulExit()) {
-            sendAbordMessage(player);
+            if(question instanceof NumberQuestion) {
+                sendAbordNumberQuestionMessage(player, question.getCorrectAnswer(), 
+                                              ((NumberQuestion)question).getPrecision());
+            } else {
+                sendAbordMessage(player, question.getCorrectAnswer());
+            }
         }
         else {
-            AbstractQuestion question = (AbstractQuestion)cc.getSessionData("question");
-            String answer = (String) cc.getSessionData("answer");
             if(question.isCorrectAnswer(answer)) {
                 ((QuizGame)cc.getSessionData("game")).incrementScore(player);
                 if(question instanceof NumberQuestion 
@@ -114,8 +120,14 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
         }
     }
 
-    private void sendAbordMessage(Player player) {
-        PluginData.getMessageUtil().sendInfoMessage(player, "Time to answer expired.");
+    private void sendAbordMessage(Player player, String answer) {
+        PluginData.getMessageUtil().sendInfoMessage(player, "Time to answer expired. Correct answer: "
+                                           +answer);
+    }
+
+    private void sendAbordNumberQuestionMessage(Player player, String answer, int precision) {
+        PluginData.getMessageUtil().sendInfoMessage(player, "Time to answer expired. Correct answer: "
+                                           +answer+"."+"Allowed deviation from correct answer was "+precision+".");
     }
 
     private void sendSuccessMessage(Player player) {

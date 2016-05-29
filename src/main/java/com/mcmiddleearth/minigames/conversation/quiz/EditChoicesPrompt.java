@@ -16,12 +16,14 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -41,9 +43,11 @@ class EditChoicesPrompt extends StringPrompt {
     public Prompt acceptInput(ConversationContext cc, String string) {
         int answerIndex = (int) cc.getSessionData("answerIndex");
         if(string.equalsIgnoreCase("!keep")) {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.YELLOW+"Choice text is kept.");
             ((String[])cc.getSessionData("choices"))[answerIndex] 
                     = ((ChoiceQuestion)EditQuestionConversationFactory.getQuestion(cc)).getAnswers()[answerIndex];
         } else {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.GREEN+"New choice text is stored.");
             ((String[])cc.getSessionData("choices"))[answerIndex] = string; 
         }
         answerIndex++;

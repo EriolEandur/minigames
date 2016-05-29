@@ -16,12 +16,13 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
-import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.NumericPrompt;
 import org.bukkit.conversations.Prompt;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -34,8 +35,10 @@ class EditNumericPrompt extends NumericPrompt {
     @Override
     protected Prompt acceptValidatedInput(ConversationContext cc, Number number) {
         if(keep) {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.YELLOW+"Correct answer is kept.");
             cc.setSessionData("answer", ((NumberQuestion)EditQuestionConversationFactory.getQuestion(cc)).getAnswer());
         } else {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.GREEN+"New correct answer is stored.");
             cc.setSessionData("answer", number.intValue());
         }
         return new EditPrecisionPrompt();

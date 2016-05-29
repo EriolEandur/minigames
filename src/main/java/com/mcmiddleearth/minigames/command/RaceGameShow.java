@@ -70,19 +70,19 @@ public class RaceGameShow extends AbstractGameCommand{
     }
 
     private void sendAutoCheckpointMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendErrorMessage(cs, "Automatically showing rank list for most recent checkpont.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Automatically showing rank list for most recent checkpont.");
     }
 
     private void sendShowStartMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendErrorMessage(cs, "Showing starter list now.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Showing starter list now.");
     }
 
     private void sendShowFinishMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendErrorMessage(cs, "Showing finish rank list now.");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Showing finish rank list now.");
     }
 
     private void sendShowCheckMessage(CommandSender cs,int id) {
-        PluginData.getMessageUtil().sendErrorMessage(cs, "Showing intermediate rank list at checkpoint "+id+".");
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Showing intermediate rank list at checkpoint "+id+".");
     }
 
     private void sendNotANumberMessage(CommandSender cs) {

@@ -16,9 +16,12 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
+import org.bukkit.conversations.Prompt;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -31,6 +34,17 @@ class EditSingleChoiceAnswersPrompt extends EditMultipleChoiceAnswersPrompt {
         return super.getPromptText(cc);
     }
 
+    @Override
+    protected Prompt acceptValidatedInput(ConversationContext cc, String string) {
+        if(string.equalsIgnoreCase("!keep")) {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.YELLOW+"Correct choice is kept.");
+            cc.setSessionData("answer", EditQuestionConversationFactory.getQuestion(cc).getCorrectAnswer());
+        } else {
+            cc.setSessionData("answer", string);
+        }
+        return new EditQuestionCategoriesPrompt();
+    }
+    
     @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
         return ChatColor.RED+"[Invalid input] Type in the letter of the correct answer only.";

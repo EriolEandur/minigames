@@ -42,7 +42,7 @@ public class EditQuestionConversationFactory implements ConversationAbandonedLis
         factory = new ConversationFactory(plugin)
                 .withModality(false)
                 .withPrefix(new CreateQuestionPrefix())
-                .withFirstPrompt(new EditQuestionPrompt())
+                .withFirstPrompt(new EditStartPrompt())
                 .withEscapeSequence("!cancel")
                 .withTimeout(600)
                 .addConversationAbandonedListener(this);

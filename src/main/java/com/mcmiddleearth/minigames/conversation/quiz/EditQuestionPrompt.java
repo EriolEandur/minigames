@@ -16,12 +16,14 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -34,15 +36,16 @@ class EditQuestionPrompt extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext cc) {
-        return ChatColor.DARK_GREEN+"[Question] "+EditQuestionConversationFactory.getQuestion(cc).getQuestion()
-                +ChatColor.AQUA + " Type in a new question or '!keep'.";
+        return ChatColor.DARK_GREEN+"[Question] "+EditQuestionConversationFactory.getQuestion(cc).getQuestion();
     }
 
     @Override
     public Prompt acceptInput(ConversationContext cc, String string) {
         if(string.equalsIgnoreCase("!keep")) {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.YELLOW+"Question text is kept.");
             cc.setSessionData("question", EditQuestionConversationFactory.getQuestion(cc).getQuestion());
         } else {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.GREEN+"New question text is stored.");
             cc.setSessionData("question", string);
         }
         switch((QuestionType)cc.getSessionData("questionType")) {

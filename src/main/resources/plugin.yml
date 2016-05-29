@@ -4,6 +4,7 @@ version: 1.1
 description: MiniGames plugin
 load: POSTWORLD
 softdepend: [Multiverse-Core]
+depend: [PluginUtils]
 commands:
     game:
         description: manage MiniGames plugin

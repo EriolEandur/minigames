@@ -19,6 +19,7 @@ package com.mcmiddleearth.minigames.quizQuestion;
 import com.mcmiddleearth.minigames.data.PluginData;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 
 /**
  *
@@ -49,6 +50,6 @@ public class FreeQuestion extends AbstractQuestion{
     public String[] getDetails() {
         return new String[]{PluginData.getMessageUtil().HIGHLIGHT+"[Type]"+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+" FREE answer question",
                             PluginData.getMessageUtil().HIGHLIGHT+"[Question] "+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+getQuestion(),
-                            PluginData.getMessageUtil().HIGHLIGHT+"[Answer] "+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+answer};
+                            PluginData.getMessageUtil().STRESSED+"[Answer] "+answer};
     }
 }

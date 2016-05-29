@@ -22,6 +22,7 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import static org.bukkit.conversations.Prompt.END_OF_CONVERSATION;
 import org.bukkit.conversations.ValidatingPrompt;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -38,8 +39,10 @@ class EditQuestionCategoriesPrompt extends ValidatingPrompt {
     @Override
     protected Prompt acceptValidatedInput(ConversationContext cc, String string) {
         if(string.equalsIgnoreCase("!keep")) {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.YELLOW+"Categories are kept.");
             cc.setSessionData("categories", EditQuestionConversationFactory.getQuestion(cc).getCategories());
         } else {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.GREEN+"New categories are stored.");
             cc.setSessionData("categories", string);
         }
         return END_OF_CONVERSATION;

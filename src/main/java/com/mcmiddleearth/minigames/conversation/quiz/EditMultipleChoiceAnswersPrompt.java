@@ -16,12 +16,13 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
-import static org.bukkit.conversations.Prompt.END_OF_CONVERSATION;
 import org.bukkit.conversations.ValidatingPrompt;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -39,8 +40,10 @@ class EditMultipleChoiceAnswersPrompt extends ValidatingPrompt {
     @Override
     protected Prompt acceptValidatedInput(ConversationContext cc, String string) {
         if(string.equalsIgnoreCase("!keep")) {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.YELLOW+"Correct choices are kept.");
             cc.setSessionData("answer", EditQuestionConversationFactory.getQuestion(cc).getCorrectAnswer());
         } else {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.GREEN+"New correct choices are stored.");
             cc.setSessionData("answer", string);
         }
         return new EditQuestionCategoriesPrompt();

@@ -9,7 +9,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.pluginutils.NumericUtil;
+import com.mcmiddleearth.pluginutil.NumericUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class QuizGameQuestionsLoad extends AbstractGameCommand{
         super(1, true, permissionNodes);
         cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Loads questions from the question table.");
-        setUsageDescription(" <categories> [matchAll]: Loads questions from the MCME question data table which match the specified categories (see manual). The questions will be appended to the existing questions. If [MatchAll] is 'true' (default is 'false) a question needs to match all specified categories.");
+        setUsageDescription(" <categories> [matchAll]: Loads questions from the MCME question data table which match the specified categories (see manual). The questions will be appended to the existing questions. If [MatchAll] is 'true' (default is 'false) a question needs to match all specified categories. Instead of <categories> a list ('2 5 12') or range ('2-13') of question IDs may be specified.");
     }
     
     @Override
@@ -51,6 +51,25 @@ public class QuizGameQuestionsLoad extends AbstractGameCommand{
                     sendQuestionsLoadedMessage(cs, result,questionIds.size());
                 } catch (FileNotFoundException ex) {
                     sendFileNotFoundMessage(cs);
+                }
+                return;
+            }
+            if(args[0].contains("-")) {
+                try {
+                    List<Integer> questionIds = new ArrayList<>();
+                    int start = Integer.parseInt(args[0].substring(0, args[0].indexOf("-")));
+                    int end = Integer.parseInt(args[0].substring(args[0].indexOf("-")+1));
+                    for(int i = start; i<=end; i++) {
+                        questionIds.add(i);
+                    }
+                    try {
+                        int[] result = quizGame.loadQuestionsFromDataFile(file, questionIds);
+                        sendQuestionsLoadedMessage(cs, result,questionIds.size());
+                    } catch (FileNotFoundException ex) {
+                        sendFileNotFoundMessage(cs);
+                    }
+                } catch(Exception e) {
+                    sendInvalidRangeFormat(cs);
                 }
                 return;
             }
@@ -97,6 +116,10 @@ public class QuizGameQuestionsLoad extends AbstractGameCommand{
 
     private void sendFileNotFoundMessage(CommandSender cs) {
         PluginData.getMessageUtil().sendErrorMessage(cs, "Question table file not found.");
+    }
+
+    private void sendInvalidRangeFormat(CommandSender cs) {
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid question ID range. Format must be <#first>-<#last>.");
     }
 
 }

@@ -15,10 +15,10 @@ import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
 import com.mcmiddleearth.minigames.quizQuestion.SingleChoiceQuestion;
 import com.mcmiddleearth.minigames.scoreboard.QuizGameScoreboard;
-import com.mcmiddleearth.pluginutils.PlayerUtil;
-import com.mcmiddleearth.pluginutils.NumericUtil;
-import com.mcmiddleearth.pluginutils.StringUtil;
-import com.mcmiddleearth.pluginutils.TitleUtil;
+import com.mcmiddleearth.pluginutil.PlayerUtil;
+import com.mcmiddleearth.pluginutil.NumericUtil;
+import com.mcmiddleearth.pluginutil.StringUtil;
+import com.mcmiddleearth.pluginutil.TitleUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -228,10 +228,10 @@ public class QuizGame extends AbstractGame {
                 if(winner.size()>1) {
                     winnerNames = winnerNames + " and "+winner.get(winner.size()-1).getName();
                 }
-                TitleUtil.showTitleAll(getOnlinePlayers(), winner, ChatColor.BLUE+"game over", winnerNames+" won the quiz.");
+                TitleUtil.showTitleAll(getOnlinePlayers(), winner, ChatColor.BLUE+"Game Over", winnerNames+" won the quiz.");
                 Player manager = Bukkit.getPlayer(getManager().getUniqueId());
                 if(manager!=null && !PluginData.isInGame(manager)) {
-                    TitleUtil.showTitle(manager, ChatColor.BLUE+"game over", winnerNames+" won the quiz.");
+                    TitleUtil.showTitle(manager, ChatColor.BLUE+"Game Over", winnerNames+" won the quiz.");
                 }
             }
             return true;
@@ -526,7 +526,7 @@ public class QuizGame extends AbstractGame {
         };
         Collections.sort(saveQuestions, comp);
         File tmpFile = new File(file.toString()+".tmp");
-        try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8);
+        try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(tmpFile, true), StandardCharsets.UTF_8);
              PrintWriter writer = new PrintWriter(fw);
              Scanner reader = new Scanner(file, StandardCharsets.UTF_8.name())) {
             int line = 1;
@@ -543,12 +543,14 @@ public class QuizGame extends AbstractGame {
                         line++;
                     }
                     reader.nextLine();
-                    writer.println(questionToString(question));
+                    String str = questionToString(question);
+                    writer.println(str);
                     line++;
                 }
             }
             while(reader.hasNext()) {
-                writer.println(reader.nextLine());
+                String str =reader.nextLine();
+                writer.println(str);
             }
         }
         file.delete();

@@ -10,8 +10,8 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
 import com.mcmiddleearth.minigames.scoreboard.RaceGameScoreboard;
-import com.mcmiddleearth.pluginutils.BlockUtil;
-import com.mcmiddleearth.pluginutils.TitleUtil;
+import com.mcmiddleearth.pluginutil.BlockUtil;
+import com.mcmiddleearth.pluginutil.TitleUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -160,13 +160,13 @@ public class RaceGame extends AbstractGame {
                 if(timer>1) {
                     timer--;
                     //TitleUtil.setSubtitleAll(getOnlinePlayers(), null, timer+"");
-                    TitleUtil.showTitleAll(getOnlinePlayers(), null, title, timer+"",0,40,0);
+                    TitleUtil.showTitleAll(getOnlinePlayers(), null, null, timer+"",0,300,0);
                 }
                 else {
                     cancel();
                     //TitleUtil.setTitleAll(getOnlinePlayers(), null, ChatColor.GREEN+"GO");
                     //TitleUtil.setSubtitleAll(getOnlinePlayers(), null, "");
-                    TitleUtil.showTitleAll(getOnlinePlayers(), null, ChatColor.GREEN+"GO","",0,30,20);
+                    TitleUtil.showTitleAll(getOnlinePlayers(), null, ChatColor.GREEN+"GO","",0,30,60);
                     go();
                 }
             }
@@ -176,7 +176,7 @@ public class RaceGame extends AbstractGame {
                 super.cancel();
                 //TitleUtil.setTimesAll(getOnlinePlayers(), null, 0,50,20);
             }};
-        goTask.runTaskTimer(MiniGamesPlugin.getPluginInstance(), 40, 20);
+        goTask.runTaskTimer(MiniGamesPlugin.getPluginInstance(), 20, 20);
     }
     
     public void go() {

@@ -19,6 +19,7 @@ package com.mcmiddleearth.minigames.quizQuestion;
 import com.mcmiddleearth.minigames.data.PluginData;
 import lombok.Getter;
 import lombok.Setter;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  *
@@ -63,7 +64,7 @@ public class NumberQuestion extends AbstractQuestion{
     public String[] getDetails() {
         return new String[]{PluginData.getMessageUtil().HIGHLIGHT+"[Type]"+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+" NUMBER answer question",
                             PluginData.getMessageUtil().HIGHLIGHT+"[Question] "+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+getQuestion(),
-                            PluginData.getMessageUtil().HIGHLIGHT+"[Answer] "+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+answer,
-                            PluginData.getMessageUtil().HIGHLIGHT+"[Precision] "+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+precision};
+                            PluginData.getMessageUtil().STRESSED+"[Answer] "+answer,
+                            ChatColor.DARK_GREEN+"[Precision] "+precision};
     }
 }

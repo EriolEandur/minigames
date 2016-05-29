@@ -39,7 +39,7 @@ class EditStartPrompt extends MessagePrompt {
 
     @Override
     public String getPromptText(ConversationContext cc) {
-        return ChatColor.DARK_GREEN+"[Edit Question] This conversation will show you all details of the specified quiz question. You may type in new data or keep the current with '!keep'.";
+        return ChatColor.YELLOW+"[Edit Question] This conversation will show you all details of the specified quiz question. You may type in new data or keep the current with '!keep'. You may cancel editing of the question with '!cancel'.";
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.mcmiddleearth.minigames.command.GCCommandExecutor;
 import com.mcmiddleearth.minigames.command.GameCommandExecutor;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.listener.PlayerListener;
-import com.mcmiddleearth.pluginutils.EntityUtil;
+import com.mcmiddleearth.pluginutil.EntityUtil;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 

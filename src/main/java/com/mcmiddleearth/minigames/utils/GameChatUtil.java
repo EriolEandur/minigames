@@ -16,7 +16,7 @@
  */
 package com.mcmiddleearth.minigames.utils;
 
-import com.mcmiddleearth.pluginutils.PlayerUtil;
+import com.mcmiddleearth.pluginutil.PlayerUtil;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import org.bukkit.ChatColor;

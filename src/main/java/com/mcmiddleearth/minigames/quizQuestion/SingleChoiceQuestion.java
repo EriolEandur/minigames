@@ -38,15 +38,11 @@ public class SingleChoiceQuestion extends ChoiceQuestion{
     public String[] getDetails() {
         return new String[]{PluginData.getMessageUtil().HIGHLIGHT+"[Type]"+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+" SINGLE choice question",
                             PluginData.getMessageUtil().HIGHLIGHT+"[Question] "+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+getQuestion(),
-            (correctAnswers[0]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[A] "
-                +(correctAnswers[0]?ChatColor.GREEN:PluginData.getMessageUtil().HIGHLIGHT_STRESSED)+answers[0],
-            (correctAnswers[1]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[B] "
-                +(correctAnswers[1]?ChatColor.GREEN:PluginData.getMessageUtil().HIGHLIGHT_STRESSED)+answers[1],
-            (correctAnswers[2]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[C] "
-                +(correctAnswers[2]?ChatColor.GREEN:PluginData.getMessageUtil().HIGHLIGHT_STRESSED)+answers[2],
-            (correctAnswers[3]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[D] "
-                +(correctAnswers[3]?ChatColor.GREEN:PluginData.getMessageUtil().HIGHLIGHT_STRESSED)+answers[3],
-             PluginData.getMessageUtil().HIGHLIGHT+"[Correct] "+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+getCorrectAnswer()};
+            (correctAnswers[0]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[A] "+answers[0],
+            (correctAnswers[1]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[B] "+answers[1],
+            (correctAnswers[2]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[C] "+answers[2],
+            (correctAnswers[3]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[D] "+answers[3],
+             PluginData.getMessageUtil().STRESSED+"[Correct] "+getCorrectAnswer()};
     }
 
 }

@@ -16,10 +16,12 @@
  */
 package com.mcmiddleearth.minigames.conversation.quiz;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -36,8 +38,10 @@ class EditFreePrompt extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext cc, String string) {
         if(string.equalsIgnoreCase("!keep")) {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.YELLOW+"Answer text is kept.");
             cc.setSessionData("answer", EditQuestionConversationFactory.getQuestion(cc).getCorrectAnswer());
         } else {
+            PluginData.getMessageUtil().sendInfoMessage((Player)cc.getForWhom(), ChatColor.GREEN+"New answer text is stored.");
             cc.setSessionData("answer", string);
         }
         return new EditQuestionCategoriesPrompt();
