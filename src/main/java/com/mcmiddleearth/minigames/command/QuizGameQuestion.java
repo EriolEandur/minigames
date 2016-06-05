@@ -34,7 +34,7 @@ public class QuizGameQuestion extends AbstractGameCommand{
         super(0, true, permissionNodes);
         cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Manipulates questions of a quiz game.");
-        setUsageDescription(" single|multi|free|number|list|remove [#ID]: Arguments single, multi, free and number will initiate a conversation to create a new question, which will be added to the quiz. Argument 'remove' will delete the questions number [questionID]. Argument 'list' will display a list of all questions of a game.");
+        setUsageDescription(" <questionType>|<manage> [#ID]: Arguments <questionType> may be 'single', 'multi', 'free' or 'number' and will initiate a conversation to create a new question, which will be added to the quiz. Argument <manage> may be 'remove', 'list', 'edit', 'submit', 'review' ,'accept', 'clear' or 'load'. See manual for full description.");
     }
     
     @Override

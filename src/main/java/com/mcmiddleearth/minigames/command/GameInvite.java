@@ -22,7 +22,7 @@ public class GameInvite extends AbstractGameCommand{
     public GameInvite(String... permissionNodes) {
         super(1, true, permissionNodes);
         setShortDescription(": Invites a player to join a game.");
-        setUsageDescription(" <player>: Invites <player> to join the game. This is neeed if '/game deny join' was used.");
+        setUsageDescription(" <player>: Invites <player> to join the game. This is needed if '/game deny join' was used.");
     }
     
     @Override

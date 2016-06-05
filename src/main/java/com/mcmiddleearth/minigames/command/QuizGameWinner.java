@@ -22,7 +22,7 @@ public class QuizGameWinner extends AbstractGameCommand{
         super(0, true, permissionNodes);
         cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Announces the winner of a quiz game.");
-        setUsageDescription(": Announces the winner of a quiz game. If two or more player have same score after last question, a winner will not be announced automaticall. The manager can add more questions or announce multiple winners with this command.");
+        setUsageDescription(": Announces the winner of a quiz game. If two or more players have the same score after the last question, no winner will be announced automatically. The manager can add more questions or announce multiple winners with this command.");
     }
     
     @Override

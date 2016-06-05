@@ -21,7 +21,7 @@ public class GameUnban extends AbstractGameCommand{
     
     public GameUnban(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": Removes the ban of a player from a game.");
+        setShortDescription(": Unbans a player from a minigame.");
         setUsageDescription(" <player>: <player> is no longer banned from the game and may join/spectate again.");
     }
     

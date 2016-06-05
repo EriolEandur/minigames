@@ -71,7 +71,6 @@ public class CreateQuestionConversationFactory implements ConversationAbandonedL
             sendAbordMessage((Player) cc.getSessionData("player"));
         }
         else {
-            sendQuestionCreatedMessage((Player) cc.getSessionData("player"));
             QuizGame game = (QuizGame)cc.getSessionData("game");
             switch(((QuestionType)cc.getSessionData("questionType"))) {
                 case FREE:
@@ -102,9 +101,12 @@ public class CreateQuestionConversationFactory implements ConversationAbandonedL
                 try {
                     PluginData.getQuestionSubmitGame().saveQuestionsToJson(PluginData.getSubmittedQuestionsFile(),
                             "Submitted quiz questions.");
+                    sendQuestionSubmittedMessage((Player) cc.getSessionData("player"));
                 } catch (IOException ex) {
                     Logger.getLogger(QuizGameQuestionsSubmit.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } else {
+                sendQuestionCreatedMessage((Player) cc.getSessionData("player"));
             }
         }
     }
@@ -115,5 +117,9 @@ public class CreateQuestionConversationFactory implements ConversationAbandonedL
     
     private void sendQuestionCreatedMessage(Player player) {
         PluginData.getMessageUtil().sendInfoMessage(player, "You added a new question to the quiz.");
+    }
+    
+    private void sendQuestionSubmittedMessage(Player player) {
+        PluginData.getMessageUtil().sendInfoMessage(player, "You submitted a new question.");
     }
 }

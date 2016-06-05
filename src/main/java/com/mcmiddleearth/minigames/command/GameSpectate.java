@@ -20,7 +20,7 @@ public class GameSpectate extends AbstractGameCommand{
     public GameSpectate(String... permissionNodes) {
         super(1, true, permissionNodes);
         setShortDescription(": Spectate at a game.");
-        setUsageDescription(" <gamename>: Switches on spectating a game which is watching the game scoreboard. Use optional argument '!off' to stop spectating.");
+        setUsageDescription(" <gamename>: Displays the game's scoreboard to a player spectating the game. Use optional argument '!off' to stop spectating.");
     }
     
     @Override

@@ -23,8 +23,8 @@ public class QuizGameQuestionsReview extends AbstractGameCommand{
     public QuizGameQuestionsReview(String... permissionNodes) {
         super(0, true, permissionNodes);
         cmdGroup = CmdGroup.LORE_QUIZ;
-        setShortDescription(": Creates a new mini game.");
-        setUsageDescription(" quiz|race|hide <gamename>: Creates a lore quiz or a race or a hide and seek game with name <gamename>. The location of the player issuing the command becomes the warp of the game.");
+        setShortDescription(": Creates a quiz game with submitted questions.");
+        setUsageDescription(": Creates a lore quiz game with all submitted question which have not been reviewed before. The quiz is save in a quiz file with filename <rYYYY_MM_DD> you can then edit or remove questions and accept (save) them for the MCME lore question table.");
     }
     
     @Override

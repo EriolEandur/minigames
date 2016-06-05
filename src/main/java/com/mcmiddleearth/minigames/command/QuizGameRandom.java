@@ -22,7 +22,7 @@ public class QuizGameRandom extends AbstractGameCommand{
         super(0, true, permissionNodes);
         cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Defines the order of questions.");
-        setUsageDescription(" off|questions|choices|all: 'off' will set all questions and choices to be shown in saved order. 'questions' will show questions in random order. 'choices' will show possibl answers for a question in random order. 'all' or just no argument will show questions and choices in random order");
+        setUsageDescription(" off|questions|choices|all: 'off' will set all questions and choices to be shown in saved order. 'questions' will show questions in random order. 'choices' will show possible answers for a question in random order. 'all' or just no argument will show questions and choices in random order");
     }
     
     @Override

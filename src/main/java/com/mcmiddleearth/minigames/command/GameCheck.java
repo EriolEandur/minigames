@@ -21,8 +21,8 @@ public class GameCheck extends AbstractCommand{
     
     public GameCheck(String... permissionNodes) {
         super(0, true, permissionNodes);
-        setShortDescription(": Lists all current mini game.");
-        setUsageDescription(": Lists all current mini game.");
+        setShortDescription(": Lists all current minigames.");
+        setUsageDescription(": Lists all current minigames.");
     }
     
     @Override

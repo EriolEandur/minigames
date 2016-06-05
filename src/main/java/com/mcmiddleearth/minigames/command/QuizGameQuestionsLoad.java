@@ -28,7 +28,7 @@ public class QuizGameQuestionsLoad extends AbstractGameCommand{
         super(1, true, permissionNodes);
         cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Loads questions from the question table.");
-        setUsageDescription(" <categories> [matchAll]: Loads questions from the MCME question data table which match the specified categories (see manual). The questions will be appended to the existing questions. If [MatchAll] is 'true' (default is 'false) a question needs to match all specified categories. Instead of <categories> a list ('2 5 12') or range ('2-13') of question IDs may be specified.");
+        setUsageDescription(" <categories> | <questionIDs> [matchAll]: Loads questions from the MCME question data table which match the specified categories (see manual). The questions will be appended to the existing questions. If [MatchAll] is 'true' (default is 'false) a question needs to match all specified categories. <questionIDs> may be a list ('2 5 12') or a range ('2-13') of question IDs.");
     }
     
     @Override
@@ -54,7 +54,7 @@ public class QuizGameQuestionsLoad extends AbstractGameCommand{
                 }
                 return;
             }
-            if(args[0].contains("-")) {
+            if(args[0].indexOf("-")>0 && NumericUtil.isInt(args[0].substring(0, args[0].indexOf("-")))) {
                 try {
                     List<Integer> questionIds = new ArrayList<>();
                     int start = Integer.parseInt(args[0].substring(0, args[0].indexOf("-")));

@@ -29,12 +29,14 @@ class EnterSingleChoiceAnswersPrompt extends EnterMultipleChoiceAnswersPrompt {
     @Override
     public String getPromptText(ConversationContext cc) {
         cc.setSessionData("input", true);
-        return ChatColor.DARK_GREEN+"[Hint] Type in chat the letter of the correct answer.";
+        return ChatColor.DARK_GREEN+"[Hint] Type in chat the letter of the correct answer. \n"
+                +ChatColor.GREEN+ChatColor.BOLD+"Only one"
+                   +ChatColor.RESET+ChatColor.DARK_GREEN+" answer is correct.";
     }
 
     @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
-        return ChatColor.RED+"[Invalid input] Type in the letter of the correct answer only.";
+        return ChatColor.RED+"[Invalid input] You did not type in a single answer letter.";
     }
     
     @Override

@@ -32,7 +32,9 @@ class EnterMultipleChoiceAnswersPrompt extends ValidatingPrompt {
     @Override
     public String getPromptText(ConversationContext cc) {
         cc.setSessionData("input", true);
-        return ChatColor.DARK_GREEN+"[Hint] Type in the letters of the correct answers.";
+        return ChatColor.DARK_GREEN+"[Hint] Type in the letters of the correct answers. \n"
+                   +ChatColor.GREEN+ChatColor.BOLD+"More than one"
+                   +ChatColor.RESET+ChatColor.DARK_GREEN+" answer may be correct.";
     }
 
     @Override
@@ -55,7 +57,7 @@ class EnterMultipleChoiceAnswersPrompt extends ValidatingPrompt {
     
     @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
-        return ChatColor.RED+"[Invalid input] Type in chat the letters of the correct answer. For example type: 'ACD'";
+        return ChatColor.RED+"[Invalid input] You did not type in possible answer letters.";
     }
     
     @Override

@@ -45,7 +45,7 @@ class EnterNumericPrompt extends NumericPrompt {
     
     @Override
     protected String getFailedValidationText(ConversationContext context, String invalidInput) {
-        return ChatColor.RED+"[Invalid input] Type in chat a whole number.";
+        return ChatColor.RED+"[Invalid input] You did not type in a whole number.";
     }
     
     @Override

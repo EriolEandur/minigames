@@ -21,8 +21,8 @@ public class GameWarp extends AbstractCommand{
     
     public GameWarp(String... permissionNodes) {
         super(1, true, permissionNodes);
-        setShortDescription(": Lists all current games.");
-        setUsageDescription(": Lists all current games with manager and number of participating players.");
+        setShortDescription(": Teleports to a minigame.");
+        setUsageDescription("<name>: Teleports you to the location of minigame 'name'.");
     }
     
     @Override

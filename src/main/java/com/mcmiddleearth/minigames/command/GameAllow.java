@@ -20,7 +20,7 @@ public class GameAllow extends AbstractGameCommand{
     public GameAllow(String... permissionNodes) {
         super(1, true, permissionNodes);
         setShortDescription(": Allows various actions for a game.");
-        setUsageDescription(" flight|teleport|join|warp|spectate: 'flight'/'teleport' allows for players in the game to fly or teleport. 'join' allows players to join without invitation. warp allows player to warp to game location. spectate allows players to see scoreboard of the game without participating.");
+        setUsageDescription(" flight|teleport|join|warp|spectate: 'flight'/'teleport' allows for players in the game to fly or teleport. 'join' allows players to join without invitation. 'warp' allows player to warp to game location. 'spectate' allows players to see scoreboard of the game without participating.");
     }
     
     @Override

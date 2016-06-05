@@ -22,7 +22,7 @@ public class RaceGameStop extends AbstractGameCommand{
         super(0, true, permissionNodes);
         cmdGroup = CmdGroup.RACE;
         setShortDescription(": Stops a race.");
-        setUsageDescription(": Aborts a already started race. Useful when there is a problem with a checkpoint or to let some other players join the race. Race can be started again.");
+        setUsageDescription(": Aborts an already started race. Useful when there is a problem with a checkpoint or to let some other players join the race. Race can be started again.");
     }
     
     @Override

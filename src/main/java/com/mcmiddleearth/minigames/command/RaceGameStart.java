@@ -22,7 +22,7 @@ public class RaceGameStart extends AbstractGameCommand{
         super(0, true, permissionNodes);
         cmdGroup = CmdGroup.RACE;
         setShortDescription(": Starts a race.");
-        setUsageDescription(": Cages the participating players at the check locations of the start marker. After countdown from 10 seconds the race is started.");
+        setUsageDescription(": Cages the players at the start line. After countdown from 10 seconds the race is started.");
     }
     
     @Override

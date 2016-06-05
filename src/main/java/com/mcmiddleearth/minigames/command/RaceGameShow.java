@@ -22,7 +22,7 @@ public class RaceGameShow extends AbstractGameCommand{
         super(0, true, permissionNodes);
         cmdGroup = CmdGroup.RACE;
         setShortDescription(": Shows rankings for a race.");
-        setUsageDescription(" [start|finish|checkpointID]: 'start' shows the starter list to all participating and spectating players. 'finish' shows the final ranking of the game. An numeric argument shows the intermediate ranking at the checkpoin with checkpointID.");
+        setUsageDescription(" [start|finish|checkpointID]: 'start' shows the starter list to all participating and spectating players. 'finish' shows the final ranking of the game. A numeric argument shows the intermediate ranking at the checkpoint with 'checkpointID'.");
     }
     
     @Override

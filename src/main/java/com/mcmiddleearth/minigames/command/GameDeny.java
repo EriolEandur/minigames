@@ -19,7 +19,7 @@ public class GameDeny extends AbstractGameCommand{
     public GameDeny(String... permissionNodes) {
         super(1, true, permissionNodes);
         setShortDescription(": Denies various actions for a game.");
-        setUsageDescription(" flight|teleport|join|warp: flight/teleport allows for players in the game to fly or teleport. join allows players to join without invitation. warp allows player to warp to game location.");
+        setUsageDescription(" flight|teleport|join|warp: 'flight' or 'teleport' denies for players in the game to fly or teleport. 'join' denies players to join without invitation. 'warp' denies players to warp to game location. 'spectate' denies players to see the game scoreboad without participating.");
     }
     
     @Override
