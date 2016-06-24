@@ -53,6 +53,10 @@ public class CreateQuestionConversationFactory implements ConversationAbandonedL
     }
     
     public void start(Player player, QuizGame game, QuestionType questionType, int questionIndex) {
+        if(player.isConversing()) {
+            PluginData.getMessageUtil().sendErrorMessage(player, "You can't create a new question now as you are already in another conversation.");
+            return;
+        }
         Conversation conversation = factory.buildConversation(player);
         ConversationContext context = conversation.getContext();
         context.setSessionData("game", game);

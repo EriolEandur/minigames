@@ -49,6 +49,10 @@ public class EditQuestionConversationFactory implements ConversationAbandonedLis
     }
     
     public void start(Player player, QuizGame game, int questionIndex) {
+        if(player.isConversing()) {
+            PluginData.getMessageUtil().sendErrorMessage(player, "You can't edit a question now as you are already in another conversation.");
+            return;
+        }
         Conversation conversation = factory.buildConversation(player);
         ConversationContext context = conversation.getContext();
         context.setSessionData("game", game);

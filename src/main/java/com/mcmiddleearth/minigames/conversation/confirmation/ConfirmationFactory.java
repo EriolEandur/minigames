@@ -16,6 +16,7 @@
  */
 package com.mcmiddleearth.minigames.conversation.confirmation;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.conversations.ConversationAbandonedListener;
@@ -42,6 +43,10 @@ public class ConfirmationFactory implements ConversationAbandonedListener{
     }
     
     public void start(Player player, String query, Confirmationable task) {
+        if(player.isConversing()) {
+            PluginData.getMessageUtil().sendErrorMessage(player, "Can't ask for your confirmation as you are already in another conversation. Action cancelled.");
+            return;
+        }
         Conversation conversation = factory.buildConversation(player);
         ConversationContext context = conversation.getContext();
         context.setSessionData("player", player);

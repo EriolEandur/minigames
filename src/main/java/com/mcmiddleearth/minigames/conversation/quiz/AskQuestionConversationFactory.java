@@ -21,7 +21,6 @@ import com.mcmiddleearth.minigames.game.QuizGame;
 import com.mcmiddleearth.minigames.quizQuestion.AbstractQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.ChoiceQuestion;
 import com.mcmiddleearth.minigames.quizQuestion.NumberQuestion;
-import com.mcmiddleearth.minigames.quizQuestion.QuestionType;
 import com.mcmiddleearth.pluginutil.StringUtil;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +52,10 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
     }
     
     public void start(Player player, QuizGame game, AbstractQuestion question) {
+        if(player.isConversing()) {
+            PluginData.getMessageUtil().sendErrorMessage(player, "Can't send the next quiz question to you as you are already in another conversation.");
+            return;
+        }
         Conversation conversation = factory.buildConversation(player);
         ConversationContext context = conversation.getContext();
         context.setSessionData("game", game);
