@@ -178,11 +178,13 @@ public class QuizGame extends AbstractGame {
             AbstractQuestion question = getNextQuestion();
             nextQuestion++;
             question.setAnswered(true);
-            playersInQuestion.addAll(getOnlinePlayers());
             ((QuizGameScoreboard)getBoard()).startQuestion(answerTime);
             AskQuestionConversationFactory askQuestionFactory 
                     = new AskQuestionConversationFactory(MiniGamesPlugin.getPluginInstance(),answerTime);
             for (Player player : getOnlinePlayers()) {
+                if(!player.isConversing()) {
+                    playersInQuestion.add(player);
+                }
                 askQuestionFactory.start(player, this, question);
             }
         }

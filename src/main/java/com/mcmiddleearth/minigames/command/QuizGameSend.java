@@ -35,6 +35,10 @@ public class QuizGameSend extends AbstractGameCommand{
                 sendNotAnnouncedErrorMessage(cs);
                 return;
             }*/
+            if(quizGame.isPlayerInQuestion()) {
+                sendPlayerInQuestionError(cs);
+                return;
+            }
             if(!quizGame.hasNextQuestion()) {
                 sendNoMoreQuestions(cs);
                 return;
@@ -64,5 +68,9 @@ public class QuizGameSend extends AbstractGameCommand{
 
     private void sendNoMoreQuestions(CommandSender cs) {
         PluginData.getMessageUtil().sendErrorMessage(cs, "There are no more questions for this game.");
+    }
+
+    private void sendPlayerInQuestionError(CommandSender cs) {
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Wait until all players finished the last question.");
     }
 }
