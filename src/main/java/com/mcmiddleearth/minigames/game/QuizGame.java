@@ -30,7 +30,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -39,6 +41,9 @@ import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.Conversation.ConversationState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.json.simple.JSONArray;
@@ -65,10 +70,12 @@ public class QuizGame extends AbstractGame {
 
     private int answerTime = 30; //seconds
     
-    private final List<Player> playersInQuestion = new ArrayList<>();
+    @Getter
+    private final Map<Player,Conversation> playersInQuestion = new HashMap<>();
 
     public QuizGame(Player manager, String name) {
         super(manager, name, GameType.LORE_QUIZ, new QuizGameScoreboard());
+        setGm3Allowed(true);
     }
 
     @Override
@@ -178,21 +185,41 @@ public class QuizGame extends AbstractGame {
             AbstractQuestion question = getNextQuestion();
             nextQuestion++;
             question.setAnswered(true);
-            ((QuizGameScoreboard)getBoard()).startQuestion(answerTime);
+            ((QuizGameScoreboard)getBoard()).startQuestion(answerTime, this.countOnlinePlayer());
             AskQuestionConversationFactory askQuestionFactory 
                     = new AskQuestionConversationFactory(MiniGamesPlugin.getPluginInstance(),answerTime);
             for (Player player : getOnlinePlayers()) {
-                if(!player.isConversing()) {
-                    playersInQuestion.add(player);
+                if(player.isConversing()) {
+                    PluginData.getMessageUtil().sendErrorMessage(player, "Can't send the next quiz question to you as you are already in another conversation.");
+                } else {
+                    Conversation newConvo = askQuestionFactory.start(player, this, question);
+                    playersInQuestion.put(player,newConvo);
                 }
-                askQuestionFactory.start(player, this, question);
+                
+            }
+            if(!isInGame(this.getManager())) {
+                Player onlineManager = Bukkit.getPlayer(this.getManager().getUniqueId());
+                if(onlineManager!=null) {
+                    String[] details = question.getDetails();
+                    for(String line:details) {
+                        onlineManager.sendMessage(line);
+                    }
+                           /*hatColor.YELLOW+"[Question] "+ChatColor.GOLD
+                                              +question.getQuestion()); 
+                    onlineManager.sendMessage(ChatColor.GREEN+"[Answer] "+ChatColor.DARK_GREEN
+                                              +question.); 
+                    if(question instanceof NumberQuestion) {
+                        onlineManager.sendMessage(ChatColor.GREEN+"[Precision] "+ChatColor.DARK_GREEN
+                                                  +((NumberQuestion)question).getPrecision()); 
+                    }*/
+                }
             }
         }
     }
 
     public void stopQuestion() {
         ((QuizGameScoreboard)getBoard()).stopQuestion();
-        playersInQuestion.clear();
+        removeAllPlayersFromQuestion();
         if(!hasNextQuestion()) {
             if(!announceWinner(false)) {
                 Player manager = Bukkit.getPlayer(getManager().getUniqueId());
@@ -202,7 +229,7 @@ public class QuizGame extends AbstractGame {
             }
         }
     }
-
+    
     public boolean announceWinner(boolean allowEqual) {
         int maxScore = 0;
         List<Player> winner = new ArrayList<>();
@@ -246,15 +273,52 @@ public class QuizGame extends AbstractGame {
         return !playersInQuestion.isEmpty();
     }
     
+    @Override
+    public void end(Player sender) {
+        removeAllPlayersFromQuestion();
+        super.end(sender);
+    }
+    
+    @Override
+    public void removePlayer(OfflinePlayer player) {
+        super.removePlayer(player);
+        Player onlinePlayer = Bukkit.getPlayer(player.getUniqueId()); 
+        if(onlinePlayer!=null) {
+            Conversation convo = playersInQuestion.get(onlinePlayer);
+            if(convo != null && convo.getState().equals(ConversationState.STARTED)) {
+                convo.abandon();
+            }
+        }
+    }
+    
+    private void removeAllPlayersFromQuestion() {
+        List<Conversation> foundConvos = new ArrayList<>();
+        for(Player player: playersInQuestion.keySet()) {
+            Conversation convo = playersInQuestion.get(player);
+            if(convo != null && convo.getState().equals(ConversationState.STARTED)) {
+                foundConvos.add(convo);
+            }
+        }
+        for(Conversation convo:foundConvos) {
+            convo.abandon();
+        }
+        playersInQuestion.clear();
+    }
+
     public void removePlayerFromQuestion(Player player) {
         Player found = null;
-        for(Player search: playersInQuestion) {
+        for(Player search: playersInQuestion.keySet()) {
             if(search.getUniqueId()==player.getUniqueId()) {
                 found = search; break;
             }
         }
         if(found!=null) {
             playersInQuestion.remove(found);
+            ((QuizGameScoreboard)getBoard()).playerFinished();
+            /*Player onlineManager = Bukkit.getPlayer(this.getManager().getUniqueId());
+            if(onlineManager!=null) {
+                PluginData.getMessageUtil().sendInfoMessage(onlineManager,found.getName()+" left the question conversation.");
+            }*/
         }
     }
     

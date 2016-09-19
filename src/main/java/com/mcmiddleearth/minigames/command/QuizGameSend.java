@@ -22,7 +22,7 @@ public class QuizGameSend extends AbstractGameCommand{
         super(0, true, permissionNodes);
         cmdGroup = CmdGroup.LORE_QUIZ;
         setShortDescription(": Sends the next question.");
-        setUsageDescription(" [answerTime]: Sends the next question to all participating players. Without a given [answerTime] players will have 30 sec to answer. A specified [answerTime] will be use for all later questions too.");
+        setUsageDescription(" [answerTime]: Sends the next question to all participating players and the game manager. Without a given [answerTime] players will have 30 sec to answer. A specified [answerTime] will be use for all later questions too.");
     }
     
     @Override

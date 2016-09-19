@@ -181,10 +181,9 @@ public class ChoiceQuestion extends AbstractQuestion {
     public String[] getDetails() {
         return new String[]{PluginData.getMessageUtil().HIGHLIGHT+"[Type]"+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+" MULTI choice question",
                             PluginData.getMessageUtil().HIGHLIGHT+"[Question] "+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+getQuestion(),
-            (correctAnswers[0]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[A] "+answers[0],
-            (correctAnswers[1]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[B] "+answers[1],
-            (correctAnswers[2]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[C] "+answers[2],
-            (correctAnswers[3]?ChatColor.DARK_GREEN:PluginData.getMessageUtil().HIGHLIGHT)+"[D] "+answers[3],
-             PluginData.getMessageUtil().STRESSED+"[Correct] "+getCorrectAnswer()};
+            (correctAnswers[0]?PluginData.getMessageUtil().STRESSED:PluginData.getMessageUtil().HIGHLIGHT)+"[A] "+answers[0],
+            (correctAnswers[1]?PluginData.getMessageUtil().STRESSED:PluginData.getMessageUtil().HIGHLIGHT)+"[B] "+answers[1],
+            (correctAnswers[2]?PluginData.getMessageUtil().STRESSED:PluginData.getMessageUtil().HIGHLIGHT)+"[C] "+answers[2],
+            (correctAnswers[3]?PluginData.getMessageUtil().STRESSED:PluginData.getMessageUtil().HIGHLIGHT)+"[D] "+answers[3]};
     }
 }

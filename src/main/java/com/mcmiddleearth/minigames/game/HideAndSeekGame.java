@@ -14,14 +14,19 @@ import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import com.mcmiddleearth.pluginutil.TitleUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -64,6 +69,7 @@ public class HideAndSeekGame extends AbstractGame {
         super(manager, name, GameType.HIDE_AND_SEEK, new HideAndSeekGameScoreboard());
         setTeleportAllowed(false);
         setFlightAllowed(false);
+        setGm2Forced(true);
         announceGame();
     }
     
@@ -79,6 +85,9 @@ public class HideAndSeekGame extends AbstractGame {
         if(seeker == null || PlayerUtil.getOnlinePlayer(seeker)==null) {
             seeker = getOnlinePlayers().get(new Double(Math.floor(Math.random()*(getPlayers().size()))).intValue());
         }
+        final PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 
+                                                    (hideTime+seekTime)*20, 1, false, false);
+        ((Player)seeker).addPotionEffect(effect);
         for(Player player : getOnlinePlayers()) {
             if(!PlayerUtil.isSame(player,seeker)) {
                 hidePlayer(player);
@@ -101,6 +110,9 @@ public class HideAndSeekGame extends AbstractGame {
         this.hiding = false;
         this.seeking = true;
         ((HideAndSeekGameScoreboard)this.getBoard()).startSeeking(seekTime);
+        for(Player player:hiddenPlayers) {
+            player.setSneaking(true);
+        }
         sendStartSeekingMessage();
         stopTask = new BukkitRunnable() {
             @Override
@@ -126,6 +138,10 @@ public class HideAndSeekGame extends AbstractGame {
         }
         this.seeking = false;
         this.hiding = false;
+        Player onlinePlayer = Bukkit.getPlayer(seeker.getUniqueId());
+        if(onlinePlayer!=null) {
+            onlinePlayer.removePotionEffect(PotionEffectType.SPEED);
+        }
         seeker = null;
         ((HideAndSeekGameScoreboard)this.getBoard()).stop();
     }
@@ -137,6 +153,7 @@ public class HideAndSeekGame extends AbstractGame {
     
     private void unhidePlayer(Player player) {
         hiddenPlayers.remove(player);
+        player.setSneaking(false);
         DynmapUtil.show(player);
     }
     
@@ -213,14 +230,26 @@ public class HideAndSeekGame extends AbstractGame {
                 event.setTo(to);
             }
         }
-        if(seeking && PlayerUtil.isSame(event.getPlayer(),seeker)) {
-            Player[] myList = hiddenPlayers.toArray(new Player[0]);
-            for(Player hidden : myList) {
-                if(event.getTo().distance(hidden.getLocation())<revealDistance) {
-                    sendPlayerFoundMessage(hidden);
-                    revealPlayer(hidden);
-               }
+        if(seeking) {
+            if(!PlayerUtil.isSame(event.getPlayer(),seeker)) {
+                event.getPlayer().setSneaking(true);
+            } else {
+                Player[] myList = hiddenPlayers.toArray(new Player[0]);
+                for(Player hidden : myList) {
+                    if(event.getTo().distance(hidden.getLocation())<revealDistance) {
+                        sendPlayerFoundMessage(hidden);
+                        revealPlayer(hidden);
+                   }
+                }
             }
+        }
+    }
+    
+    @Override
+    public void playerDamaged(EntityDamageByEntityEvent event) {
+        Player player = (Player) event.getEntity();
+        if(seeking && hiddenPlayers.contains(player)) {
+            this.revealPlayer(player);
         }
     }
 

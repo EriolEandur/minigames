@@ -62,6 +62,7 @@ public class GameCommandExecutor implements CommandExecutor {
         addCommandHandler("show", new RaceGameShow(Permissions.MANAGER));
         addCommandHandler("showcategories", new QuizGameShowCategories(Permissions.USER));
         addCommandHandler("spectate", new GameSpectate(Permissions.USER));
+        addCommandHandler("stat", new QuizGameStatus(Permissions.MANAGER));
         addCommandHandler("start", new RaceGameStart(Permissions.MANAGER));
         addCommandHandler("stop", new RaceGameStop(Permissions.MANAGER));
         addCommandHandler("submitquestion", new QuizGameQuestionsSubmit(Permissions.USER));

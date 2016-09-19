@@ -86,7 +86,7 @@ public class QuizGameQuestionsLoad extends AbstractGameCommand{
                 maxNumber = Math.min(100,NumericUtil.getInt(args[2]));
             }
             try {
-                quizGame.clearQuestions();
+                //quizGame.clearQuestions(); keep score when loading additional questions
                 int[] result = quizGame.loadQuestionsFromDataFile(file, categories, matchAll, maxNumber);
                 sendQuestionsLoadedMessage(cs, result, maxNumber);
             } catch (FileNotFoundException ex) {

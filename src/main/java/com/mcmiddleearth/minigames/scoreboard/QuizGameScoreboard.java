@@ -33,7 +33,7 @@ public class QuizGameScoreboard extends GameScoreboard{
     
     private final Objective quizObjective, timerObjective;
     
-    private final Score answerTimeScore;
+    private final Score answerTimeScore, unfinishedScore;
     
     private int questionCount = 0;
     
@@ -51,10 +51,13 @@ public class QuizGameScoreboard extends GameScoreboard{
         timerObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
         answerTimeScore = timerObjective.getScore(ChatColor.YELLOW+" time remaining: ");
         answerTimeScore.setScore(0);
+        unfinishedScore = timerObjective.getScore(ChatColor.RED+" players thinking: ");
+        unfinishedScore.setScore(0);
     }
     
-    public void startQuestion(int time) {
+    public void startQuestion(int time, int players) {
         answerTimeScore.setScore(time);
+        unfinishedScore.setScore(players);
         currentQuestion++;
         setQuestionDisplay();
         if(timerTask!=null) {
@@ -129,5 +132,8 @@ public class QuizGameScoreboard extends GameScoreboard{
         restart();
     }
 
+    public void playerFinished() {
+        unfinishedScore.setScore(unfinishedScore.getScore()-1);
+    }
 
 }

@@ -29,6 +29,7 @@ import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.conversations.ConversationAbandonedListener;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationFactory;
+import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -51,11 +52,7 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
                 .addConversationAbandonedListener(this);
     }
     
-    public void start(Player player, QuizGame game, AbstractQuestion question) {
-        if(player.isConversing()) {
-            PluginData.getMessageUtil().sendErrorMessage(player, "Can't send the next quiz question to you as you are already in another conversation.");
-            return;
-        }
+    public Conversation start(Player player, QuizGame game, AbstractQuestion question) {
         Conversation conversation = factory.buildConversation(player);
         ConversationContext context = conversation.getContext();
         context.setSessionData("game", game);
@@ -63,6 +60,7 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
         context.setSessionData("question", question);
         context.setSessionData("createQuestion", false);
         conversation.begin();
+        return conversation;
     }
    
     @Override
@@ -72,11 +70,16 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
         AbstractQuestion question = (AbstractQuestion)cc.getSessionData("question");
         String answer = (String) cc.getSessionData("answer");
         if (!abandonedEvent.gracefulExit()) {
-            if(question instanceof NumberQuestion) {
-                sendAbordNumberQuestionMessage(player, question.getCorrectAnswer(), 
-                                              ((NumberQuestion)question).getPrecision());
+            if(abandonedEvent.getCanceller() instanceof ManuallyAbandonedConversationCanceller) {
+                sendQuestionCancelledMessage(player);
             } else {
-                sendAbordMessage(player, question.getCorrectAnswer());
+                if(question instanceof NumberQuestion) {
+                    sendAbordNumberQuestionMessage(player, question.getCorrectAnswer(), 
+                                                  ((NumberQuestion)question).getPrecision());
+                } else {
+                    String correctAnswer=getCorrectAnswer(cc, question);
+                    sendAbordMessage(player, correctAnswer);
+                }
             }
         }
         else {
@@ -95,23 +98,7 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
                                                   question.getCorrectAnswer(),
                                                   ((NumberQuestion)question).getPrecision());
                 } else {
-                    String correctAnswer;
-                    if(question instanceof ChoiceQuestion) {
-                        correctAnswer = question.getCorrectAnswer();
-                        Character[] answerLetters = ChoiceQuestion.parseAnswer(correctAnswer);
-                        correctAnswer = "";
-                        for (Character answerLetter : answerLetters) {
-                            String[] choices = (String[])cc.getSessionData("Choices");
-                            for(int i = 0; i < choices.length;i++) {
-                                if(choices[i].charAt(0)==answerLetter) {
-                                    correctAnswer = correctAnswer+ChoiceQuestion.getAnswerCharacter(i);
-                                    break;
-                                }
-                            }
-                        }
-                    } else {
-                        correctAnswer = question.getCorrectAnswer();
-                    }
+                    String correctAnswer=getCorrectAnswer(cc, question);
                     sendFailMessage((Player) cc.getSessionData("player"), correctAnswer);  
                 }
             }
@@ -121,6 +108,27 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
         if(!game.isPlayerInQuestion()) {
             game.stopQuestion();
         }
+    }
+    
+    private String getCorrectAnswer(ConversationContext cc, AbstractQuestion question) {
+        String correctAnswer;
+        if(question instanceof ChoiceQuestion) {
+            correctAnswer = question.getCorrectAnswer();
+            Character[] answerLetters = ChoiceQuestion.parseAnswer(correctAnswer);
+            correctAnswer = "";
+            for (Character answerLetter : answerLetters) {
+                String[] choices = (String[])cc.getSessionData("Choices");
+                for(int i = 0; i < choices.length;i++) {
+                    if(choices[i].charAt(0)==answerLetter) {
+                        correctAnswer = correctAnswer+ChoiceQuestion.getAnswerCharacter(i);
+                        break;
+                    }
+                }
+            }
+        } else {
+            correctAnswer = question.getCorrectAnswer();
+        }
+        return correctAnswer;
     }
 
     private void sendAbordMessage(Player player, String answer) {
@@ -150,4 +158,7 @@ public class AskQuestionConversationFactory implements ConversationAbandonedList
         PluginData.getMessageUtil().sendInfoMessage(player, "Almost! The right answer was "+answer+" but you were close enough.");
     }
 
+    private void sendQuestionCancelledMessage(Player player) {
+        PluginData.getMessageUtil().sendInfoMessage(player, "Question cancelled.");
+    }
 }

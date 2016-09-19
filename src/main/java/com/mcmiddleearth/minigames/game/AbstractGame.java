@@ -13,7 +13,9 @@ import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import com.mcmiddleearth.pluginutil.message.FancyMessage;
 import com.mcmiddleearth.pluginutil.message.MessageType;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +25,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -66,6 +69,8 @@ public abstract class AbstractGame {
     
     private final List<UUID> leaveMessaged = new ArrayList<>();
     
+    private final Map<UUID,GameMode> playerPreviousMode = new HashMap<>();
+    
     @Getter
     private Location warp = null;
     
@@ -90,6 +95,10 @@ public abstract class AbstractGame {
     @Getter
     @Setter
     private boolean gm3Allowed = false;
+    
+    @Getter
+    @Setter
+    private boolean gm2Forced = false;
     
     @Getter
     private final GameScoreboard board;
@@ -183,6 +192,10 @@ public abstract class AbstractGame {
         if(!flightAllowed) {
             player.setFlying(false);
         }
+        if(gm2Forced) {
+            playerPreviousMode.put(player.getUniqueId(), player.getGameMode());
+            player.setGameMode(GameMode.ADVENTURE);
+        }
         if(!gm3Allowed && player.getGameMode().equals(GameMode.SPECTATOR)) {
             player.setGameMode(GameMode.SURVIVAL);
         }
@@ -210,8 +223,14 @@ public abstract class AbstractGame {
         if(players.remove(player.getUniqueId())) {
             getBoard().decrementPlayer();
             Player onlinePlayer = PlayerUtil.getOnlinePlayer(player);
-            if(onlinePlayer!=null && !PlayerUtil.isSame(onlinePlayer,manager)) {
-                onlinePlayer.setScoreboard(Bukkit.getServer().getScoreboardManager().getMainScoreboard());
+            if(onlinePlayer!=null) {
+                if(!PlayerUtil.isSame(onlinePlayer,manager)) {
+                    onlinePlayer.setScoreboard(Bukkit.getServer().getScoreboardManager().getMainScoreboard());
+                }
+                if(gm2Forced) {
+                    onlinePlayer.setGameMode(playerPreviousMode.get(onlinePlayer.getUniqueId()));
+                    playerPreviousMode.remove(onlinePlayer.getUniqueId());
+                }
             }
         }
     }
@@ -238,11 +257,19 @@ public abstract class AbstractGame {
         if(!flightAllowed) {
             event.getPlayer().setFlying(false);
         }
+        /*if(gm2Forced) {
+            playerPreviousMode.put(event.getPlayer().getUniqueId(),event.getPlayer().getGameMode());
+            event.getPlayer().setGameMode(GameMode.ADVENTURE);
+        }*/
     }
     
     public void playerLeaveServer(PlayerQuitEvent event) {
         event.getPlayer().setScoreboard(Bukkit.getServer().getScoreboardManager().getMainScoreboard());
         getBoard().decrementPlayer();
+        /*if(gm2Forced) {
+            event.getPlayer().setGameMode(playerPreviousMode.get(event.getPlayer().getUniqueId()));
+            playerPreviousMode.remove(event.getPlayer().getUniqueId());
+        }*/
     }
     
     public int allowedRadius(Player player) {
@@ -330,10 +357,18 @@ public abstract class AbstractGame {
     }
     
     public void playerChangeGameMode(PlayerGameModeChangeEvent event) {
+        if(gm2Forced) {
+            event.setCancelled(true);
+            return;
+        }
         if(!gm3Allowed && event.getNewGameMode().equals(GameMode.SPECTATOR)) {
             event.setCancelled(true);
             sendGm3NotAllowed(event.getPlayer());
         }
+    }
+    
+    public void playerDamaged(EntityDamageByEntityEvent event) {
+        
     }
     
     public void forceTeleport(Player player, Location loc) {

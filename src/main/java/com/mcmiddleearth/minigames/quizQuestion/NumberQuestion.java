@@ -65,6 +65,6 @@ public class NumberQuestion extends AbstractQuestion{
         return new String[]{PluginData.getMessageUtil().HIGHLIGHT+"[Type]"+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+" NUMBER answer question",
                             PluginData.getMessageUtil().HIGHLIGHT+"[Question] "+PluginData.getMessageUtil().HIGHLIGHT_STRESSED+getQuestion(),
                             PluginData.getMessageUtil().STRESSED+"[Answer] "+answer,
-                            ChatColor.DARK_GREEN+"[Precision] "+precision};
+                            PluginData.getMessageUtil().STRESSED+"[Precision] "+precision};
     }
 }

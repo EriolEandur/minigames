@@ -35,6 +35,10 @@ public class RaceGameStart extends AbstractGameCommand{
                 return;
             }
             RaceGame raceGame = (RaceGame) game;
+            if(!raceGame.hasStart() || !raceGame.hasFinish()) {
+                sendNoStartFinishMessage(cs);
+                return;
+            }
             if(raceGame.isStarted()) {
                 sendAlreadySteadyMessage(cs);
                 return;
@@ -52,5 +56,9 @@ public class RaceGameStart extends AbstractGameCommand{
     }
     private void sendAlreadySteadyMessage(CommandSender cs) {
         PluginData.getMessageUtil().sendErrorMessage(cs, "You already started the race.");
+    }
+
+    private void sendNoStartFinishMessage(CommandSender cs) {
+        PluginData.getMessageUtil().sendErrorMessage(cs, "A race needs a start and finish.");
     }
 }

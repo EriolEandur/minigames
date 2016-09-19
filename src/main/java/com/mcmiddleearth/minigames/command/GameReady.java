@@ -5,7 +5,9 @@
  */
 package com.mcmiddleearth.minigames.command;
 
+import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
+import com.mcmiddleearth.minigames.game.RaceGame;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -29,9 +31,20 @@ public class GameReady extends AbstractGameCommand{
                 sendAlreadyAnnouncedErrorMessage(cs);
             }
             else {
+                if(game instanceof RaceGame) {
+                    RaceGame raceGame = (RaceGame) game; 
+                    if(!raceGame.hasStart() || !raceGame.hasFinish()) {
+                        sendNoStartFinishMessage(cs);
+                        return;
+                    }
+                }
                 game.announceGame();
             }
         }
+    }
+
+    private void sendNoStartFinishMessage(CommandSender cs) {
+        PluginData.getMessageUtil().sendErrorMessage(cs, "You need to set a start and finish before announcing a race game. Also please remember that you can't add checkpoints after announcing a race.");
     }
 
 }

@@ -320,5 +320,10 @@ public class RaceGame extends AbstractGame {
         }
     }
     
-
+    public boolean hasStart() {
+        return checkpointManager.getStart()!=null;
+    }
+    public boolean hasFinish() {
+        return checkpointManager.getFinish()!=null;
+    }
 }
