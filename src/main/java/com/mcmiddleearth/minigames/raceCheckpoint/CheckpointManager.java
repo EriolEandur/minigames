@@ -247,7 +247,7 @@ public class CheckpointManager {
     }
     
     private static boolean isFar(Location loc1, Location loc2) {
-        return loc1.distance(loc2)>FAR_DISTANCE;
+        return !loc1.getWorld().equals(loc2.getWorld()) || loc1.distance(loc2)>FAR_DISTANCE;
     }
     
     public void saveRace(File file, String description) throws IOException {

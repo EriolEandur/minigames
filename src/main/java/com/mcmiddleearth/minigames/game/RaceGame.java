@@ -60,6 +60,7 @@ public class RaceGame extends AbstractGame {
         super(manager, name, GameType.RACE, new RaceGameScoreboard());
         setFlightAllowed(false);
         setTeleportAllowed(false);
+        setGm2Forced(true);
         ((RaceGameScoreboard)getBoard()).init(this);
     }
 
