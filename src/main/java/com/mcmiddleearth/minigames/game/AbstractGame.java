@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -341,6 +342,7 @@ public abstract class AbstractGame {
     }
     
     public void playerTeleport(PlayerTeleportEvent event) {
+Logger.getGlobal().info("in game teleport reason: "+event.getCause());
         if((!teleportAllowed && !event.getCause().equals(TeleportCause_FORCE))
                              && !event.getCause().equals(PlayerTeleportEvent.TeleportCause.UNKNOWN)) {
             event.setCancelled(true);
