@@ -14,7 +14,6 @@ import com.mcmiddleearth.minigames.utils.GameChatUtil;
 import com.mcmiddleearth.pluginutil.TitleUtil;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -227,7 +226,8 @@ public class HideAndSeekGame extends AbstractGame {
             if(event.getTo().getPitch()<70) {
                 Location to = event.getTo().clone();
                 to.setPitch(80);
-                event.setTo(to);
+                event.setCancelled(true);
+                event.getPlayer().teleport(to, TeleportCause_FORCE);
             }
         }
         if(seeking) {
