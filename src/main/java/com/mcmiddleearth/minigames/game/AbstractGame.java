@@ -342,7 +342,7 @@ public abstract class AbstractGame {
     }
     
     public void playerTeleport(PlayerTeleportEvent event) {
-Logger.getGlobal().info("in game teleport reason: "+event.getCause());
+//Logger.getGlobal().info("in game teleport reason: "+event.getCause());
         if((!teleportAllowed && !event.getCause().equals(TeleportCause_FORCE))
                              && !event.getCause().equals(PlayerTeleportEvent.TeleportCause.UNKNOWN)) {
             event.setCancelled(true);
