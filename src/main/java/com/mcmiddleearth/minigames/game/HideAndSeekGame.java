@@ -247,6 +247,12 @@ public class HideAndSeekGame extends AbstractGame {
     
     @Override
     public void playerDamaged(EntityDamageByEntityEvent event) {
+        if(!(event.getDamager() instanceof Player)) {
+            return;
+        }
+        if(!PlayerUtil.isSame(seeker, (Player) event.getDamager())) {
+            return;
+        }
         Player player = (Player) event.getEntity();
         if(seeking && hiddenPlayers.contains(player)) {
             this.revealPlayer(player);
