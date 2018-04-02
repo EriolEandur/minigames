@@ -193,12 +193,20 @@ public class RaceGame extends AbstractGame {
         steady = false;
         finished = 0;
         ((RaceGameScoreboard)getBoard()).stopRace();
+        removeBoostItems();
     }
     
     /** 
      * Places 1-4 boost items between every two race checkpoints
      */
     private void placeBoostItems() {
+        //TODO
+    }
+    
+    /**
+     * Removes all boost items of this game
+     */
+    private void removeBoostItems() {
         //TODO
     }
     
