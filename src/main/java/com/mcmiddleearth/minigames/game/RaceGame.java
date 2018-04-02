@@ -40,6 +40,9 @@ public class RaceGame extends AbstractGame {
     private final CheckpointManager checkpointManager = new CheckpointManager(getName());
     
     @Getter
+    private final BoostItemManager boostItemManager = new BoostItemManager();
+    
+    @Getter
     private boolean started = false;
     
     @Getter
@@ -341,7 +344,4 @@ public class RaceGame extends AbstractGame {
         return checkpointManager.getFinish()!=null;
     }
 
-    public BoostItemManager getBoostItemManager() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
