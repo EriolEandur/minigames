@@ -345,3 +345,4 @@ public class RaceGame extends AbstractGame {
     }
 
 }
+//when finished with boost items, need to impliment them here - didi

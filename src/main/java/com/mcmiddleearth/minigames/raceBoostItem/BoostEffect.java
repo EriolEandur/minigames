@@ -16,10 +16,40 @@
  */
 package com.mcmiddleearth.minigames.raceBoostItem;
 
+import org.bukkit.potion.PotionEffectType;
+
 /**
  *
  * @author Eriol_Eandur
  */
 public enum BoostEffect {
     
+   SPEED (PotionEffectType.SPEED),
+   JUMP (PotionEffectType.JUMP),
+   SLOW (PotionEffectType.SLOW),
+   CONFUSION (PotionEffectType.CONFUSION),
+   BLINDNESS (PotionEffectType.BLINDNESS),
+   INVISIBILITY (PotionEffectType.INVISIBILITY),
+   LEVITATION (PotionEffectType.LEVITATION),
+   GLOWING (PotionEffectType.GLOWING);
+   
+   private final Random random;
+   private PotionEffectType type;
+   
+   BoostEffect(PotionEffectType type) {
+       this.random = ThreadLocalRandom.current();
+       this.type = type;
+   }
+   
+   public PotionEffectType getType() {
+       return type;
+   }
+   
+   public BoostEffect getRandomBoostEffect() {
+       return values()[random.nextInt(values().length)];
+   }
+   
+   
+   
+   
 }

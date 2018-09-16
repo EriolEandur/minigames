@@ -23,6 +23,9 @@ import java.util.Map;
 import java.util.UUID;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionBrewer;
 
 /**
  *
@@ -36,12 +39,15 @@ public class BoostItemManager {
 
     /**
      * Checks if an Item at the map represents a boost item of this BoostItemManager
-     * @param item The Item that will be ckecked
+     * @param item The Item that will be checked
      * @return 
      */
     public boolean isBoostItem(Item item) {
         //TODO
-        return false;
+      boolean isBoost = false;
+         
+        
+       return isBoost;
     }
 
     /**
@@ -52,6 +58,11 @@ public class BoostItemManager {
      */
     public void handlePickUp(Player player, Item item) {
         //TODO
+        
+        
+        
     }
-    
+      
 }
+   
+
