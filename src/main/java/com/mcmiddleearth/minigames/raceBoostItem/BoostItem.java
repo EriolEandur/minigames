@@ -16,10 +16,71 @@
  */
 package com.mcmiddleearth.minigames.raceBoostItem;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionBrewer;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 /**
  *
  * @author Eriol_Eandur
  */
 public class BoostItem {
+    //TODO
+    
+     private List<BoostItem> placedBoosts = new ArrayList<>();
+     
+     private Map<UUID,BoostEffect> playerEffects = new HashMap<>();
+     
+    public <PotionEffectType> BoostItem()
+    {
+        
+      
+    }
+    
+   
+    /* Add Here - Didi
+      public final void apply(final Player p, int duration, int amplifier) {
+       p.addPotionEffect(new PotionEffect(type, duration, amplifier, ambient:false, particles: false));
+   }
+   
+   public final void apply(final Player p, int duration, int amplifier, Color color) {
+       p.addPotionEffect(new PotionEffect(type, duration, amplifier, ambient:false, particles:true, color));
+   }
+    */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }
