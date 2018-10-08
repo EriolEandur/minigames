@@ -21,12 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionBrewer;
-import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionType;
+
 /**
  *
  * @author Eriol_Eandur
@@ -40,21 +39,62 @@ public class BoostItem {
      
     public <PotionEffectType> BoostItem()
     {
-        
+         final Player p = null;
+         final int duration = 200;
+         int amplifier = 0;
+         BoostEffect random = null;
+         random = random.getRandomBoostEffect();
+         
+
+         
+         if(null != random) 
+         /*Colors:
+         SPEED = YELLOW
+         JUMP = BLUE
+         SLOW = GREEN
+         CONFUSION = RED
+         BLINDNESS = BLACK
+         INVISIBILITY = AQUA
+         LEVITATION = ORANGE
+         GLOWING = SLIVER*/
+         switch (random) {
+             case SPEED:
+                 BoostEffect.SPEED.apply(p, duration, amplifier, Color.YELLOW);
+                 break;
+             case JUMP:
+                 BoostEffect.JUMP.apply(p, duration, amplifier, Color.BLUE);
+                 break;
+             case SLOW:
+                 BoostEffect.SLOW.apply(p, duration, amplifier, Color.GREEN);
+                 break;
+             case CONFUSION:
+                 BoostEffect.CONFUSION.apply(p, duration, amplifier, Color.RED);
+                 break;
+             case BLINDNESS:
+                 BoostEffect.BLINDNESS.apply(p, duration, amplifier, Color.BLACK);
+                 break;
+             case INVISIBILITY:
+                 BoostEffect.INVISIBILITY.apply(p, duration, amplifier, Color.AQUA);
+                 break;
+             case LEVITATION:
+                 BoostEffect.LEVITATION.apply(p, duration, amplifier, Color.ORANGE);
+                 break;
+             case GLOWING:
+                 BoostEffect.GLOWING.apply(p, duration, amplifier, Color.SILVER);
+                 break;
+             default:
+                 break;
+         }
+         
+         
+         
+         
       
     }
     
-   
-    /* Add Here - Didi
-      public final void apply(final Player p, int duration, int amplifier) {
-       p.addPotionEffect(new PotionEffect(type, duration, amplifier, ambient:false, particles: false));
-   }
-   
-   public final void apply(final Player p, int duration, int amplifier, Color color) {
-       p.addPotionEffect(new PotionEffect(type, duration, amplifier, ambient:false, particles:true, color));
-   }
-    */
+  
     
+
     
     
     
