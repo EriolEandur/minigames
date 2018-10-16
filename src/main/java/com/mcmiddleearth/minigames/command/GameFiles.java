@@ -25,7 +25,7 @@ public class GameFiles extends AbstractCommand{
     public GameFiles(String... permissionNodes) {
         super(1, true, permissionNodes);
         setShortDescription(": Lists all saved game data files.");
-        setUsageDescription(" quiz|race|marker: Lists all quiz or race or marker data files. For quiz and race data files a descripion of the saved data will be shown.");
+        setUsageDescription(" quiz|race|marker|golf: Lists all quiz or race or marker or golf courses data files. For quiz, race and golf course data files a description of the saved data will be shown.");
     }
     
     @Override
@@ -55,6 +55,11 @@ public class GameFiles extends AbstractCommand{
             filter =FileUtil.getFileExtFilter(Checkpoint.getMarkerExt());
             command = "/game marker";
             header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED+"race marker"+PluginData.getMessageUtil().INFO+" files.");
+        } else if(args[0].equalsIgnoreCase("golf")) {
+            directory = PluginData.getGolfDir();
+            filter = FileUtil.getFileExtFilter("json");
+            command = "/game loadgolf";
+            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED+"golf course"+PluginData.getMessageUtil().INFO+" files.");
         }
         else {
             sendInvalidDataTypeMessage(cs);
@@ -145,6 +150,6 @@ public class GameFiles extends AbstractCommand{
     }*/
 
     private void sendInvalidDataTypeMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid file type. Try /game files quiz|race|marker");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid file type. Try /game files quiz|race|marker|golf");
     }
 }

@@ -27,13 +27,11 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -360,6 +358,10 @@ public abstract class AbstractGame {
     
     public void playerChangeGameMode(PlayerGameModeChangeEvent event) {
         if(gm2Forced) {
+            if (type.equals(GameType.GOLF)) {
+                return;
+            }
+
             event.setCancelled(true);
             return;
         }
@@ -370,7 +372,29 @@ public abstract class AbstractGame {
     }
     
     public void playerDamaged(EntityDamageByEntityEvent event) {
-        
+        if (type.equals(GameType.GOLF)) {
+            event.setCancelled(true);
+        }
+    }
+
+    public void playerDamage(EntityDamageEvent event) {
+        if (type.equals(GameType.GOLF)) {
+            event.setCancelled(true);
+        }
+    }
+
+    public void foodChange(FoodLevelChangeEvent event) {
+        if (type.equals(GameType.GOLF)) {
+            event.setCancelled(true);
+        }
+    }
+
+    public void projectileHit(ProjectileHitEvent event) { }
+
+    public void playerDropItem(PlayerDropItemEvent event) {
+        if (type.equals(GameType.GOLF)) {
+            event.setCancelled(true);
+        }
     }
     
     public void forceTeleport(Player player, Location loc) {
@@ -383,7 +407,6 @@ public abstract class AbstractGame {
         player.teleport(loc, TeleportCause_WARP);
     }
 
-    
     public boolean joinAllowed() {
         return announced;
     }

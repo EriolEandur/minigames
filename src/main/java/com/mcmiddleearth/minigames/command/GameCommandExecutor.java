@@ -63,12 +63,15 @@ public class GameCommandExecutor implements CommandExecutor {
         addCommandHandler("showcategories", new QuizGameShowCategories(Permissions.USER));
         addCommandHandler("spectate", new GameSpectate(Permissions.USER));
         addCommandHandler("stat", new QuizGameStatus(Permissions.MANAGER));
-        addCommandHandler("start", new RaceGameStart(Permissions.MANAGER));
+        addCommandHandler("start", new GameStart(Permissions.MANAGER));
         addCommandHandler("stop", new RaceGameStop(Permissions.MANAGER));
         addCommandHandler("submitquestion", new QuizGameQuestionsSubmit(Permissions.USER));
         addCommandHandler("unban", new GameUnban(Permissions.MANAGER));
         addCommandHandler("warp", new GameWarp(Permissions.USER));
         addCommandHandler("winner", new QuizGameWinner(Permissions.MANAGER));
+        addCommandHandler("location", new GolfGameLocation(Permissions.MANAGER));
+        addCommandHandler("savegolf", new GolfGameSave(Permissions.MANAGER));
+        addCommandHandler("loadgolf", new GolfGameLoad(Permissions.MANAGER));
     }
     
     @Override

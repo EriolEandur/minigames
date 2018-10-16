@@ -28,7 +28,8 @@ public enum CmdGroup {
     GENERAL         ("General"),
     HIDE_AND_SEEK   ("Hide"),
     RACE            ("Race"),
-    LORE_QUIZ       ("Quiz");
+    LORE_QUIZ       ("Quiz"),
+    GOLF            ("Golf");
 
     @Getter
     private final String name;

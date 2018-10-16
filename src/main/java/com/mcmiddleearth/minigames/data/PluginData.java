@@ -69,6 +69,10 @@ public class PluginData {
     @Getter
     private static final File raceDir = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
                                                     + File.separator + "Races");
+
+    @Getter
+    private static final File golfDir = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
+            + File.separator + "Courses");
     
     static {
         if(!MiniGamesPlugin.getPluginInstance().getDataFolder().exists()) {

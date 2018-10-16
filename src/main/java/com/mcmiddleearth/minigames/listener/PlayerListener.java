@@ -13,12 +13,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.*;
 
 /**
  *
@@ -87,6 +85,46 @@ public class PlayerListener implements Listener{
                 AbstractGame game = PluginData.getGame((Player) event.getEntity());
                 game.playerDamaged(event);
             }
+        }
+    }
+
+    @EventHandler
+    public void playerHit(EntityDamageEvent event) {
+        if(event.getEntity() instanceof Player) {
+            if(PluginData.isInGame((Player)event.getEntity())) {
+                AbstractGame game = PluginData.getGame((Player) event.getEntity());
+                game.playerDamage(event);
+            }
+        }
+    }
+
+    @EventHandler
+    public void playerFoodChange(FoodLevelChangeEvent event) {
+        if(event.getEntity() instanceof Player) {
+            if(PluginData.isInGame((Player) event.getEntity())) {
+                if(PluginData.isInGame((Player)event.getEntity())) {
+                    AbstractGame game = PluginData.getGame((Player) event.getEntity());
+                    game.foodChange(event);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void playerProjectileHit(ProjectileHitEvent event) {
+        if(PluginData.isInGame((Player) event.getEntity().getShooter())) {
+            if(PluginData.isInGame((Player) event.getEntity().getShooter())) {
+                AbstractGame game = PluginData.getGame((Player) event.getEntity().getShooter());
+                game.projectileHit(event);
+            }
+        }
+    }
+
+    @EventHandler
+    public void playerDropItem(PlayerDropItemEvent event) {
+        if(PluginData.isInGame(event.getPlayer())) {
+            AbstractGame game = PluginData.getGame(event.getPlayer());
+            game.playerDropItem(event);
         }
     }
 }

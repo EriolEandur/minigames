@@ -23,7 +23,7 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
     public GameDelete(String... permissionNodes) {
         super(2, true, permissionNodes);
         setShortDescription(": Deletes saved minigame files.");
-        setUsageDescription(" quiz|race|marker <filename>: Deletes a quiz or race or marker data file with name <filename>.");
+        setUsageDescription(" quiz|race|marker|golf <filename>: Deletes a quiz or race or marker or golf data file with name <filename>.");
     }
     
     @Override
@@ -36,6 +36,9 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
         }
         else if(args[0].equalsIgnoreCase("marker")) {
             file = new File(Checkpoint.getMarkerDir(), args[1] + "."+ Checkpoint.getMarkerExt());
+        }
+        else if(args[0].equalsIgnoreCase("golf")) {
+            file = new File(PluginData.getGolfDir(), args[1] + ".json");
         }
         else {
             sendInvalidDataTypeMessage(cs);

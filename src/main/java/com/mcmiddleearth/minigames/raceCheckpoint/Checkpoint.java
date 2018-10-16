@@ -109,7 +109,7 @@ public class Checkpoint {
     private void refreshLabel() {
         for(BlockState state: marker) {
             if(state.getType().equals(Material.WALL_SIGN) 
-                    || state.getType().equals(Material.SIGN_POST)) {
+                    || state.getType().equals(Material.SIGN)) {
                 Sign sign = (Sign) state.getBlock().getState();
                 sign.setLine(1, label1);
                 sign.setLine(2, label2);
@@ -183,15 +183,14 @@ public class Checkpoint {
         }
         for(BlockState blockState : marker) {
             if(!blockState.getType().equals(Material.SIGN) 
-                    && !blockState.getType().equals(Material.SIGN_POST) 
+                    && !blockState.getType().equals(Material.SIGN)
                     && !blockState.getType().equals(Material.WALL_SIGN)
                     && !blockState.getType().equals(Material.TORCH)) {
                 blockState.update(true, false);
             }
         }
         for(BlockState blockState : marker) {
-            if(blockState.getType().equals(Material.SIGN) 
-                    || blockState.getType().equals(Material.SIGN_POST) 
+            if(blockState.getType().equals(Material.SIGN)
                     || blockState.getType().equals(Material.WALL_SIGN)
                     || blockState.getType().equals(Material.TORCH)) {
                 blockState.update(true, false);
@@ -207,8 +206,7 @@ public class Checkpoint {
             return;
         }
         for(BlockState state : marker) {
-            if(state.getType().equals(Material.SIGN) 
-                    || state.getType().equals(Material.SIGN_POST) 
+            if(state.getType().equals(Material.SIGN)
                     || state.getType().equals(Material.WALL_SIGN)
                     || state.getType().equals(Material.TORCH)) {
                 state.setType(Material.AIR);
@@ -318,18 +316,18 @@ public class Checkpoint {
                         else if(type.equals(Material.TORCH)) {
                             data = adaptData(data, rotation, new byte[]{3,2,4,1});
                         }
-                        else if(type.equals(Material.SMOOTH_STAIRS)
+                        else if(type.equals(Material.SANDSTONE_STAIRS)
                                 || type.equals(Material.ACACIA_STAIRS)
                                 || type.equals(Material.DARK_OAK_STAIRS)
                                 || type.equals(Material.RED_SANDSTONE_STAIRS)
                                 || type.equals(Material.QUARTZ_STAIRS)
-                                || type.equals(Material.JUNGLE_WOOD_STAIRS)
-                                || type.equals(Material.BIRCH_WOOD_STAIRS)
+                                || type.equals(Material.JUNGLE_STAIRS)
+                                || type.equals(Material.BIRCH_STAIRS)
                                 || type.equals(Material.SANDSTONE_STAIRS)
                                 || type.equals(Material.NETHER_BRICK_STAIRS)
                                 || type.equals(Material.COBBLESTONE_STAIRS)
-                                || type.equals(Material.SPRUCE_WOOD_STAIRS)
-                                || type.equals(Material.WOOD_STAIRS)
+                                || type.equals(Material.SPRUCE_STAIRS)
+                                || type.equals(Material.OAK_STAIRS)
                                 || type.equals(Material.BRICK_STAIRS)) {
                             if(data==3 || data==0 || data==2 || data==1) {
                                 data = adaptData(data, rotation, new byte[]{3,0,2,1});
