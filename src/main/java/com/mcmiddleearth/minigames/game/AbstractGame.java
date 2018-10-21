@@ -358,10 +358,6 @@ public abstract class AbstractGame {
     
     public void playerChangeGameMode(PlayerGameModeChangeEvent event) {
         if(gm2Forced) {
-            if (type.equals(GameType.GOLF)) {
-                return;
-            }
-
             event.setCancelled(true);
             return;
         }
@@ -370,31 +366,9 @@ public abstract class AbstractGame {
             sendGm3NotAllowed(event.getPlayer());
         }
     }
-    
+
     public void playerDamaged(EntityDamageByEntityEvent event) {
-        if (type.equals(GameType.GOLF)) {
-            event.setCancelled(true);
-        }
-    }
-
-    public void playerDamage(EntityDamageEvent event) {
-        if (type.equals(GameType.GOLF)) {
-            event.setCancelled(true);
-        }
-    }
-
-    public void foodChange(FoodLevelChangeEvent event) {
-        if (type.equals(GameType.GOLF)) {
-            event.setCancelled(true);
-        }
-    }
-
-    public void projectileHit(ProjectileHitEvent event) { }
-
-    public void playerDropItem(PlayerDropItemEvent event) {
-        if (type.equals(GameType.GOLF)) {
-            event.setCancelled(true);
-        }
+        event.setCancelled(true);
     }
     
     public void forceTeleport(Player player, Location loc) {

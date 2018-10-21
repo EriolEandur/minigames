@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Planetology
- * @since 10/8/2018
  */
 public class GolfPlayer {
 

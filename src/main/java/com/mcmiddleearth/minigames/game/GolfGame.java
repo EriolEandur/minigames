@@ -15,7 +15,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
@@ -25,29 +31,28 @@ import java.util.*;
 
 /**
  * @author Planetology
- * @since 10/8/2018
  */
-public class GolfGame extends AbstractGame {
+public class GolfGame extends AbstractGame implements Listener {
 
     @Getter private final LocationManager locationManager;
     @Getter private final List<GolfPlayer> golfers;
     @Getter private final List<Player> notFinished;
 
-    @Getter private boolean started;
+    @Getter private boolean ready, started;
     @Getter private int readySeconds, hole, par, round, shots;
 
     public GolfGame(Player manager, String name) {
         super(manager, name, GameType.GOLF, new GolfGameScoreboard());
+        Bukkit.getServer().getPluginManager().registerEvents(this, MiniGamesPlugin.getPluginInstance());
 
         setFlightAllowed(false);
         setGm3Allowed(true);
-        setGm2Forced(true);
+        setGm2Forced(false);
 
         locationManager = new LocationManager(this);
         golfers = new ArrayList<>();
         notFinished = new ArrayList<>();
 
-        started = false;
         readySeconds = 16;
         hole = 1;
         par = 3;
@@ -58,7 +63,7 @@ public class GolfGame extends AbstractGame {
     }
 
     public void ready() {
-        started = true;
+        ready = true;
 
         for (GolfPlayer golfPlayer : golfers) {
             Player player = golfPlayer.getGolfer();
@@ -92,6 +97,8 @@ public class GolfGame extends AbstractGame {
     }
 
     private void start() {
+        started = true;
+
         for (GolfPlayer golfPlayer : golfers) {
             Player player = golfPlayer.getGolfer();
 
@@ -282,8 +289,8 @@ public class GolfGame extends AbstractGame {
         }.runTaskTimer(MiniGamesPlugin.getPluginInstance(), 0, 20);
     }
 
-    @Override
-    public void projectileHit(ProjectileHitEvent event) {
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent event) {
         Block hitBlock = event.getHitBlock();
 
         if (event.getEntityType().equals(EntityType.ARROW)) {
@@ -293,80 +300,97 @@ public class GolfGame extends AbstractGame {
             if (projectileSource instanceof Player) {
                 Player shooter = (Player) projectileSource;
 
-                shots++;
-                arrow.remove();
+                if(PluginData.isInGame(shooter) && started) {
+                    shots++;
+                    arrow.remove();
 
-                for (GolfPlayer golfPlayer : golfers) {
-                    if (golfPlayer.getGolfer().getName().equalsIgnoreCase(shooter.getName())) {
-                        if (golfPlayer.isShot()) {
-                            PluginData.getMessageUtil().sendErrorMessage(shooter, "You already used your golfclub ones, wait till your next turn.");
+                    for (GolfPlayer golfPlayer : golfers) {
+                        if (golfPlayer.getGolfer().getName().equalsIgnoreCase(shooter.getName())) {
+                            if (golfPlayer.isShot()) {
+                                PluginData.getMessageUtil().sendErrorMessage(shooter, "You already used your golfclub ones, wait till your next turn.");
 
-                            return;
-                        } else {
-                            golfPlayer.setShots(golfPlayer.getShots() + 1);
-                            golfPlayer.setShot(true);
+                                return;
+                            } else {
+                                golfPlayer.setShots(golfPlayer.getShots() + 1);
+                                golfPlayer.setShot(true);
 
-                            ((GolfGameScoreboard) getBoard()).showShots(golfPlayer);
-                            ((GolfGameScoreboard) getBoard()).removeGolfer(golfPlayer);
+                                ((GolfGameScoreboard) getBoard()).showShots(golfPlayer);
+                                ((GolfGameScoreboard) getBoard()).removeGolfer(golfPlayer);
 
-                            if (hitBlock.getType().equals(Material.ORANGE_WOOL)) {
-                                if (!notFinished.contains(shooter)) {
-                                    PluginData.getMessageUtil().sendErrorMessage(shooter, "You already reached the hole.");
+                                if (hitBlock.getType().equals(Material.ORANGE_WOOL)) {
+                                    if (!notFinished.contains(shooter)) {
+                                        PluginData.getMessageUtil().sendErrorMessage(shooter, "You already reached the hole.");
 
+                                        return;
+                                    } else {
+                                        golfPlayer.getGolfer().playSound(golfPlayer.getGolfer().getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
+                                        golfPlayer.getGolfer().spawnParticle(Particle.VILLAGER_HAPPY, hitBlock.getLocation(), 10, 1, 1, 1);
+                                        PluginData.getMessageUtil().sendInfoMessage(golfPlayer.getGolfer(), ChatColor.GREEN + shooter.getName() + ChatColor.AQUA + " reached the hole.");
+
+                                        notFinished.remove(shooter);
+
+                                        if (golfPlayer.getGolfer().getName().equalsIgnoreCase(shooter.getName())) {
+                                            if (golfPlayer.getArrowBlockMaterial() != null && golfPlayer.getArrowLocation() != null) {
+                                                golfPlayer.getArrowLocation().getBlock().setType(golfPlayer.getArrowBlockMaterial());
+                                            }
+                                        }
+                                    }
+                                } else if (hitBlock.getType().equals(Material.WATER)
+                                        || hitBlock.getType().equals(Material.ACACIA_LEAVES)
+                                        || hitBlock.getType().equals(Material.BIRCH_LEAVES)
+                                        || hitBlock.getType().equals(Material.DARK_OAK_LEAVES)
+                                        || hitBlock.getType().equals(Material.JUNGLE_LEAVES)
+                                        || hitBlock.getType().equals(Material.OAK_LEAVES)
+                                        || hitBlock.getType().equals(Material.SPRUCE_LEAVES)) {
+                                    PluginData.getMessageUtil().sendErrorMessage(shooter, "Out of bound, try again.");
+                                    setGolfing(shooter);
                                     return;
                                 } else {
-                                    golfPlayer.getGolfer().playSound(golfPlayer.getGolfer().getLocation(), Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
-                                    golfPlayer.getGolfer().spawnParticle(Particle.VILLAGER_HAPPY, hitBlock.getLocation(), 10, 1, 1, 1);
-                                    PluginData.getMessageUtil().sendInfoMessage(golfPlayer.getGolfer(), ChatColor.GREEN + shooter.getName() + ChatColor.AQUA + " reached the hole.");
-
-                                    notFinished.remove(shooter);
+                                    Block blockAbove = hitBlock.getRelative(BlockFace.UP);
 
                                     if (golfPlayer.getGolfer().getName().equalsIgnoreCase(shooter.getName())) {
                                         if (golfPlayer.getArrowBlockMaterial() != null && golfPlayer.getArrowLocation() != null) {
                                             golfPlayer.getArrowLocation().getBlock().setType(golfPlayer.getArrowBlockMaterial());
                                         }
-                                    }
-                                }
-                            } else if (hitBlock.getType().equals(Material.WATER)
-                                    || hitBlock.getType().equals(Material.ACACIA_LEAVES)
-                                    || hitBlock.getType().equals(Material.BIRCH_LEAVES)
-                                    || hitBlock.getType().equals(Material.DARK_OAK_LEAVES)
-                                    || hitBlock.getType().equals(Material.JUNGLE_LEAVES)
-                                    || hitBlock.getType().equals(Material.OAK_LEAVES)
-                                    || hitBlock.getType().equals(Material.SPRUCE_LEAVES)) {
-                                PluginData.getMessageUtil().sendErrorMessage(shooter, "Out of bound, try again.");
-                                setGolfing(shooter);
-                                return;
-                            } else {
-                                Block blockAbove = hitBlock.getRelative(BlockFace.UP);
 
-                                if (golfPlayer.getGolfer().getName().equalsIgnoreCase(shooter.getName())) {
-                                    if (golfPlayer.getArrowBlockMaterial() != null && golfPlayer.getArrowLocation() != null) {
-                                        golfPlayer.getArrowLocation().getBlock().setType(golfPlayer.getArrowBlockMaterial());
+                                        golfPlayer.setArrowLocation(blockAbove.getLocation());
+                                        golfPlayer.setArrowBlockMaterial(blockAbove.getType());
                                     }
 
-                                    golfPlayer.setArrowLocation(blockAbove.getLocation());
-                                    golfPlayer.setArrowBlockMaterial(blockAbove.getType());
+                                    blockAbove.setType(Material.PLAYER_HEAD);
+
+                                    Skull skull = (Skull) blockAbove.getState();
+
+                                    skull.setOwner(shooter.getName());
+                                    skull.update();
                                 }
 
-                                blockAbove.setType(Material.PLAYER_HEAD);
+                                if (shots == golfers.size()) {
+                                    round++;
+                                }
 
-                                Skull skull = (Skull) blockAbove.getState();
-
-                                skull.setOwner(shooter.getName());
-                                skull.update();
+                                nextGolfer();
                             }
-
-                            if (shots == golfers.size()) {
-                                round++;
-                            }
-
-                            nextGolfer();
                         }
                     }
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerDamage(EntityDamageEvent event) {
+        if(PluginData.isInGame((Player) event.getEntity()) && ready) event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onFoodChange(FoodLevelChangeEvent event) {
+        if (PluginData.isInGame((Player) event.getEntity()) && ready) event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if(PluginData.isInGame(event.getPlayer()) && ready) event.setCancelled(true);
     }
 
     private void showScore(GolfPlayer golfPlayer) {
@@ -453,7 +477,7 @@ public class GolfGame extends AbstractGame {
 
     @Override
     public boolean joinAllowed() {
-        return super.joinAllowed() && !started && !(getPlayers().size() >= 6);
+        return super.joinAllowed() && !ready && !(getPlayers().size() >= 6);
     }
 
     @Override

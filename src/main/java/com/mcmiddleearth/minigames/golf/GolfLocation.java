@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 /**
  * @author Planetology
- * @since 10/8/2018
  */
 public class GolfLocation {
 
@@ -29,7 +28,7 @@ public class GolfLocation {
             try {
                 setPoint(name,false);
             } catch (FileNotFoundException ex1) {
-                Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "Default marker not found.", ex1);
+                Logger.getLogger(GolfLocation.class.getName()).log(Level.SEVERE, "Default location not found.", ex1);
             }
         }
     }
