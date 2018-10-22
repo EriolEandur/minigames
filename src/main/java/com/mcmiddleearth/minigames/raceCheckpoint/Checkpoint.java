@@ -278,68 +278,66 @@ public class Checkpoint {
                     Material type = Material.getMaterial(scanner.next());
                     byte data = scanner.nextByte();
                     scanner.nextLine();
-                    if(type.equals(Material.NETHERRACK)) {
-                        switch(rotation) {
-                            case RIGHT: 
-                                addCheckIfAir(-z,y,x);
-                                break;
-                            case TURN_AROUND:
-                                addCheckIfAir(-x,y,-z);
-                                break;
-                            case LEFT:
-                                addCheckIfAir(z,y,-x);
-                                break;
-                            default:
-                                addCheckIfAir(x,y,z);
-                                break;
-                        }
-                    }
-                    else if(!type.equals(Material.PRISMARINE)){
-                        Block block;
-                        switch(rotation) {
-                            case RIGHT: 
-                                block = location.getBlock().getRelative(-z,y,x);
-                                break;
-                            case TURN_AROUND:
-                                block = location.getBlock().getRelative(-x,y,-z);
-                                break;
-                            case LEFT:
-                                block = location.getBlock().getRelative(z,y,-x);
-                                break;
-                            default:
-                                block = location.getBlock().getRelative(x,y,z);
-                                break;
-                        }
-                        if(type.equals(Material.WALL_SIGN)) {
-                            data = adaptData(data, rotation, new byte[]{3,4,2,5});
-                        }
-                        else if(type.equals(Material.TORCH)) {
-                            data = adaptData(data, rotation, new byte[]{3,2,4,1});
-                        }
-                        else if(type.equals(Material.SANDSTONE_STAIRS)
-                                || type.equals(Material.ACACIA_STAIRS)
-                                || type.equals(Material.DARK_OAK_STAIRS)
-                                || type.equals(Material.RED_SANDSTONE_STAIRS)
-                                || type.equals(Material.QUARTZ_STAIRS)
-                                || type.equals(Material.JUNGLE_STAIRS)
-                                || type.equals(Material.BIRCH_STAIRS)
-                                || type.equals(Material.SANDSTONE_STAIRS)
-                                || type.equals(Material.NETHER_BRICK_STAIRS)
-                                || type.equals(Material.COBBLESTONE_STAIRS)
-                                || type.equals(Material.SPRUCE_STAIRS)
-                                || type.equals(Material.OAK_STAIRS)
-                                || type.equals(Material.BRICK_STAIRS)) {
-                            if(data==3 || data==0 || data==2 || data==1) {
-                                data = adaptData(data, rotation, new byte[]{3,0,2,1});
+                    if (type != null) {
+                        if(type.equals(Material.NETHERRACK)) {
+                            switch (rotation) {
+                                case RIGHT:
+                                    addCheckIfAir(-z, y, x);
+                                    break;
+                                case TURN_AROUND:
+                                    addCheckIfAir(-x, y, -z);
+                                    break;
+                                case LEFT:
+                                    addCheckIfAir(z, y, -x);
+                                    break;
+                                default:
+                                    addCheckIfAir(x, y, z);
+                                    break;
                             }
-                            else if(data==7 || data==4 || data==6 || data==5){
-                                data = adaptData(data, rotation, new byte[]{7,4,6,5});
+                        } else if(!type.equals(Material.PRISMARINE)) {
+                            Block block;
+                            switch (rotation) {
+                                case RIGHT:
+                                    block = location.getBlock().getRelative(-z, y, x);
+                                    break;
+                                case TURN_AROUND:
+                                    block = location.getBlock().getRelative(-x, y, -z);
+                                    break;
+                                case LEFT:
+                                    block = location.getBlock().getRelative(z, y, -x);
+                                    break;
+                                default:
+                                    block = location.getBlock().getRelative(x, y, z);
+                                    break;
                             }
+
+                            if (type.equals(Material.WALL_SIGN)) {
+                                data = adaptData(data, rotation, new byte[]{3, 4, 2, 5});
+                            } else if (type.equals(Material.TORCH)) {
+                                data = adaptData(data, rotation, new byte[]{3, 2, 4, 1});
+                            } else if (type.equals(Material.SANDSTONE_STAIRS)
+                                    || type.equals(Material.ACACIA_STAIRS)
+                                    || type.equals(Material.DARK_OAK_STAIRS)
+                                    || type.equals(Material.RED_SANDSTONE_STAIRS)
+                                    || type.equals(Material.QUARTZ_STAIRS)
+                                    || type.equals(Material.JUNGLE_STAIRS)
+                                    || type.equals(Material.BIRCH_STAIRS)
+                                    || type.equals(Material.NETHER_BRICK_STAIRS)
+                                    || type.equals(Material.COBBLESTONE_STAIRS)
+                                    || type.equals(Material.SPRUCE_STAIRS)
+                                    || type.equals(Material.OAK_STAIRS)
+                                    || type.equals(Material.BRICK_STAIRS)) {
+                                if (data == 3 || data == 0 || data == 2 || data == 1) {
+                                    data = adaptData(data, rotation, new byte[]{3, 0, 2, 1});
+                                } else if (data == 7 || data == 4 || data == 6 || data == 5) {
+                                    data = adaptData(data, rotation, new byte[]{7, 4, 6, 5});
+                                }
+                            }
+                            BlockState state = block.getState();
+                            state.setType(type);
+                            state.setRawData(data);
+                            marker.add(state);
                         }
-                        BlockState state = block.getState();
-                        state.setType(type);
-                        state.setRawData(data); 
-                        marker.add(state);
                     }
                 }
         } catch (IOException ex) {

@@ -1,6 +1,5 @@
 package com.mcmiddleearth.minigames.golf;
 
-import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
