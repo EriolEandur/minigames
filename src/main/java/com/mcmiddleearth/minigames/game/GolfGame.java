@@ -2,8 +2,8 @@ package com.mcmiddleearth.minigames.game;
 
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
+import com.mcmiddleearth.minigames.golf.GolfLocationManager;
 import com.mcmiddleearth.minigames.golf.GolfPlayer;
-import com.mcmiddleearth.minigames.golf.LocationManager;
 import com.mcmiddleearth.minigames.scoreboard.GolfGameScoreboard;
 import com.mcmiddleearth.pluginutil.TitleUtil;
 import lombok.Getter;
@@ -33,7 +33,7 @@ import java.util.*;
  */
 public class GolfGame extends AbstractGame implements Listener {
 
-    @Getter private final LocationManager locationManager;
+    @Getter private final GolfLocationManager locationManager;
     @Getter private final List<GolfPlayer> golfers;
     @Getter private final List<Player> notFinished;
 
@@ -48,7 +48,7 @@ public class GolfGame extends AbstractGame implements Listener {
         setGm3Allowed(true);
         setGm2Forced(false);
 
-        locationManager = new LocationManager(this);
+        locationManager = new GolfLocationManager(this);
         golfers = new ArrayList<>();
         notFinished = new ArrayList<>();
 
@@ -82,14 +82,16 @@ public class GolfGame extends AbstractGame implements Listener {
                     for (GolfPlayer golfPlayer : golfers) {
                         golfPlayer.getGolfer().setLevel(readySeconds);
                     }
-                } else {
-                    cancel();
 
-                    for (GolfPlayer golfPlayer : golfers) {
-                        TitleUtil.showTitle(golfPlayer.getGolfer(), "", ChatColor.GOLD + "Golf course has started!", 0, 30, 60);
+                    if (readySeconds == 0) {
+                        cancel();
+
+                        for (GolfPlayer golfPlayer : golfers) {
+                            TitleUtil.showTitle(golfPlayer.getGolfer(), "", ChatColor.GOLD + "Golf course has started!", 0, 30, 60);
+                        }
+
+                        start();
                     }
-
-                    start();
                 }
             }
         }.runTaskTimer(MiniGamesPlugin.getPluginInstance(), 0, 20);
@@ -138,13 +140,15 @@ public class GolfGame extends AbstractGame implements Listener {
                     for (GolfPlayer golfPlayer : golfers) {
                         golfPlayer.getGolfer().setLevel(seconds);
                     }
-                } else {
-                    cancel();
 
-                    if (notFinished.isEmpty()) {
-                        nextHole();
-                    } else {
-                        setGolfing(notFinished.get(new Random().nextInt(notFinished.size())));
+                    if (seconds == 0) {
+                        cancel();
+
+                        if (notFinished.isEmpty()) {
+                            nextHole();
+                        } else {
+                            setGolfing(notFinished.get(new Random().nextInt(notFinished.size())));
+                        }
                     }
                 }
             }
@@ -268,21 +272,23 @@ public class GolfGame extends AbstractGame implements Listener {
                     for (GolfPlayer golfPlayer : golfers) {
                         golfPlayer.getGolfer().setLevel(seconds);
                     }
-                } else {
-                    cancel();
 
-                    for (GolfPlayer golfPlayer : golfers) {
-                        if (hole != 1) {
-                            if (hole == 9 || hole ==  18|| hole == 27 || hole == 14 || hole == 20) {
-                                PluginData.getMessageUtil().sendInfoMessage(golfPlayer.getGolfer(), ChatColor.GREEN + golfers.get(0).getGolfer().getName() + ChatColor.AQUA + " starts with the last hole.");
-                            } else {
-                                PluginData.getMessageUtil().sendInfoMessage(golfPlayer.getGolfer(), ChatColor.GREEN + golfers.get(0).getGolfer().getName() + ChatColor.AQUA + " starts with hole " + ChatColor.GREEN + hole);
+                    if (seconds == 0) {
+                        cancel();
+
+                        for (GolfPlayer golfPlayer : golfers) {
+                            if (hole != 1) {
+                                if (hole == 9 || hole ==  18|| hole == 27 || hole == 14 || hole == 20) {
+                                    PluginData.getMessageUtil().sendInfoMessage(golfPlayer.getGolfer(), ChatColor.GREEN + golfers.get(0).getGolfer().getName() + ChatColor.AQUA + " starts with the last hole.");
+                                } else {
+                                    PluginData.getMessageUtil().sendInfoMessage(golfPlayer.getGolfer(), ChatColor.GREEN + golfers.get(0).getGolfer().getName() + ChatColor.AQUA + " starts with hole " + ChatColor.GREEN + hole);
+                                }
                             }
                         }
-                    }
 
-                    setGolfing(getWinner());
-                    ((GolfGameScoreboard) getBoard()).showHole();
+                        setGolfing(getWinner());
+                        ((GolfGameScoreboard) getBoard()).showHole();
+                    }
                 }
             }
         }.runTaskTimer(MiniGamesPlugin.getPluginInstance(), 0, 20);

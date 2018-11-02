@@ -15,9 +15,9 @@ import org.bukkit.material.MaterialData;
 /**
  * @author Planetology
  */
-public class GolfGameLocation extends AbstractGameCommand {
+public class GolfGameSet extends AbstractGameCommand {
 
-    public GolfGameLocation(String... permissionNodes) {
+    public GolfGameSet(String... permissionNodes) {
         super(2, true, permissionNodes);
         cmdGroup = CmdGroup.GOLF;
         setShortDescription(": Defines a golf game location.");
@@ -40,11 +40,11 @@ public class GolfGameLocation extends AbstractGameCommand {
             if(args[0].equalsIgnoreCase("tee")) {
                 if (args[1].equalsIgnoreCase("start")) {
                     if(golfGame.getLocationManager().setStartTeeLocation(loc)) {
-                        sendStartTeeSetMessage(cs);
+                        sendStartTeeSetMessage(cs, golfGame.getLocationManager().getTeeCount());
                     }
                 } else if (args[1].equalsIgnoreCase("end")) {
                     if (golfGame.getLocationManager().setEndTeeLocation(loc)) {
-                        sendEndTeeSetMessage(cs);
+                        sendEndTeeSetMessage(cs, golfGame.getLocationManager().getTeeCount());
                     }
                 } else if (args[1].equalsIgnoreCase("add")) {
                     if (golfGame.getLocationManager().addTeeLocation(loc)) {
@@ -56,12 +56,12 @@ public class GolfGameLocation extends AbstractGameCommand {
             } else if(args[0].equalsIgnoreCase("hole")) {
                 if (args[1].equalsIgnoreCase("start")) {
                     if(golfGame.getLocationManager().setStartHoleLocation(loc)) {
-                        sendStartHoleSetMessage(cs);
+                        sendStartHoleSetMessage(cs, golfGame.getLocationManager().getTeeCount());
                         setWool(cs);
                     }
                 } else if (args[1].equalsIgnoreCase("end")) {
                     if (golfGame.getLocationManager().setEndHoleLocation(loc)) {
-                        sendEndHoleSetMessage(cs);
+                        sendEndHoleSetMessage(cs, golfGame.getLocationManager().getTeeCount());
                         setWool(cs);
                     }
                 } else if (args[1].equalsIgnoreCase("add")) {
@@ -78,20 +78,20 @@ public class GolfGameLocation extends AbstractGameCommand {
         }
     }
 
-    private void sendStartTeeSetMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendInfoMessage(cs, "Start tee location saved.");
+    private void sendStartTeeSetMessage(CommandSender cs, int totalTees) {
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Start tee location saved. " + ChatColor.GREEN + totalTees + ChatColor.AQUA + " total tees.");
     }
 
-    private void sendEndTeeSetMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendInfoMessage(cs, "End tee location saved.");
+    private void sendEndTeeSetMessage(CommandSender cs, int totalTees) {
+        PluginData.getMessageUtil().sendInfoMessage(cs, "End tee location saved. " + ChatColor.GREEN + totalTees + ChatColor.AQUA + " total tees.");
     }
 
-    private void sendStartHoleSetMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendInfoMessage(cs, "Start hole location saved.");
+    private void sendStartHoleSetMessage(CommandSender cs, int totalTees) {
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Start hole location saved. " + ChatColor.GREEN + totalTees + ChatColor.AQUA + " total tees.");
     }
 
-    private void sendEndHoleSetMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendInfoMessage(cs, "End hole location saved.");
+    private void sendEndHoleSetMessage(CommandSender cs, int totalTees) {
+        PluginData.getMessageUtil().sendInfoMessage(cs, "End hole location saved. " + ChatColor.GREEN + totalTees + ChatColor.AQUA + " total tees.");
     }
 
     private void sendTeeAddMessage(CommandSender cs, int totalTees) {
@@ -107,7 +107,7 @@ public class GolfGameLocation extends AbstractGameCommand {
     }
 
     private void sendInvalidArgumentMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid Argument. Usage: /game location tee|hole [|start|end|add].");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid Argument. Usage: /game golfset tee|hole [|start|end|add].");
     }
 
     private void sendTeeNotValidMessage(CommandSender cs) {

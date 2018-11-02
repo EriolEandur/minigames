@@ -9,12 +9,11 @@ import org.bukkit.scoreboard.Score;
 
 /**
  * @author Planetology
- * @since 10/8/2018
  */
 public class GolfGameScoreboard extends GameScoreboard {
 
-    private Objective holeObjective, scoresObjective, finishedObjective;
     private GolfGame game;
+    private Objective holeObjective, scoresObjective, finishedObjective;
 
     public GolfGameScoreboard() {
         super("Golf");
@@ -22,12 +21,13 @@ public class GolfGameScoreboard extends GameScoreboard {
 
     public void init(GolfGame game) {
         this.game = game;
-        holeObjective = scoreboard.registerNewObjective("hole", "dummy",
-                ChatColor.AQUA + "Hole " + game.getHole() + " | " + ChatColor.GREEN + "Par " + game.getPar());
-        scoresObjective = scoreboard.registerNewObjective("scores", "dummy",
-                ChatColor.AQUA + "Hole " + game.getHole() + " | " + ChatColor.GREEN + "Scores");
-        finishedObjective = scoreboard.registerNewObjective("finished", "dummy",
-                ChatColor.AQUA + "Game Over! | " + ChatColor.GREEN + "Scores");
+
+        holeObjective = scoreboard.registerNewObjective("hole", "dummy", ChatColor.GOLD + "Par " + game.getPar() + ChatColor.GRAY + " | "
+                + ChatColor.GOLD + "Hole " + game.getHole());
+        scoresObjective = scoreboard.registerNewObjective("scores", "dummy", ChatColor.GOLD + "Scores " + ChatColor.GRAY + "| "
+                + ChatColor.GOLD + "Hole " + game.getHole());
+        finishedObjective = scoreboard.registerNewObjective("finished", "dummy", ChatColor.GOLD + "Scores " + ChatColor.GRAY + "| "
+                + ChatColor.GOLD + "Game Over!");
     }
 
     public void addPlayer(String playerName) {
@@ -42,12 +42,12 @@ public class GolfGameScoreboard extends GameScoreboard {
 
     public void showHole() {
         holeObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        holeObjective.setDisplayName(ChatColor.AQUA + "Hole " + game.getHole() + " | " + ChatColor.GREEN + "Par " + game.getPar());
+        holeObjective.setDisplayName(ChatColor.GOLD + "Par " + game.getPar() + ChatColor.GRAY + " | " + ChatColor.GOLD + "Hole " + game.getHole());
     }
 
     public void showScores() {
         scoresObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        scoresObjective.setDisplayName(ChatColor.AQUA + "Hole " + game.getHole() + " | " + ChatColor.GREEN + "Scores");
+        scoresObjective.setDisplayName(ChatColor.GOLD + "Scores " + ChatColor.GRAY + "| " + ChatColor.GOLD + "Hole " + game.getHole());
     }
 
     public void showFinished() {
@@ -67,19 +67,19 @@ public class GolfGameScoreboard extends GameScoreboard {
     }
 
     public void showShots(GolfPlayer golfPlayer) {
-        holeObjective.getScore(ChatColor.DARK_AQUA + golfPlayer.getGolfer().getName()).setScore(holeObjective.getScore(ChatColor.DARK_AQUA + golfPlayer.getGolfer().getName()).getScore() + 1);
+        holeObjective.getScore(ChatColor.YELLOW + golfPlayer.getGolfer().getName()).setScore(holeObjective.getScore(ChatColor.YELLOW + golfPlayer.getGolfer().getName()).getScore() + 1);
         holeObjective.getScore(golfPlayer.getGolfer().getName()).setScore(holeObjective.getScore(golfPlayer.getGolfer().getName()).getScore() + 1);
     }
 
     public void showGolfer(GolfPlayer golfPlayer) {
         scoreboard.resetScores(golfPlayer.getGolfer().getName());
 
-        Score score = holeObjective.getScore(ChatColor.DARK_AQUA + golfPlayer.getGolfer().getName());
+        Score score = holeObjective.getScore(ChatColor.YELLOW + golfPlayer.getGolfer().getName());
         score.setScore(golfPlayer.getShots());
     }
 
     public void removeGolfer(GolfPlayer golfPlayer) {
-        scoreboard.resetScores(ChatColor.DARK_AQUA + golfPlayer.getGolfer().getName());
+        scoreboard.resetScores(ChatColor.YELLOW + golfPlayer.getGolfer().getName());
 
         Score score = holeObjective.getScore(golfPlayer.getGolfer().getName());
         score.setScore(golfPlayer.getShots());

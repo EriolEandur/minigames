@@ -78,11 +78,17 @@ public class PluginData {
         if(!MiniGamesPlugin.getPluginInstance().getDataFolder().exists()) {
             MiniGamesPlugin.getPluginInstance().getDataFolder().mkdirs();
         }
+
         if(!questionDir.exists()) {
             questionDir.mkdirs();
         }
+
         if(!raceDir.exists()) {
             raceDir.mkdirs();
+        }
+
+        if(!golfDir.exists()) {
+            golfDir.mkdirs();
         }
     }
    

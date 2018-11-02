@@ -32,6 +32,7 @@ public class GolfGameSave extends AbstractGameCommand implements Confirmationabl
     @Override
     protected void execute(CommandSender cs, String... args) {
         AbstractGame game = getGame((Player) cs);
+
         if(game != null && isManager((Player) cs, game)
                 && isCorrectGameType((Player) cs, game, GameType.GOLF)) {
             golfGame = (GolfGame) game;

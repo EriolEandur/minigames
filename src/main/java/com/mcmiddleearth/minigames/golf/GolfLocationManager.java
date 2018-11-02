@@ -21,17 +21,18 @@ import java.util.logging.Level;
 /**
  * @author Planetology
  */
-public class LocationManager {
+public class GolfLocationManager {
 
     private GolfGame game;
 
-    @Getter private final LinkedList<GolfLocation> holes = new LinkedList<>();
+    @Getter
+    private final LinkedList<GolfLocation> holes = new LinkedList<>();
     @Getter private final LinkedList<GolfLocation> tees = new LinkedList<>();
 
     @Getter private GolfLocation teeStart, holeStart, teeEnd, holeEnd;
     @Getter private int holeCount, teeCount;
 
-    public LocationManager(GolfGame game) {
+    public GolfLocationManager(GolfGame game) {
         this.game = game;
     }
 
