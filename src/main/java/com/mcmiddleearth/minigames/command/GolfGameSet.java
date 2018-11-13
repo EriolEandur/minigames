@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
+import org.bukkit.material.Wool;
 
 /**
  * @author Planetology
@@ -56,12 +57,12 @@ public class GolfGameSet extends AbstractGameCommand {
             } else if(args[0].equalsIgnoreCase("hole")) {
                 if (args[1].equalsIgnoreCase("start")) {
                     if(golfGame.getLocationManager().setStartHoleLocation(loc)) {
-                        sendStartHoleSetMessage(cs, golfGame.getLocationManager().getTeeCount());
+                        sendStartHoleSetMessage(cs, golfGame.getLocationManager().getHoleCount());
                         setWool(cs);
                     }
                 } else if (args[1].equalsIgnoreCase("end")) {
                     if (golfGame.getLocationManager().setEndHoleLocation(loc)) {
-                        sendEndHoleSetMessage(cs, golfGame.getLocationManager().getTeeCount());
+                        sendEndHoleSetMessage(cs, golfGame.getLocationManager().getHoleCount());
                         setWool(cs);
                     }
                 } else if (args[1].equalsIgnoreCase("add")) {
@@ -86,12 +87,12 @@ public class GolfGameSet extends AbstractGameCommand {
         PluginData.getMessageUtil().sendInfoMessage(cs, "End tee location saved. " + ChatColor.GREEN + totalTees + ChatColor.AQUA + " total tees.");
     }
 
-    private void sendStartHoleSetMessage(CommandSender cs, int totalTees) {
-        PluginData.getMessageUtil().sendInfoMessage(cs, "Start hole location saved. " + ChatColor.GREEN + totalTees + ChatColor.AQUA + " total tees.");
+    private void sendStartHoleSetMessage(CommandSender cs, int totalHoles) {
+        PluginData.getMessageUtil().sendInfoMessage(cs, "Start hole location saved. " + ChatColor.GREEN + totalHoles + ChatColor.AQUA + " total holes.");
     }
 
-    private void sendEndHoleSetMessage(CommandSender cs, int totalTees) {
-        PluginData.getMessageUtil().sendInfoMessage(cs, "End hole location saved. " + ChatColor.GREEN + totalTees + ChatColor.AQUA + " total tees.");
+    private void sendEndHoleSetMessage(CommandSender cs, int totalHoles) {
+        PluginData.getMessageUtil().sendInfoMessage(cs, "End hole location saved. " + ChatColor.GREEN + totalHoles + ChatColor.AQUA + " total tees.");
     }
 
     private void sendTeeAddMessage(CommandSender cs, int totalTees) {
@@ -103,7 +104,8 @@ public class GolfGameSet extends AbstractGameCommand {
     }
 
     private void setWool(CommandSender cs) {
-        ((Player) cs).getLocation().getBlock().setType(Material.ORANGE_WOOL);
+        ((Player) cs).getLocation().getBlock().setType(Material.WOOL);
+        ((Player) cs).getLocation().getBlock().setData((byte) 1);
     }
 
     private void sendInvalidArgumentMessage(CommandSender cs) {

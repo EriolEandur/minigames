@@ -29,7 +29,8 @@ public enum CmdGroup {
     HIDE_AND_SEEK   ("Hide"),
     RACE            ("Race"),
     LORE_QUIZ       ("Quiz"),
-    GOLF            ("Golf");
+    GOLF            ("Golf"),
+    PVP             ("PvP");
 
     @Getter
     private final String name;

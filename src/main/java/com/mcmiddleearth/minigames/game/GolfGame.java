@@ -5,6 +5,7 @@ import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.golf.GolfLocationManager;
 import com.mcmiddleearth.minigames.golf.GolfPlayer;
 import com.mcmiddleearth.minigames.scoreboard.GolfGameScoreboard;
+import com.mcmiddleearth.pluginutil.PlayerUtil;
 import com.mcmiddleearth.pluginutil.TitleUtil;
 import lombok.Getter;
 import org.bukkit.*;
@@ -67,10 +68,15 @@ public class GolfGame extends AbstractGame implements Listener {
         for (GolfPlayer golfPlayer : golfers) {
             Player player = golfPlayer.getGolfer();
 
+            PluginData.getMessageUtil().sendInfoMessage(player, "Golf course starts in " + ChatColor.GREEN + "15 " + ChatColor.AQUA + "seconds...");
+
             player.teleport(locationManager.getTeeStart().getLocation());
             player.setGameMode(GameMode.ADVENTURE);
             player.getInventory().clear();
-            PluginData.getMessageUtil().sendInfoMessage(player, "Golf course starts in " + ChatColor.GREEN + "15 " + ChatColor.AQUA + "seconds...");
+
+            player.setHealth(20);
+            player.setFoodLevel(20);
+            player.setExp(0.0f);
         }
 
         new BukkitRunnable() {
@@ -322,7 +328,7 @@ public class GolfGame extends AbstractGame implements Listener {
                                 ((GolfGameScoreboard) getBoard()).showShots(golfPlayer);
                                 ((GolfGameScoreboard) getBoard()).removeGolfer(golfPlayer);
 
-                                if (hitBlock.getType().equals(Material.ORANGE_WOOL)) {
+                                if (hitBlock.getType().equals(Material.WOOL)) {
                                     if (!notFinished.contains(shooter)) {
                                         PluginData.getMessageUtil().sendErrorMessage(shooter, "You already reached the hole.");
 
@@ -341,12 +347,8 @@ public class GolfGame extends AbstractGame implements Listener {
                                         }
                                     }
                                 } else if (hitBlock.getType().equals(Material.WATER)
-                                        || hitBlock.getType().equals(Material.ACACIA_LEAVES)
-                                        || hitBlock.getType().equals(Material.BIRCH_LEAVES)
-                                        || hitBlock.getType().equals(Material.DARK_OAK_LEAVES)
-                                        || hitBlock.getType().equals(Material.JUNGLE_LEAVES)
-                                        || hitBlock.getType().equals(Material.OAK_LEAVES)
-                                        || hitBlock.getType().equals(Material.SPRUCE_LEAVES)) {
+                                        || hitBlock.getType().equals(Material.STATIONARY_WATER)
+                                        || hitBlock.getType().equals(Material.LEAVES)) {
                                     PluginData.getMessageUtil().sendErrorMessage(shooter, "Out of bound, try again.");
                                     setGolfing(shooter);
                                     return;
@@ -362,7 +364,7 @@ public class GolfGame extends AbstractGame implements Listener {
                                         golfPlayer.setArrowBlockMaterial(blockAbove.getType());
                                     }
 
-                                    blockAbove.setType(Material.PLAYER_HEAD);
+                                    blockAbove.setType(Material.SKULL);
 
                                     Skull skull = (Skull) blockAbove.getState();
 
@@ -385,7 +387,11 @@ public class GolfGame extends AbstractGame implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent event) {
-        if(PluginData.isInGame((Player) event.getEntity()) && ready) event.setCancelled(true);
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+
+            if(PluginData.isInGame(player) && ready) event.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -465,6 +471,7 @@ public class GolfGame extends AbstractGame implements Listener {
     @Override
     public void addPlayer(Player player) {
         super.addPlayer(player);
+
         forceTeleport(player, getWarp());
         ((GolfGameScoreboard) getBoard()).addPlayer(player.getName());
 
@@ -475,9 +482,11 @@ public class GolfGame extends AbstractGame implements Listener {
     @Override
     public void removePlayer(OfflinePlayer player) {
         super.removePlayer(player);
+
         ((GolfGameScoreboard) getBoard()).removePlayer(player.getName());
 
         golfers.remove(new GolfPlayer((Player) player));
+        if (PlayerUtil.isSame(player, getManager())) ((Player) player).setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
     }
 
     @Override
@@ -493,6 +502,15 @@ public class GolfGame extends AbstractGame implements Listener {
         else {
             return ChatColor.BLUE + "<Golfer: ";
         }
+    }
+
+    @Override
+    public void end(Player sender) {
+        super.end(sender);
+
+        // Cleanup
+        this.golfers.clear();
+        this.notFinished.clear();
     }
 
     public boolean hasTeeStart() { return locationManager.getTeeStart() != null; }

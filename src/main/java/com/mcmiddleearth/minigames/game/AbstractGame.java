@@ -226,6 +226,7 @@ public abstract class AbstractGame {
                 if(!PlayerUtil.isSame(onlinePlayer,manager)) {
                     onlinePlayer.setScoreboard(Bukkit.getServer().getScoreboardManager().getMainScoreboard());
                 }
+
                 if(gm2Forced) {
                     onlinePlayer.setGameMode(playerPreviousMode.get(onlinePlayer.getUniqueId()));
                     playerPreviousMode.remove(onlinePlayer.getUniqueId());

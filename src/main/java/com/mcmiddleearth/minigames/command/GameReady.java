@@ -8,6 +8,7 @@ package com.mcmiddleearth.minigames.command;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GolfGame;
+import com.mcmiddleearth.minigames.game.PvPGame;
 import com.mcmiddleearth.minigames.game.RaceGame;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,8 +31,7 @@ public class GameReady extends AbstractGameCommand{
         if(game != null && isManager((Player) cs, game)) {
             if(game.isAnnounced()) {
                 sendAlreadyAnnouncedErrorMessage(cs);
-            }
-            else {
+            } else {
                 if(game instanceof RaceGame) {
                     RaceGame raceGame = (RaceGame) game; 
                     if(!raceGame.hasStart() || !raceGame.hasFinish()) {
@@ -57,6 +57,26 @@ public class GameReady extends AbstractGameCommand{
                         return;
                     }
                 }
+
+                if(game instanceof PvPGame) {
+                    PvPGame pvpGame = (PvPGame) game;
+
+                    if (!pvpGame.hasRedSpawn() || !pvpGame.hasBlueSpawn()) {
+                        sendNoRedBlueSpawnMessage(cs);
+                        return;
+                    }
+
+                    if (pvpGame.isCuboidArena()) {
+                        if (!pvpGame.hasArenaMax() || !pvpGame.hasArenaMin()) {
+                            sendNoArenaRegionMessage(cs);
+                            return;
+                        }
+                    } else if (!pvpGame.hasArenaCenter()) {
+                        sendNoArenaRegionMessage(cs);
+                        return;
+                    }
+                }
+
                 game.announceGame();
             }
         }
@@ -76,5 +96,13 @@ public class GameReady extends AbstractGameCommand{
 
     private void sendNotEnoughHolesMessage(CommandSender cs) {
         PluginData.getMessageUtil().sendErrorMessage(cs, "A golf course needs a hole amount of 9, 18, 27, 14 or 20.");
+    }
+
+    private void sendNoRedBlueSpawnMessage(CommandSender cs) {
+        PluginData.getMessageUtil().sendErrorMessage(cs, "A pvp match needs a spawn for the red and blue team.");
+    }
+
+    private void sendNoArenaRegionMessage(CommandSender cs) {
+        PluginData.getMessageUtil().sendErrorMessage(cs, "A pvp match needs arena region.");
     }
 }

@@ -22,7 +22,10 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.json.simple.parser.ParseException;
@@ -73,6 +76,14 @@ public class PluginData {
     @Getter
     private static final File golfDir = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
             + File.separator + "Courses");
+
+    @Getter
+    private static final File pvpDirectory = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
+            + File.separator + "Arenas");
+
+    @Getter
+    private static final File loadoutDirectory = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
+            + File.separator + "Loadouts");
     
     static {
         if(!MiniGamesPlugin.getPluginInstance().getDataFolder().exists()) {
@@ -89,6 +100,14 @@ public class PluginData {
 
         if(!golfDir.exists()) {
             golfDir.mkdirs();
+        }
+
+        if(!pvpDirectory.exists()) {
+            pvpDirectory.mkdirs();
+        }
+
+        if(!loadoutDirectory.exists()) {
+            loadoutDirectory.mkdirs();
         }
     }
    
@@ -229,5 +248,8 @@ public class PluginData {
         }
         return true;
     }
-    
+
+    public static WorldEditPlugin getWorldEdit() {
+        return (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
+    }
 }

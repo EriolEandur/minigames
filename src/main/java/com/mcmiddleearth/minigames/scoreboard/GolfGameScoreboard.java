@@ -22,12 +22,14 @@ public class GolfGameScoreboard extends GameScoreboard {
     public void init(GolfGame game) {
         this.game = game;
 
-        holeObjective = scoreboard.registerNewObjective("hole", "dummy", ChatColor.GOLD + "Par " + game.getPar() + ChatColor.GRAY + " | "
-                + ChatColor.GOLD + "Hole " + game.getHole());
-        scoresObjective = scoreboard.registerNewObjective("scores", "dummy", ChatColor.GOLD + "Scores " + ChatColor.GRAY + "| "
-                + ChatColor.GOLD + "Hole " + game.getHole());
-        finishedObjective = scoreboard.registerNewObjective("finished", "dummy", ChatColor.GOLD + "Scores " + ChatColor.GRAY + "| "
-                + ChatColor.GOLD + "Game Over!");
+        holeObjective = scoreboard.registerNewObjective("hole", "dummy");
+        holeObjective.setDisplayName(ChatColor.GOLD + "Par " + game.getPar() + ChatColor.GRAY + " ▏ " + ChatColor.GOLD + "Hole " + game.getHole());
+
+        scoresObjective = scoreboard.registerNewObjective("scores", "dummy");
+        scoresObjective.setDisplayName(ChatColor.GOLD + "Scores " + ChatColor.GRAY + "▏ " + ChatColor.GOLD + "Hole " + game.getHole());
+
+        finishedObjective = scoreboard.registerNewObjective("finished", "dummy");
+        finishedObjective.setDisplayName(ChatColor.GOLD + "Scores " + ChatColor.GRAY + "▏ " + ChatColor.GOLD + "Game Over!");
     }
 
     public void addPlayer(String playerName) {
@@ -42,12 +44,12 @@ public class GolfGameScoreboard extends GameScoreboard {
 
     public void showHole() {
         holeObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        holeObjective.setDisplayName(ChatColor.GOLD + "Par " + game.getPar() + ChatColor.GRAY + " | " + ChatColor.GOLD + "Hole " + game.getHole());
+        holeObjective.setDisplayName(ChatColor.GOLD + "Par " + game.getPar() + ChatColor.GRAY + " ▏ " + ChatColor.GOLD + "Hole " + game.getHole());
     }
 
     public void showScores() {
         scoresObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        scoresObjective.setDisplayName(ChatColor.GOLD + "Scores " + ChatColor.GRAY + "| " + ChatColor.GOLD + "Hole " + game.getHole());
+        scoresObjective.setDisplayName(ChatColor.GOLD + "Scores " + ChatColor.GRAY + "▏ " + ChatColor.GOLD + "Hole " + game.getHole());
     }
 
     public void showFinished() {

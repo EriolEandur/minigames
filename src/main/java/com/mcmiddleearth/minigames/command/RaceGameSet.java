@@ -54,6 +54,7 @@ public class RaceGameSet extends AbstractGameCommand{
                         return;
                     }
                 }
+
                 else {
                     try {
                         int id = Integer.parseInt(args[1]);
@@ -105,7 +106,7 @@ public class RaceGameSet extends AbstractGameCommand{
     }
 
     private void sendInvalidArgumentMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid Argument. Usage: /game set start|finish|checkpoint.");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid Argument. Usage: /game raceset start|finish|checkpoint.");
     }
 
     private void sendInvalidLocationMessage(CommandSender cs) {
