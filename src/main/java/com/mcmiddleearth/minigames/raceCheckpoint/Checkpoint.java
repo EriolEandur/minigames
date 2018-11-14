@@ -320,12 +320,12 @@ public class Checkpoint {
                                     || type.equals(Material.DARK_OAK_STAIRS)
                                     || type.equals(Material.RED_SANDSTONE_STAIRS)
                                     || type.equals(Material.QUARTZ_STAIRS)
-                                    || type.equals(Material.JUNGLE_STAIRS)
-                                    || type.equals(Material.BIRCH_STAIRS)
+                                    || type.equals(Material.JUNGLE_WOOD_STAIRS)
+                                    || type.equals(Material.BIRCH_WOOD_STAIRS)
                                     || type.equals(Material.NETHER_BRICK_STAIRS)
                                     || type.equals(Material.COBBLESTONE_STAIRS)
-                                    || type.equals(Material.SPRUCE_STAIRS)
-                                    || type.equals(Material.OAK_STAIRS)
+                                    || type.equals(Material.SPRUCE_WOOD_STAIRS)
+                                    || type.equals(Material.WOOD_STAIRS)
                                     || type.equals(Material.BRICK_STAIRS)) {
                                 if (data == 3 || data == 0 || data == 2 || data == 1) {
                                     data = adaptData(data, rotation, new byte[]{3, 0, 2, 1});
