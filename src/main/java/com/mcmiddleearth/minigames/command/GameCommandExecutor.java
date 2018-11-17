@@ -79,6 +79,8 @@ public class GameCommandExecutor implements CommandExecutor {
         addCommandHandler("respawn", new PvPGameRespawn(Permissions.MANAGER));
         addCommandHandler("loadout", new PvPGameLoadout(Permissions.MANAGER));
         addCommandHandler("saveloadout", new PvPGameSaveLoadout(Permissions.MANAGER));
+        addCommandHandler("teamred", new PvPGameTeamRed(Permissions.MANAGER));
+        addCommandHandler("teamblue", new PvPGameTeamBlue(Permissions.MANAGER));
     }
     
     @Override

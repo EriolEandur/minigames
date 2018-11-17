@@ -15,7 +15,9 @@ import com.sk89q.worldedit.regions.factory.SphereRegionFactory;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.*;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -129,9 +131,9 @@ public class PvPGame extends AbstractGame implements Listener {
         for (String name : pvpers) {
             Player player = Bukkit.getPlayer(name);
 
-            if (redTeam.contains(player.getName())) PluginData.getMessageUtil().sendInfoMessage(player, "You joined team " + ChatColor.RED + "red"
+            if (redTeam.contains(player.getName())) PluginData.getMessageUtil().sendInfoMessage(player, "You are fighting for team " + ChatColor.RED + "red"
                     + ChatColor.AQUA + ", battle will begin in 15 seconds...");
-            if (blueTeam.contains(player.getName())) PluginData.getMessageUtil().sendInfoMessage(player, "You joined team " + ChatColor.BLUE + "blue"
+            if (blueTeam.contains(player.getName())) PluginData.getMessageUtil().sendInfoMessage(player, "You are fighting for team " + ChatColor.BLUE + "blue"
                     + ChatColor.AQUA + ", battle will begin in 15 seconds...");
 
             giveLoadout(player);
@@ -238,16 +240,17 @@ public class PvPGame extends AbstractGame implements Listener {
     private void finish() {
         finished = true;
 
-        for (final String name : pvpers) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (String name : pvpers) {
                     Bukkit.getPlayer(name).teleport(getWarp());
                     Bukkit.getPlayer(name).getInventory().clear();
-                    end(Bukkit.getPlayer(name));
                 }
-            }.runTaskLater(MiniGamesPlugin.getPluginInstance(), 20 * 10);
-        }
+
+                end(getManager().getPlayer());
+            }
+        }.runTaskLater(MiniGamesPlugin.getPluginInstance(), 20 * 10);
     }
 
     private void giveLoadout(Player player) {
@@ -298,22 +301,28 @@ public class PvPGame extends AbstractGame implements Listener {
         for (String name : pvpers) {
             Player player = Bukkit.getPlayer(name);
 
-            if (blueTeam.size() > redTeam.size()) {
-                redTeam.add(player.getName());
-                player.teleport(locationManager.getRedSpawn().getLocation());
-            } else if (redTeam.size() > blueTeam.size()) {
-                blueTeam.add(player.getName());
-                player.teleport(locationManager.getBlueSpawn().getLocation());
-            } else {
-                Random random = new Random();
-
-                if(random.nextBoolean()) {
+            if (!redTeam.contains(player.getName()) && !blueTeam.contains(player.getName())) {
+                if (blueTeam.size() > redTeam.size()) {
                     redTeam.add(player.getName());
                     player.teleport(locationManager.getRedSpawn().getLocation());
-                } else {
+                } else if (redTeam.size() > blueTeam.size()) {
                     blueTeam.add(player.getName());
                     player.teleport(locationManager.getBlueSpawn().getLocation());
+                } else {
+                    Random random = new Random();
+
+                    if(random.nextBoolean()) {
+                        redTeam.add(player.getName());
+                        player.teleport(locationManager.getRedSpawn().getLocation());
+                    } else {
+                        blueTeam.add(player.getName());
+                        player.teleport(locationManager.getBlueSpawn().getLocation());
+                    }
                 }
+            } else if (redTeam.contains(player.getName())) {
+                player.teleport(locationManager.getRedSpawn().getLocation());
+            } else if (blueTeam.contains(player.getName())) {
+                player.teleport(locationManager.getBlueSpawn().getLocation());
             }
         }
     }
@@ -349,6 +358,45 @@ public class PvPGame extends AbstractGame implements Listener {
                 }
 
                 if (!started || this.finished) event.setCancelled(true);
+            }
+        }
+
+        if (event.getDamager() instanceof Arrow && event.getEntity() instanceof Player) {
+            Arrow arrow = (Arrow) event.getDamager();
+            Player shooter = (Player) arrow.getShooter();
+            Player damaged = (Player) event.getEntity();
+
+            if(PluginData.isInGame(shooter) && (PluginData.isInGame(damaged))) {
+                if (started) {
+                    if (redTeam.contains(shooter.getName()) && redTeam.contains(damaged.getName()))
+                        event.setCancelled(true);
+                    if (blueTeam.contains(shooter.getName()) && blueTeam.contains(damaged.getName()))
+                        event.setCancelled(true);
+                }
+            }
+        }
+
+        if (event.getDamager() instanceof Snowball && event.getEntity() instanceof Player) {
+            Snowball snowball = (Snowball) event.getDamager();
+            Player shooter = (Player) snowball.getShooter();
+            Player damaged = (Player) event.getEntity();
+
+            if(PluginData.isInGame(shooter) && (PluginData.isInGame(damaged))) {
+                if(PluginData.isInGame(shooter) && (PluginData.isInGame(damaged))) {
+                    if (started) {
+                        if (redTeam.contains(shooter.getName()) && redTeam.contains(damaged.getName()))  {
+                            event.setCancelled(true);
+                        } else if (blueTeam.contains(shooter.getName()) && blueTeam.contains(damaged.getName())) {
+                            event.setCancelled(true);
+                        } else {
+                            event.setDamage(2.0D);
+
+                            for (String name : pvpers) {
+                                Bukkit.getPlayer(name).spawnParticle(Particle.SNOWBALL, damaged.getLocation(), 1, 0, 0, 0);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
