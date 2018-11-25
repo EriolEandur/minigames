@@ -69,7 +69,7 @@ public class GameCommandExecutor implements CommandExecutor {
         addCommandHandler("unban", new GameUnban(Permissions.MANAGER));
         addCommandHandler("warp", new GameWarp(Permissions.USER));
         addCommandHandler("winner", new QuizGameWinner(Permissions.MANAGER));
-        addCommandHandler("location", new GolfGameLocation(Permissions.MANAGER));
+        addCommandHandler("location", new GolfGameSet(Permissions.MANAGER));
         addCommandHandler("savegolf", new GolfGameSave(Permissions.MANAGER));
         addCommandHandler("loadgolf", new GolfGameLoad(Permissions.MANAGER));
     }
