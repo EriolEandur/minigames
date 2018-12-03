@@ -25,6 +25,11 @@ import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
+import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
+import org.bukkit.Location;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -39,7 +44,7 @@ public class BoostItem {
      
     public <PotionEffectType> BoostItem()
     {
-         final Player p = null;
+         final Player p;
          final int duration = 200;
          int amplifier = 0;
          BoostEffect random = null;
@@ -85,6 +90,19 @@ public class BoostItem {
              default:
                  break;
          }
+          
+         //Will here create the Boost Item and place it on the map 
+          CheckpointManager checkpointManager = racegame.getCheckpointManager();
+            for(Checkpoint checkpoint: checkpointManager.getCheckpoints()) {
+             Location checkpointLocation = checkpoint.getLocation();
+                Item entity = checkpointLocation.getWorld().dropItemNaturally(checkpointLocation, new ItemStack(mat));
+            }
+           
+         
+          
+                 
+         
+         
          
          
          
