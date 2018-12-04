@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
@@ -42,17 +41,29 @@ public class BoostItem {
      
      private Map<UUID,BoostEffect> playerEffects = new HashMap<>();
      
-    public <PotionEffectType> BoostItem()
+     private Item entity;
+    public PotionEffectType BoostItem()
     {
-         final Player p;
-         final int duration = 200;
-         int amplifier = 0;
-         BoostEffect random = null;
+        
+         //Will here create the Boost Item and place it on the map 
+          CheckpointManager checkpointManager = racegame.getCheckpointManager();
+            for(Checkpoint checkpoint: checkpointManager.getCheckpoints()) {
+             Location checkpointLocation = checkpoint.getLocation();
+                this.entity = checkpointLocation.getWorld().dropItemNaturally(checkpointLocation, new ItemStack(mat));
+            }
+           
+
+    }
+    
+    public Item getItem() {
+     return this.entity;
+    }
+        
+    public final void apply(final Player p, int duration, int amplifier, Color color) {
+         BoostEffect random;
          random = random.getRandomBoostEffect();
          
-
-         
-         if(null != random) 
+          if(null != random) 
          /*Colors:
          SPEED = YELLOW
          JUMP = BLUE
@@ -90,55 +101,7 @@ public class BoostItem {
              default:
                  break;
          }
-          
-         //Will here create the Boost Item and place it on the map 
-          CheckpointManager checkpointManager = racegame.getCheckpointManager();
-            for(Checkpoint checkpoint: checkpointManager.getCheckpoints()) {
-             Location checkpointLocation = checkpoint.getLocation();
-                Item entity = checkpointLocation.getWorld().dropItemNaturally(checkpointLocation, new ItemStack(mat));
-            }
-           
          
-          
-                 
-         
-         
-         
-         
-         
-         
-      
     }
-    
-  
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 }
