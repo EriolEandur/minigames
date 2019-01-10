@@ -25,6 +25,7 @@ public class GameCommandExecutor implements CommandExecutor {
     private final Map <String, AbstractCommand> commands = new LinkedHashMap <>();
     
     public GameCommandExecutor() {
+        addCommandHandler("dev", new GameDev(Permissions.STAFF));
         addCommandHandler("acceptquestions", new QuizGameQuestionsAccept(Permissions.STAFF));
         addCommandHandler("allow", new GameAllow(Permissions.MANAGER));
         addCommandHandler("ban", new GameBan(Permissions.MANAGER));

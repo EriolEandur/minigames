@@ -2,10 +2,13 @@ package com.mcmiddleearth.minigames.game;
 
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
+import static com.mcmiddleearth.minigames.game.AbstractGame.TeleportCause_FORCE;
 import com.mcmiddleearth.minigames.pvp.PvPLoadoutItem;
 import com.mcmiddleearth.minigames.pvp.PvPLoadoutManager;
 import com.mcmiddleearth.minigames.pvp.PvPLocationManager;
 import com.mcmiddleearth.minigames.scoreboard.PvPGameScoreboard;
+import com.mcmiddleearth.minigames.utils.DevUtil;
+import com.mcmiddleearth.minigames.utils.WorldGuardUtil;
 import com.mcmiddleearth.pluginutil.PlayerUtil;
 import com.mcmiddleearth.pluginutil.TitleUtil;
 import com.sk89q.worldedit.BlockVector;
@@ -33,6 +36,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * @author Planetology
@@ -60,6 +64,7 @@ public class PvPGame extends AbstractGame implements Listener {
         setFlightAllowed(false);
         setGm3Allowed(false);
         setGm2Forced(true);
+        setTeleportAllowed(false);
 
         locationManager = new PvPLocationManager(this);
         loadoutManager = new PvPLoadoutManager(this);
@@ -113,6 +118,7 @@ public class PvPGame extends AbstractGame implements Listener {
         super.end(sender);
 
         // Cleanup
+        WorldGuardUtil.removePVPArea(cuboidSelection);
         this.finished = false;
         this.redTeam.clear();
         this.blueTeam.clear();
@@ -193,6 +199,7 @@ public class PvPGame extends AbstractGame implements Listener {
             cuboidSelection = new CuboidSelection(locationManager.getArenaMax().getLocation().getWorld(),
                     locationManager.getArenaMax().getLocation(),
                     locationManager.getArenaMin().getLocation());
+            WorldGuardUtil.createPVPArea(cuboidSelection);
         } else if (locationManager.getArenaCenter() != null) {
             Location center = locationManager.getArenaCenter().getLocation();
 
@@ -236,12 +243,13 @@ public class PvPGame extends AbstractGame implements Listener {
 
     private void finish() {
         finished = true;
+        WorldGuardUtil.removePVPArea(cuboidSelection);
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 for (String name : pvpers) {
-                    Bukkit.getPlayer(name).teleport(getWarp());
+                    Bukkit.getPlayer(name).teleport(getWarp(),TeleportCause_FORCE);
                     Bukkit.getPlayer(name).getInventory().clear();
                 }
 
@@ -295,31 +303,40 @@ public class PvPGame extends AbstractGame implements Listener {
     }
 
     private void createTeams() {
+        redTeam.clear();
+        blueTeam.clear();
+        
         for (String name : pvpers) {
             Player player = Bukkit.getPlayer(name);
 
             if (!redTeam.contains(player.getName()) && !blueTeam.contains(player.getName())) {
                 if (blueTeam.size() > redTeam.size()) {
                     redTeam.add(player.getName());
-                    player.teleport(locationManager.getRedSpawn().getLocation());
+                    player.teleport(locationManager.getRedSpawn().getLocation(),TeleportCause_FORCE);
+                    player.setBedSpawnLocation(locationManager.getRedSpawn().getLocation(),true);               
                 } else if (redTeam.size() > blueTeam.size()) {
                     blueTeam.add(player.getName());
-                    player.teleport(locationManager.getBlueSpawn().getLocation());
+                    player.teleport(locationManager.getBlueSpawn().getLocation(),TeleportCause_FORCE);
+                    player.setBedSpawnLocation(locationManager.getBlueSpawn().getLocation(),true);
                 } else {
                     Random random = new Random();
 
                     if(random.nextBoolean()) {
                         redTeam.add(player.getName());
-                        player.teleport(locationManager.getRedSpawn().getLocation());
+                        player.teleport(locationManager.getRedSpawn().getLocation(),TeleportCause_FORCE);
+                        player.setBedSpawnLocation(locationManager.getRedSpawn().getLocation(),true);               
                     } else {
                         blueTeam.add(player.getName());
-                        player.teleport(locationManager.getBlueSpawn().getLocation());
+                        player.teleport(locationManager.getBlueSpawn().getLocation(),TeleportCause_FORCE);
+                        player.setBedSpawnLocation(locationManager.getBlueSpawn().getLocation(),true);               
                     }
                 }
             } else if (redTeam.contains(player.getName())) {
-                player.teleport(locationManager.getRedSpawn().getLocation());
+                player.teleport(locationManager.getRedSpawn().getLocation(),TeleportCause_FORCE);
+                player.setBedSpawnLocation(locationManager.getRedSpawn().getLocation(),true);               
             } else if (blueTeam.contains(player.getName())) {
-                player.teleport(locationManager.getBlueSpawn().getLocation());
+                player.teleport(locationManager.getBlueSpawn().getLocation(),TeleportCause_FORCE);
+                player.setBedSpawnLocation(locationManager.getBlueSpawn().getLocation(),true);               
             }
         }
     }
@@ -354,7 +371,10 @@ public class PvPGame extends AbstractGame implements Listener {
                     if (blueTeam.contains(damager.getName()) && blueTeam.contains(damaged.getName())) event.setCancelled(true);
                 }
 
-                if (!started || this.finished) event.setCancelled(true);
+                if (!started || this.finished) {
+                    event.setCancelled(true);
+                    DevUtil.log("Cancelled damage as not started or finished");
+                }
             }
         }
 
@@ -365,10 +385,14 @@ public class PvPGame extends AbstractGame implements Listener {
 
             if(PluginData.isInGame(shooter) && (PluginData.isInGame(damaged))) {
                 if (started) {
-                    if (redTeam.contains(shooter.getName()) && redTeam.contains(damaged.getName()))
+                    if (redTeam.contains(shooter.getName()) && redTeam.contains(damaged.getName())) {
                         event.setCancelled(true);
-                    if (blueTeam.contains(shooter.getName()) && blueTeam.contains(damaged.getName()))
+                        DevUtil.log("Cancelled damage as both red");
+                    }
+                    if (blueTeam.contains(shooter.getName()) && blueTeam.contains(damaged.getName())) {
                         event.setCancelled(true);
+                        DevUtil.log("Cancelled damage as both blue");
+                    }
                 }
             }
         }
@@ -382,8 +406,10 @@ public class PvPGame extends AbstractGame implements Listener {
                 if(PluginData.isInGame(shooter) && (PluginData.isInGame(damaged))) {
                     if (started) {
                         if (redTeam.contains(shooter.getName()) && redTeam.contains(damaged.getName()))  {
+                            DevUtil.log("Cancelled damage as both red (ranged)");
                             event.setCancelled(true);
                         } else if (blueTeam.contains(shooter.getName()) && blueTeam.contains(damaged.getName())) {
+                            DevUtil.log("Cancelled damage as both blue (ranged)");
                             event.setCancelled(true);
                         } else {
                             event.setDamage(2.0D);
@@ -417,19 +443,19 @@ public class PvPGame extends AbstractGame implements Listener {
         if (PluginData.isInGame(event.getPlayer())) {
             if (ready && !started) {
                 if (from.getX() != to.getX() || from.getZ() != to.getZ()) {
-                    event.getPlayer().teleport(from.setDirection(to.getDirection()));
+                    event.getPlayer().teleport(from.setDirection(to.getDirection()),TeleportCause_FORCE);
                 }
             } else if (started) {
                 if (cuboidArena) {
                     if (cuboidSelection.contains(from) && !cuboidSelection.contains(to)) {
-                        event.getPlayer().teleport(from.setDirection(to.getDirection()));
+                        event.getPlayer().teleport(from.setDirection(to.getDirection()),TeleportCause_FORCE);
                     }
                 } else {
                     BlockVector fromVector = new BlockVector(from.getX(), from.getY(), from.getZ());
                     BlockVector toVector = new BlockVector(to.getX(), to.getY(), to.getZ());
 
                     if (sphereRegion.contains(fromVector) && !sphereRegion.contains(toVector)) {
-                        event.getPlayer().teleport(from.setDirection(to.getDirection()));
+                        event.getPlayer().teleport(from.setDirection(to.getDirection()),TeleportCause_FORCE);
                     }
                 }
             }
@@ -459,7 +485,9 @@ public class PvPGame extends AbstractGame implements Listener {
                     }
                 }
 
-                player.spigot().respawn();
+                //player.spigot().respawn();
+                Logger.getGlobal().info("teleport blue");
+                //respawn(player,locationManager.getRedSpawn().getLocation());
             }
 
             if (blueTeam.contains(player.getName())) {
@@ -473,9 +501,28 @@ public class PvPGame extends AbstractGame implements Listener {
                     }
                 }
 
-                player.spigot().respawn();
+                //player.spigot().respawn();
+                Logger.getGlobal().info("teleport blue");
+                
+                //respawn(player,locationManager.getBlueSpawn().getLocation());
             }
         }
+    }
+    
+    private void respawn(final Player player, final Location loc) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.spigot().respawn();
+                if (redTeam.contains(player.getName())) {
+                    player.teleport(locationManager.getRedSpawn().getLocation(),TeleportCause_FORCE);
+                } else if (blueTeam.contains(player.getName())) {
+                    player.teleport(locationManager.getBlueSpawn().getLocation(),TeleportCause_FORCE);
+                }
+                player.setHealth(20);
+                player.setFoodLevel(20);
+            }
+        }.runTaskLater(MiniGamesPlugin.getPluginInstance(), 40);
     }
 
     @EventHandler
@@ -483,16 +530,30 @@ public class PvPGame extends AbstractGame implements Listener {
         final Player player = event.getPlayer();
 
         if(PluginData.isInGame(player) && started) {
+            this.setTeleportAllowed(true);
+            if (redTeam.contains(player.getName())) {
+                player.setBedSpawnLocation(locationManager.getRedSpawn().getLocation(),true);
+            } else if (blueTeam.contains(player.getName())) {
+                player.setBedSpawnLocation(locationManager.getBlueSpawn().getLocation(),true);
+            }
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     giveLoadout(player);
 
                     if (redTeam.contains(player.getName())) {
-                        player.teleport(locationManager.getRedSpawn().getLocation());
+                        player.teleport(locationManager.getRedSpawn().getLocation(),TeleportCause_FORCE);
                     } else if (blueTeam.contains(player.getName())) {
-                        player.teleport(locationManager.getBlueSpawn().getLocation());
+                        player.teleport(locationManager.getBlueSpawn().getLocation(),TeleportCause_FORCE);
                     }
+                    setTeleportAllowed(false);
+                    /*player.setInvulnerable(true);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            player.setInvulnerable(false);
+                        }
+                    }.runTaskLater(MiniGamesPlugin.getPluginInstance(),300);*/
                 }
             }.runTaskLater(MiniGamesPlugin.getPluginInstance(), 1);
         }
