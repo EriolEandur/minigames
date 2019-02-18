@@ -23,9 +23,10 @@ import java.util.Map;
 import java.util.UUID;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionBrewer;
+import com.mcmiddleearth.minigames.raceBoostItem.BoostItem;
+import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
+import org.bukkit.Color;
+
 
 /**
  *
@@ -42,12 +43,9 @@ public class BoostItemManager {
      * @param item The Item that will be checked
      * @return 
      */
-    public boolean isBoostItem(Item item) {
-        //TODO
-      boolean isBoost = false;
-         
-        
-       return isBoost;
+    public boolean isBoostItem(Item item) {  
+        return placedBoosts.contains(item);
+       
     }
 
     /**
@@ -57,9 +55,28 @@ public class BoostItemManager {
      * @param item Item that might get picked up by the player.
      */
     public void handlePickUp(Player player, Item item) {
-        //TODO
         
+        if(playerEffects.get(player.getUniqueId()) != null) {
+            playerEffects.remove(player.getUniqueId());
+        }
         
+        int duration = 100;
+        int amplifier = 1;
+        Color color;
+        player.getUniqueId().apply(player, duration, amplifier, color);
+        
+      
+       
+       
+       
+    }
+    
+    public void createBoostItem() {
+        BoostItem boostitem = new BoostItem();
+    }
+    
+    public void removeBoostItem() {
+        this.placedBoosts = null;
         
     }
       
