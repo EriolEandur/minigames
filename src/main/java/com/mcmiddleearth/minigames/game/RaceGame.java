@@ -8,6 +8,8 @@ package com.mcmiddleearth.minigames.game;
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.raceBoostItem.BoostItemManager;
+import com.mcmiddleearth.minigames.raceBoostItem.BoostItem;
+import com.mcmiddleearth.minigames.raceBoostItem.BoostEffect;
 import com.mcmiddleearth.minigames.raceCheckpoint.Checkpoint;
 import com.mcmiddleearth.minigames.raceCheckpoint.CheckpointManager;
 import com.mcmiddleearth.minigames.scoreboard.RaceGameScoreboard;
@@ -184,7 +186,7 @@ public class RaceGame extends AbstractGame {
         steady = false;
         cagePlayer(false);
         ((RaceGameScoreboard)getBoard()).startRace();
-        placeBoostItems();
+        boostItemManager.createBoostItem();
     }
     
     public void stop() {
@@ -196,21 +198,7 @@ public class RaceGame extends AbstractGame {
         steady = false;
         finished = 0;
         ((RaceGameScoreboard)getBoard()).stopRace();
-        removeBoostItems();
-    }
-    
-    /** 
-     * Places 1-4 boost items between every two race checkpoints
-     */
-    private void placeBoostItems() {
-        //TODO
-    }
-    
-    /**
-     * Removes all boost items of this game
-     */
-    private void removeBoostItems() {
-        //TODO
+        boostItemManager.removeBoostItem();
     }
     
     private void cagePlayer(boolean cage) {
@@ -345,4 +333,3 @@ public class RaceGame extends AbstractGame {
     }
 
 }
-//when finished with boost items, need to impliment them here - didi

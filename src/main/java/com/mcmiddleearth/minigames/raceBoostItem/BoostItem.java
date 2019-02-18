@@ -42,7 +42,7 @@ public class BoostItem {
      private Map<UUID,BoostEffect> playerEffects = new HashMap<>();
      
      private Item entity;
-    public PotionEffectType BoostItem()
+    public BoostItem()
     {
         
          //Will here create the Boost Item and place it on the map 

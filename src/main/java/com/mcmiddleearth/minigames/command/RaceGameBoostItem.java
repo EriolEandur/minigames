@@ -23,6 +23,7 @@ public class RaceGameBoostItem extends AbstractGameCommand{
         cmdGroup = CmdGroup.RACE;
         setShortDescription(": Adds or removes boost items.");
         setUsageDescription(" true|false: Adds or removes boost items from a race game. Can be used before or during the race.");
+         addCommandHandler("boostItem", new RaceGameBoostItem(Permissions.MANAGER));
     }
     
     @Override
@@ -31,7 +32,7 @@ public class RaceGameBoostItem extends AbstractGameCommand{
         if(game != null && isManager((Player) cs, game)
                         && isCorrectGameType((Player) cs, game, GameType.RACE)) {
             RaceGame raceGame = (RaceGame) game;
-            //TODO
+            
         }
     }
 
