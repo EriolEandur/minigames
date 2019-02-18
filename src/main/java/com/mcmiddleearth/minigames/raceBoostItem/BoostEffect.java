@@ -16,6 +16,11 @@
  */
 package com.mcmiddleearth.minigames.raceBoostItem;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import org.bukkit.Color;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 /**
@@ -49,6 +54,9 @@ public enum BoostEffect {
        return values()[random.nextInt(values().length)];
    }
    
+   public final void apply(final Player p, int duration, int amplifier, Color color) {
+       p.addPotionEffect(new PotionEffect(type, duration, amplifier, false, true, color));
+   }
    
    
    
