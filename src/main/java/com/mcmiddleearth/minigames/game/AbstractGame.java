@@ -68,7 +68,7 @@ public abstract class AbstractGame {
     
     private final List<UUID> leaveMessaged = new ArrayList<>();
     
-    private final Map<UUID,GameMode> playerPreviousMode = new HashMap<>();
+    public final Map<UUID,GameMode> playerPreviousMode = new HashMap<>();
     
     @Getter
     private Location warp = null;

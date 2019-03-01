@@ -4,30 +4,31 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * @author Planetology
  */
-public class GolfLocation {
+public class GolfHoleLocation {
 
     @Getter @Setter private Location location;
     @Getter private String name, pointName;
+    @Getter private int par;
 
-    public GolfLocation(Location loc, String name) {
+    public GolfHoleLocation(Location loc, String name, int par) {
         this.location = loc;
         this.name = name;
+        this.par = par;
+
         try {
             setPoint(name,false);
         } catch (FileNotFoundException ex) {
             try {
                 setPoint(name,false);
             } catch (FileNotFoundException ex1) {
-                Logger.getLogger(GolfLocation.class.getName()).log(Level.SEVERE, "Default location not found.", ex1);
+                Logger.getLogger(GolfHoleLocation.class.getName()).log(Level.SEVERE, "Default location not found.", ex1);
             }
         }
     }

@@ -22,7 +22,7 @@ public class GolfGameScoreboard extends GameScoreboard {
     public void init(GolfGame game) {
         this.game = game;
 
-        holeObjective = scoreboard.registerNewObjective("hole", "dummy", ChatColor.GOLD + "Par " + game.getPar() + ChatColor.GRAY + " | "
+        holeObjective = scoreboard.registerNewObjective("hole", "dummy", ChatColor.GOLD + "Par " + game.getLocationManager().getGameHoles().getFirst().getPar() + ChatColor.GRAY + " | "
                 + ChatColor.GOLD + "Hole " + game.getHole());
         scoresObjective = scoreboard.registerNewObjective("scores", "dummy", ChatColor.GOLD + "Scores " + ChatColor.GRAY + "| "
                 + ChatColor.GOLD + "Hole " + game.getHole());
@@ -42,7 +42,7 @@ public class GolfGameScoreboard extends GameScoreboard {
 
     public void showHole() {
         holeObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        holeObjective.setDisplayName(ChatColor.GOLD + "Par " + game.getPar() + ChatColor.GRAY + " | " + ChatColor.GOLD + "Hole " + game.getHole());
+        holeObjective.setDisplayName(ChatColor.GOLD + "Par " + game.getLocationManager().getGameHoles().get(game.getHole() - 1).getPar() + ChatColor.GRAY + " | " + ChatColor.GOLD + "Hole " + game.getHole());
     }
 
     public void showScores() {
@@ -55,7 +55,7 @@ public class GolfGameScoreboard extends GameScoreboard {
     }
 
     public void addScoresPlayer(String playerName, int shots) {
-        int difference = -game.getPar() + shots;
+        int difference = -game.getLocationManager().getGameHoles().get(game.getHole() - 1).getPar() + shots;
 
         Score score = scoresObjective.getScore(playerName);
         score.setScore(difference);

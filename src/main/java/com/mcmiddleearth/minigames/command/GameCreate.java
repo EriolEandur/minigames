@@ -19,7 +19,7 @@ public class GameCreate extends AbstractGameCommand{
     public GameCreate(String... permissionNodes) {
         super(2, true, permissionNodes);
         setShortDescription(": Creates a new mini game.");
-        setUsageDescription(" quiz|race|hide|golf <gamename>: Creates a lore quiz or a race or a hide and seek or golf game with name <gamename>. The location of the player issuing the command becomes the warp of the game.");
+        setUsageDescription(" quiz|race|hide|golf|pvp <gamename>: Creates a lore quiz or a race or a hide and seek or golf game with name <gamename>. The location of the player issuing the command becomes the warp of the game.");
     }
     
     @Override
@@ -56,6 +56,11 @@ public class GameCreate extends AbstractGameCommand{
                     game = new GolfGame((Player) cs, args[1]);
                     sendGolfGameCreateMessage(cs);
                     break;
+                case PVP:
+                    PluginData.stopSpectating((Player)cs);
+                    game = new PvPGame((Player) cs, args[1]);
+                    sendPvPGameCreateMessage(cs);
+                    break;
                 default:
                     sendInvalidGameTypeErrorMessage(cs);
                     return;
@@ -85,5 +90,9 @@ public class GameCreate extends AbstractGameCommand{
 
     private void sendGolfGameCreateMessage(CommandSender cs) {
         PluginData.getMessageUtil().sendInfoMessage(cs, "You created a new Golf game.");
+    }
+
+    private void sendPvPGameCreateMessage(CommandSender cs) {
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You created a new PvP game.");
     }
  }

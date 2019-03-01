@@ -3,60 +3,67 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mcmiddleearth</groupId>
     <artifactId>MiniGames</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
     <build>
-    <!-- <sourceDirectory>${project.build.directory}/generated-sources/delombok</sourceDirectory> -->
-      
-       <plugins>
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.8.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
+
         <resources>
-          <resource>
-            <directory>${basedir}/src/main/resources</directory>
-            <includes>
-                <include>plugin.yml</include>
-            </includes>
-          </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
         </resources>
     </build>
+
     <repositories>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <repository>
-            <id>pluginUtil-repo</id>
-            <url>https://github.com/EriolEandur/PluginUtils/</url>
-        </repository>
+
         <repository>
             <id>projectlombok.org</id>
             <url>http://projectlombok.org/mavenrepo</url>
         </repository>
+
+        <repository>
+            <id>fawe-repo</id>
+            <url>http://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/</url>
+        </repository>
+
         <repository>
             <id>sk89q-snapshots</id>
             <url>http://maven.sk89q.com/artifactory/repo</url>
             <releases>
-                <enabled>true</enabled> <!-- releases enabled: this specific repository also hosts release versions -->
+                <enabled>true</enabled>
             </releases>
             <snapshots>
-                <enabled>true</enabled> <!-- snapshots enabled: we declare a SNAPSHOT repository because we need to download a SNAPSHOT dependency -->
+                <enabled>true</enabled>
             </snapshots>
         </repository>
     </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -64,29 +71,49 @@
             <version>1.16.12</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>18.0</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>com.mcmiddleearth</groupId>
             <artifactId>PluginUtils</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.2-SNAPSHOT-native-003</version>
             <scope>system</scope>
-            <systemPath>D:/Users/Joas Onvlee/Documents/Coding/Projects/MCME/plugins/PluginUtils-1.1-SNAPSHOT.jar</systemPath>
+            <systemPath>D:/MCME/dev/jars/PluginUtils-1.2-SNAPSHOT-native-003.jar</systemPath>
         </dependency>
+
+        <dependency>
+            <groupId>com.boydti</groupId>
+            <artifactId>fawe-api</artifactId>
+            <version>latest</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldguard</artifactId>
+            <version>7.0.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>D:/MCME/dev/jars/worldguard-legacy-7.0.0-SNAPSHOT-dist.jar</systemPath>
+        </dependency>
+
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
-            <artifactId>worldedit-bukkit</artifactId>
-            <version>6.1.4-SNAPSHOT</version>
+            <artifactId>worldedit</artifactId>
+            <version>1.13</version>
+            <systemPath>D:/MCME/dev/jars/FastAsyncWorldEdit-bukkit-1.13.132.jar</systemPath>
+            <scope>system</scope>
         </dependency>
     </dependencies>
 </project>

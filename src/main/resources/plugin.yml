@@ -1,11 +1,12 @@
-name: MiniGames
-main: com.mcmiddleearth.minigames.MiniGamesPlugin
-version: 1.1
+name: ${artifactId}
+main: ${groupId}.minigames.MiniGamesPlugin
+version: ${version}
 description: MiniGames plugin
 load: POSTWORLD
 api-version: 1.13
 softdepend: [Multiverse-Core]
 depend: [PluginUtils]
+
 commands:
     game:
         description: manage MiniGames plugin
@@ -13,6 +14,7 @@ commands:
     gc:
         description: MiniGames chat message
         usage: /gc <message> Sends a message to all participants of the MiniGame
+
 permissions:
     minigames.*:
         description: Gives access to all miniGames commands

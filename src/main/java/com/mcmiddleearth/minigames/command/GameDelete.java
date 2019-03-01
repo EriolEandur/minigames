@@ -23,34 +23,32 @@ public class GameDelete extends AbstractCommand implements Confirmationable{
     public GameDelete(String... permissionNodes) {
         super(2, true, permissionNodes);
         setShortDescription(": Deletes saved minigame files.");
-        setUsageDescription(" quiz|race|marker|golf <filename>: Deletes a quiz or race or marker or golf data file with name <filename>.");
+        setUsageDescription(" quiz|race|marker|golf|pvp <filename>: Deletes a quiz, race, marker, golf or pvp data file with name <filename>.");
     }
     
     @Override
     protected void execute(CommandSender cs, String... args) {
-        if(args[0].equalsIgnoreCase("quiz")) {
+        if (args[0].equalsIgnoreCase("quiz")) {
             file = new File(PluginData.getQuestionDir(), args[1] + ".json");
-        }
-        else if(args[0].equalsIgnoreCase("race")) {
+        } else if(args[0].equalsIgnoreCase("race")) {
             file = new File(PluginData.getRaceDir(), args[1] + ".json");
-        }
-        else if(args[0].equalsIgnoreCase("marker")) {
+        } else if(args[0].equalsIgnoreCase("marker")) {
             file = new File(Checkpoint.getMarkerDir(), args[1] + "."+ Checkpoint.getMarkerExt());
-        }
-        else if(args[0].equalsIgnoreCase("golf")) {
+        } else if(args[0].equalsIgnoreCase("golf")) {
             file = new File(PluginData.getGolfDir(), args[1] + ".json");
-        }
-        else {
+        } else if(args[0].equalsIgnoreCase("pvp")) {
+            file = new File(PluginData.getPvpDirectory(), args[1] + ".json");
+        } else {
             sendInvalidDataTypeMessage(cs);
             return;
         }
+
         if(file.exists()) {
             PluginData.getConfirmationFactory().start((Player) cs, 
                     "Are you sure to delete "
                             +PluginData.getMessageUtil().HIGHLIGHT_STRESSED+file.getName()
                             +PluginData.getMessageUtil().HIGHLIGHT+"? There is no undo.", this);
-        }
-        else {
+        } else {
             sendFileNotFoundMessage(cs);
         }
     }

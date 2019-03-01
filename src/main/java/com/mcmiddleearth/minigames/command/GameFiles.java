@@ -25,7 +25,7 @@ public class GameFiles extends AbstractCommand{
     public GameFiles(String... permissionNodes) {
         super(1, true, permissionNodes);
         setShortDescription(": Lists all saved game data files.");
-        setUsageDescription(" quiz|race|marker|golf: Lists all quiz or race or marker or golf courses data files. For quiz, race and golf course data files a description of the saved data will be shown.");
+        setUsageDescription(" quiz|race|marker|golf|pvp|loadout: Lists all quiz, race, marker, golf course, pvp match or pvp loadout data files. For quiz, race, golf course, pvp match and pvp loadout data files a description of the saved data will be shown.");
     }
     
     @Override
@@ -37,29 +37,39 @@ public class GameFiles extends AbstractCommand{
         }
         File directory;
         FileFilter filter;
-        FancyMessage header = new FancyMessage(MessageType.INFO,PluginData.getMessageUtil());
+        FancyMessage header = new FancyMessage(MessageType.INFO, PluginData.getMessageUtil());
         if(args[0].equalsIgnoreCase("quiz")) {
             directory = PluginData.getQuestionDir();
             filter = FileUtil.getFileExtFilter("json");
             command = "/game loadquiz";
-            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED+"quiz"+PluginData.getMessageUtil().INFO+" files.");
+            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED + "quiz" + PluginData.getMessageUtil().INFO+" files.");
         }
         else if(args[0].equalsIgnoreCase("race")) {
             directory = PluginData.getRaceDir();
             filter = FileUtil.getFileExtFilter("json");
             command = "/game loadrace";
-            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED+"race"+PluginData.getMessageUtil().INFO+" files.");
+            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED + "race" + PluginData.getMessageUtil().INFO+" files.");
         }
         else if(args[0].equalsIgnoreCase("marker")) {
             directory = Checkpoint.getMarkerDir();
             filter =FileUtil.getFileExtFilter(Checkpoint.getMarkerExt());
             command = "/game marker";
-            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED+"race marker"+PluginData.getMessageUtil().INFO+" files.");
+            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED + "race marker" + PluginData.getMessageUtil().INFO+" files.");
         } else if(args[0].equalsIgnoreCase("golf")) {
             directory = PluginData.getGolfDir();
             filter = FileUtil.getFileExtFilter("json");
             command = "/game loadgolf";
-            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED+"golf course"+PluginData.getMessageUtil().INFO+" files.");
+            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED + "golf course" + PluginData.getMessageUtil().INFO+" files.");
+        } else if(args[0].equalsIgnoreCase("pvp")) {
+            directory = PluginData.getPvpDirectory();
+            filter = FileUtil.getFileExtFilter("json");
+            command = "/game loadpvp";
+            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED + "pvp match" + PluginData.getMessageUtil().INFO+" files.");
+        } else if(args[0].equalsIgnoreCase("loadout")) {
+            directory = PluginData.getLoadoutDirectory();
+            filter = FileUtil.getFileExtFilter("json");
+            command = "/game loadout";
+            header.addSimple("Saved "+PluginData.getMessageUtil().STRESSED + "pvp loadout" + PluginData.getMessageUtil().INFO+" files.");
         }
         else {
             sendInvalidDataTypeMessage(cs);
@@ -150,6 +160,6 @@ public class GameFiles extends AbstractCommand{
     }*/
 
     private void sendInvalidDataTypeMessage(CommandSender cs) {
-        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid file type. Try /game files quiz|race|marker|golf");
+        PluginData.getMessageUtil().sendErrorMessage(cs, "Invalid file type. Try /game files quiz|race|marker|golf|loadout");
     }
 }
