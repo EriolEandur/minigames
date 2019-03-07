@@ -31,11 +31,18 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.type.Stairs;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -185,14 +192,14 @@ public class Checkpoint {
             if(!blockState.getType().equals(Material.SIGN) 
                     && !blockState.getType().equals(Material.SIGN)
                     && !blockState.getType().equals(Material.WALL_SIGN)
-                    && !blockState.getType().equals(Material.TORCH)) {
+                    && !blockState.getType().equals(Material.WALL_TORCH)) {
                 blockState.update(true, false);
             }
         }
         for(BlockState blockState : marker) {
             if(blockState.getType().equals(Material.SIGN)
                     || blockState.getType().equals(Material.WALL_SIGN)
-                    || blockState.getType().equals(Material.TORCH)) {
+                    || blockState.getType().equals(Material.WALL_TORCH)) {
                 blockState.update(true, false);
             }
         }
@@ -276,7 +283,8 @@ public class Checkpoint {
                     int y = scanner.nextInt();
                     int z = scanner.nextInt();
                     Material type = Material.getMaterial(scanner.next());
-                    byte data = scanner.nextByte();
+                    String data = scanner.next();
+                    BlockData blockData = Bukkit.getServer().createBlockData(data);
                     scanner.nextLine();
                     if (type != null) {
                         if(type.equals(Material.NETHERRACK)) {
@@ -312,10 +320,10 @@ public class Checkpoint {
                             }
 
                             if (type.equals(Material.WALL_SIGN)) {
-                                data = adaptData(data, rotation, new byte[]{3, 4, 2, 5});
-                            } else if (type.equals(Material.TORCH)) {
-                                data = adaptData(data, rotation, new byte[]{3, 2, 4, 1});
-                            } else if (type.equals(Material.SANDSTONE_STAIRS)
+                                blockData = adaptData(((WallSign) blockData).getFacing(), null, blockData, rotation, new BlockFace[]{BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST});
+                            } else if (type.equals(Material.WALL_TORCH)) {
+                                blockData = adaptData(((Directional) blockData).getFacing(), null, blockData, rotation, new BlockFace[]{BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST});
+                            }else if (type.equals(Material.SANDSTONE_STAIRS)
                                     || type.equals(Material.ACACIA_STAIRS)
                                     || type.equals(Material.DARK_OAK_STAIRS)
                                     || type.equals(Material.RED_SANDSTONE_STAIRS)
@@ -327,15 +335,20 @@ public class Checkpoint {
                                     || type.equals(Material.SPRUCE_STAIRS)
                                     || type.equals(Material.OAK_STAIRS)
                                     || type.equals(Material.BRICK_STAIRS)) {
-                                if (data == 3 || data == 0 || data == 2 || data == 1) {
-                                    data = adaptData(data, rotation, new byte[]{3, 0, 2, 1});
-                                } else if (data == 7 || data == 4 || data == 6 || data == 5) {
-                                    data = adaptData(data, rotation, new byte[]{7, 4, 6, 5});
+                                BlockFace face = ((Stairs) blockData).getFacing();
+                                Bisected.Half half = ((Stairs) blockData).getHalf();
+                                if (face == BlockFace.NORTH || face == BlockFace.EAST || face == BlockFace.SOUTH || face == BlockFace.WEST) {
+                                    if (half == Bisected.Half.BOTTOM) {
+                                        blockData = adaptData(((Stairs) blockData).getFacing(), Bisected.Half.BOTTOM, blockData, rotation, new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST});
+                                    } else if (half == Bisected.Half.TOP) {
+                                        blockData = adaptData(((Stairs) blockData).getFacing(), Bisected.Half.TOP, blockData, rotation, new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST});
+                                    }
                                 }
                             }
+
                             BlockState state = block.getState();
                             state.setType(type);
-                            state.setRawData(data);
+                            state.setBlockData(blockData);
                             marker.add(state);
                         }
                     }
@@ -365,19 +378,21 @@ public class Checkpoint {
         return 0;
     }
     
-    private byte adaptData(byte data, BlockRotation rotation, byte[] dataValues) {
+    private BlockData adaptData(BlockFace face, Bisected.Half half, BlockData data, BlockRotation rotation, BlockFace[] dataValues) {
         int dataIndex=-1;
-        for(int i=0; i<4 ;i++) {
-            if(dataValues[i]==data) {
-            dataIndex = i;
+
+        for(int i=0; i<4; i++) {
+            if(dataValues[i] == face) {
+                dataIndex = i;
             break;
             }
         }
+
         if(dataIndex == -1) {
             return data;
         }
         switch(rotation) {
-            case RIGHT: 
+            case RIGHT:
                 dataIndex++;
                 break;
             case TURN_AROUND:
@@ -391,7 +406,14 @@ public class Checkpoint {
         if(dataIndex>3) {
             dataIndex-=4;
         }
-        return dataValues[dataIndex];
+
+        ((Directional) data).setFacing(dataValues[dataIndex]);
+
+        if (half != null) {
+            ((Stairs) data).setHalf(half);
+        }
+
+        return data;
     }
     
     private BlockRotation getRotation(double savedYaw) {
@@ -428,7 +450,7 @@ public class Checkpoint {
                                 //blocks.add(block);
                                 writer.println(i+" "+j+" "+k+" "
                                                +block.getType()+" "
-                                               +block.getData());
+                                               +block.getBlockData().getAsString());
                             }
                         }
                     }
