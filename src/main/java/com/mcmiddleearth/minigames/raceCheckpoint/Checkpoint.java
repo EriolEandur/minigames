@@ -282,9 +282,9 @@ public class Checkpoint {
                     int x = scanner.nextInt();
                     int y = scanner.nextInt();
                     int z = scanner.nextInt();
-                    Material type = Material.getMaterial(scanner.next());
                     String data = scanner.next();
                     BlockData blockData = Bukkit.getServer().createBlockData(data);
+                    Material type = blockData.getMaterial();
                     scanner.nextLine();
                     if (type != null) {
                         if(type.equals(Material.NETHERRACK)) {
@@ -347,7 +347,6 @@ public class Checkpoint {
                             }
 
                             BlockState state = block.getState();
-                            state.setType(type);
                             state.setBlockData(blockData);
                             marker.add(state);
                         }
@@ -435,10 +434,11 @@ public class Checkpoint {
                 file.delete();
             }
         }
+
         try(FileWriter fw = new FileWriter(file); 
             PrintWriter writer = new PrintWriter(fw)) {
                 writer.println("YAW "+loc.getYaw());
-        List<Object> blocks  = new ArrayList<>();
+
                 for(int i = -CheckpointManager.NEAR_DISTANCE;
                         i< CheckpointManager.NEAR_DISTANCE; i++) {
                     for(int j = -CheckpointManager.NEAR_DISTANCE;
@@ -448,9 +448,7 @@ public class Checkpoint {
                             Block block = loc.getBlock().getRelative(i,j,k);
                             if(!block.isEmpty()) {
                                 //blocks.add(block);
-                                writer.println(i+" "+j+" "+k+" "
-                                               +block.getType()+" "
-                                               +block.getBlockData().getAsString());
+                                writer.println(i+" "+j+" "+k+" " + block.getBlockData().getAsString());
                             }
                         }
                     }
