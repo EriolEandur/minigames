@@ -21,7 +21,7 @@ public class PvPGameLoadout extends AbstractGameCommand{
         super(0, true, permissionNodes);
         cmdGroup = CmdGroup.PVP;
         setShortDescription(": Sets a loadout for a pvp match.");
-        setUsageDescription(" <filename>: Loads pvp match locations from the file <filename>.");
+        setUsageDescription(" <filename>: Loads loadout from the file <filename>.");
     }
 
     @Override

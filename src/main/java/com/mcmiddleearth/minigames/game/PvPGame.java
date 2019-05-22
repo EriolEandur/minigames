@@ -24,18 +24,16 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author Planetology
@@ -52,6 +50,8 @@ public class PvPGame extends AbstractGame implements Listener {
     @Getter @Setter boolean loadout;
     @Getter private int readySeconds, gameSeconds;
     @Getter public int redKills, blueKills;
+
+    @Getter Map<String, ItemStack[]> inventories;
 
     @Getter private PvPGameScoreboard scoreboard;
 
@@ -75,6 +75,8 @@ public class PvPGame extends AbstractGame implements Listener {
         redKills = 0;
         blueKills = 0;
 
+        inventories = new HashMap<>();
+
         scoreboard = ((PvPGameScoreboard) getBoard());
         scoreboard.init(this);
     }
@@ -85,6 +87,7 @@ public class PvPGame extends AbstractGame implements Listener {
 
         forceTeleport(player, getWarp());
         pvpers.add(player.getName());
+        inventories.put(player.getUniqueId().toString(), player.getInventory().getContents());
     }
 
     @Override
@@ -93,6 +96,7 @@ public class PvPGame extends AbstractGame implements Listener {
 
         pvpers.remove(player.getName());
         if (PlayerUtil.isSame(player, getManager())) ((Player) player).setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+        inventories.remove(player.getUniqueId().toString());
     }
 
     @Override
@@ -120,6 +124,7 @@ public class PvPGame extends AbstractGame implements Listener {
         for (String name : pvpers) {
             Bukkit.getPlayer(name).teleport(getWarp(), TeleportCause_FORCE);
             Bukkit.getPlayer(name).getInventory().clear();
+            Bukkit.getPlayer(name).getInventory().setContents(inventories.get(Bukkit.getPlayer(name).getUniqueId().toString()));
         }
 
         // Cleanup
@@ -215,6 +220,7 @@ public class PvPGame extends AbstractGame implements Listener {
                 if (gameSeconds > 0) {
                     gameSeconds --;
                     ((PvPGameScoreboard) getBoard()).showKills();
+                    checkItems();
 
                     if (gameSeconds == 0) {
                         cancel();
@@ -262,10 +268,10 @@ public class PvPGame extends AbstractGame implements Listener {
         if (redTeam.contains(player.getName())) color = Color.fromRGB(255, 0, 0);
         if (blueTeam.contains(player.getName())) color = Color.fromRGB(0, 0, 255);
 
-        ItemStack helmet = PvPLoadoutItem.fromJson(loadoutManager.getArmor().get(3)).toItemStack(),
-                chestplate = PvPLoadoutItem.fromJson(loadoutManager.getArmor().get(2)).toItemStack(),
-                leggings = PvPLoadoutItem.fromJson(loadoutManager.getArmor().get(1)).toItemStack(),
-                boots = PvPLoadoutItem.fromJson(loadoutManager.getArmor().get(0)).toItemStack();
+        ItemStack helmet = loadoutManager.getArmor().get(3),
+                chestplate = loadoutManager.getArmor().get(2),
+                leggings = loadoutManager.getArmor().get(1),
+                boots = loadoutManager.getArmor().get(0);
 
         if (helmet.getType().equals(Material.LEATHER_HELMET)) {
             LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) helmet.getItemMeta();
@@ -292,8 +298,12 @@ public class PvPGame extends AbstractGame implements Listener {
 
         if (loadoutManager.getShield() != null) player.getInventory().setItemInOffHand(PvPLoadoutItem.fromJson(loadoutManager.getShield()).toItemStack());
 
-        for (Object object : loadoutManager.getHotbar()) {
-            player.getInventory().addItem(PvPLoadoutItem.fromJson(object).toItemStack());
+        for (ItemStack item : loadoutManager.getHotbar()) {
+            ItemMeta meta = item.getItemMeta();
+            meta.setUnbreakable(true);
+            item.setItemMeta(meta);
+
+            player.getInventory().addItem(item);
         }
     }
 
@@ -334,6 +344,18 @@ public class PvPGame extends AbstractGame implements Listener {
         }
     }
 
+    private void checkItems() {
+        for (String name : pvpers) {
+            Player player = Bukkit.getPlayer(name);
+
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (item != null) {
+                    if (!loadoutManager.getHotbar().contains(item)) player.getInventory().remove(item);
+                }
+            }
+        }
+    }
+
     public String getClock() {
         int minutes = gameSeconds / 60;
         int seconds = gameSeconds % 60;
@@ -360,6 +382,7 @@ public class PvPGame extends AbstractGame implements Listener {
 
             if(PluginData.isInGame(damager) && (PluginData.isInGame(damaged))) {
                 if (started) {
+
                     if (redTeam.contains(damager.getName()) && redTeam.contains(damaged.getName())) event.setCancelled(true);
                     if (blueTeam.contains(damager.getName()) && blueTeam.contains(damaged.getName())) event.setCancelled(true);
                 }
@@ -413,7 +436,7 @@ public class PvPGame extends AbstractGame implements Listener {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
 
-            if(PluginData.isInGame(player)) {
+            if (PluginData.isInGame(player)) {
                 if (event.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED || event.getRegainReason() == EntityRegainHealthEvent.RegainReason.REGEN)
                     event.setCancelled(true);
             }
@@ -422,12 +445,13 @@ public class PvPGame extends AbstractGame implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
         Location from = event.getFrom(), to = event.getTo();
 
-        if (PluginData.isInGame(event.getPlayer())) {
+        if (PluginData.isInGame(player)) {
             if (ready && !started) {
                 if (from.getX() != to.getX() || from.getZ() != to.getZ()) {
-                    event.getPlayer().teleport(from.setDirection(to.getDirection()), TeleportCause_FORCE);
+                    player.teleport(from.setDirection(to.getDirection()), TeleportCause_FORCE);
                 }
             } else if (started && !finished) {
                 Vector fromVector = new Vector(from.getX(), from.getY(), from.getZ());
@@ -444,7 +468,12 @@ public class PvPGame extends AbstractGame implements Listener {
                     region = regions.getRegion("pvpArea");
 
                     if (region.contains(fromVector) && !region.contains(toVector)) {
-                        event.getPlayer().teleport(from.setDirection(to.getDirection()), TeleportCause_FORCE);
+                        player.teleport(from, TeleportCause_FORCE);
+
+                        org.bukkit.util.Vector center = getWarp().toVector();
+
+                        center.subtract(player.getLocation().toVector());
+                        player.setVelocity(center.normalize().multiply(0.5).setY(0.3));
                     }
                 }
             }

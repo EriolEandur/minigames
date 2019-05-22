@@ -28,7 +28,7 @@ public class PvPLoadoutManager {
 
     @Getter private LinkedList<String> armorContents, hotbarContents;
     @Getter private String shieldContent;
-    @Getter private LinkedList<Object> armor, hotbar;
+    @Getter private LinkedList<ItemStack> armor, hotbar;
     @Getter private Object shield;
 
     public PvPLoadoutManager(PvPGame game) {
@@ -97,11 +97,11 @@ public class PvPLoadoutManager {
             JSONArray jHotbarArray = (JSONArray) jInput.get("hotbar");
 
             for (Object jItem : jArmorArray) {
-                armor.add(jItem);
+                armor.add(PvPLoadoutItem.fromJson(jItem).toItemStack());
             }
 
             for (Object jItem : jHotbarArray) {
-                hotbar.add(jItem);
+                hotbar.add(PvPLoadoutItem.fromJson(jItem).toItemStack());
             }
 
             if (jInput.get("shield") != null) shield = jInput.get("shield");
