@@ -16,14 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,7 +38,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  *
  * @author Eriol_Eandur
  */
-public class HideAndSeekGame extends AbstractGame {
+public class HideAndSeekGame extends AbstractGame implements Listener {
 
     private final int seekerCageRadius = 5; 
     
@@ -58,14 +64,17 @@ public class HideAndSeekGame extends AbstractGame {
     @Getter
     private boolean hiding = false;
     
-    private OfflinePlayer seeker;
+    @Getter public OfflinePlayer seeker;
     
-    private final List<Player> hiddenPlayers = new ArrayList<>();
+    @Getter public final List<Player> hiddenPlayers = new ArrayList<>();
     
     private BukkitRunnable seekTask, stopTask;
     
     public HideAndSeekGame(Player manager, String name) {
         super(manager, name, GameType.HIDE_AND_SEEK, new HideAndSeekGameScoreboard());
+
+        Bukkit.getServer().getPluginManager().registerEvents(this, MiniGamesPlugin.getPluginInstance());
+
         setTeleportAllowed(false);
         setFlightAllowed(false);
         setGm2Forced(true);
@@ -259,6 +268,82 @@ public class HideAndSeekGame extends AbstractGame {
         }
     }
 
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        Action action = event.getAction();
+        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+
+        if (!hiddenPlayers.isEmpty() && seeker != null) {
+            if (hiddenPlayers.contains(event.getPlayer()) || seeker.equals(event.getPlayer())) {
+                if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
+                    if (itemInHand.getType().equals(Material.GHAST_TEAR)) {
+                        event.setCancelled(true);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        List<Block> blocks = new ArrayList<>();
+
+        if (!hiddenPlayers.isEmpty() && seeker != null) {
+            if (hiddenPlayers.contains(event.getPlayer()) || seeker.equals(event.getPlayer())) {
+                for (int x = getWarp().getBlockX() - radius; x <= getWarp().getBlockX() + radius; x++) {
+                    for (int y = getWarp().getBlockY() - radius; y <= getWarp().getBlockY() + radius; y++) {
+                        for (int z = getWarp().getBlockZ() - radius; z <= getWarp().getBlockZ() + radius; z++) {
+                            blocks.add(getWarp().getWorld().getBlockAt(x, y, z));
+                        }
+                    }
+                }
+
+                if (blocks.contains(event.getBlock())) {
+                    if (!getPlayers().contains(event.getPlayer().getUniqueId())) {
+                        PluginData.getMessageUtil().sendErrorMessage(event.getPlayer(), "You can't edit terrain where a minigame is active.");
+                        event.setCancelled(true);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        List<Location> locations = new ArrayList<>();
+
+        if (!hiddenPlayers.isEmpty() && seeker != null) {
+            if (hiddenPlayers.contains(event.getPlayer()) || seeker.equals(event.getPlayer())) {
+                for (int x = getWarp().getBlockX() - radius; x <= getWarp().getBlockX() + radius; x++) {
+                    for (int y = getWarp().getBlockY() - radius; y <= getWarp().getBlockY() + radius; y++) {
+                        for (int z = getWarp().getBlockZ() - radius; z <= getWarp().getBlockZ() + radius; z++) {
+                            locations.add(new Location(event.getPlayer().getWorld(), x, y, z));
+                        }
+                    }
+                }
+
+                if (locations.contains(event.getBlock().getLocation())) {
+                    if (!getPlayers().contains(event.getPlayer().getUniqueId())) {
+                        PluginData.getMessageUtil().sendErrorMessage(event.getPlayer(), "You can't edit terrain where a minigame is active.");
+                        event.setCancelled(true);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
+        if (!hiddenPlayers.isEmpty() && seeker != null) {
+            if (hiddenPlayers.contains(event.getPlayer()) || seeker.equals(event.getPlayer())) {
+                if (event.getMessage().startsWith("/up") || event.getMessage().startsWith("//up")) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
     @Override
     public boolean joinAllowed() {
         return isAnnounced() && !(hiding || seeking);
@@ -272,6 +357,10 @@ public class HideAndSeekGame extends AbstractGame {
         else {
             return super.getGameChatTag(player);
         }
+    }
+
+    public void teleportToWarp(Player player) {
+        player.teleport(getWarp(), TeleportCause_FORCE);
     }
 
     private void sendStartHideMessage() {
@@ -325,6 +414,4 @@ public class HideAndSeekGame extends AbstractGame {
         PluginData.getMessageUtil().sendInfoMessage(hidden, seeker.getName() +" found you.");
         PluginData.getMessageUtil().sendInfoMessage((Player) seeker, "You found "+ hidden.getName() + ".");
     }
-    
-    
 }

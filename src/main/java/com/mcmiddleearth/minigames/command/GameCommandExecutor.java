@@ -58,17 +58,30 @@ public class GameCommandExecutor implements CommandExecutor {
         addCommandHandler("saverace", new RaceGameSave(Permissions.MANAGER));
         addCommandHandler("seeker", new HaSGameSeeker(Permissions.MANAGER));
         addCommandHandler("send", new QuizGameSend(Permissions.MANAGER));
-        addCommandHandler("set", new RaceGameSet(Permissions.MANAGER));
+        addCommandHandler("raceset", new RaceGameSet(Permissions.MANAGER));
         addCommandHandler("show", new RaceGameShow(Permissions.MANAGER));
         addCommandHandler("showcategories", new QuizGameShowCategories(Permissions.USER));
         addCommandHandler("spectate", new GameSpectate(Permissions.USER));
         addCommandHandler("stat", new QuizGameStatus(Permissions.MANAGER));
-        addCommandHandler("start", new RaceGameStart(Permissions.MANAGER));
+        addCommandHandler("start", new GameStart(Permissions.MANAGER));
         addCommandHandler("stop", new RaceGameStop(Permissions.MANAGER));
         addCommandHandler("submitquestion", new QuizGameQuestionsSubmit(Permissions.USER));
         addCommandHandler("unban", new GameUnban(Permissions.MANAGER));
         addCommandHandler("warp", new GameWarp(Permissions.USER));
         addCommandHandler("winner", new QuizGameWinner(Permissions.MANAGER));
+        addCommandHandler("golfset", new GolfGameSet(Permissions.MANAGER));
+        addCommandHandler("savegolf", new GolfGameSave(Permissions.MANAGER));
+        addCommandHandler("loadgolf", new GolfGameLoad(Permissions.MANAGER));
+        addCommandHandler("pvpset", new PvPGameSet(Permissions.MANAGER));
+        addCommandHandler("field", new PvPGameField(Permissions.MANAGER));
+        addCommandHandler("savepvp", new PvPGameSave(Permissions.MANAGER));
+        addCommandHandler("loadpvp", new PvPGameLoad(Permissions.MANAGER));
+        addCommandHandler("respawn", new PvPGameRespawn(Permissions.MANAGER));
+        addCommandHandler("loadout", new PvPGameLoadout(Permissions.MANAGER));
+        addCommandHandler("saveloadout", new PvPGameSaveLoadout(Permissions.MANAGER));
+        addCommandHandler("teamred", new PvPGameTeamRed(Permissions.MANAGER));
+        addCommandHandler("teamblue", new PvPGameTeamBlue(Permissions.MANAGER));
+        addCommandHandler("unstuck", new HaSGameUnstuck(Permissions.USER));
     }
     
     @Override

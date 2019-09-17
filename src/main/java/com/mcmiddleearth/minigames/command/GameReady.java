@@ -7,6 +7,7 @@ package com.mcmiddleearth.minigames.command;
 
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
+import com.mcmiddleearth.minigames.game.GolfGame;
 import com.mcmiddleearth.minigames.game.RaceGame;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,7 +35,25 @@ public class GameReady extends AbstractGameCommand{
                 if(game instanceof RaceGame) {
                     RaceGame raceGame = (RaceGame) game; 
                     if(!raceGame.hasStart() || !raceGame.hasFinish()) {
-                        sendNoStartFinishMessage(cs);
+                        sendRaceNoStartFinishMessage(cs);
+                        return;
+                    }
+                }
+
+                if(game instanceof GolfGame) {
+                    GolfGame golfGame = (GolfGame) game;
+                    if(!golfGame.hasTeeStart() || !golfGame.hasTeeEnd() || !golfGame.hasHoleStart() || !golfGame.hasHoleEnd()) {
+                        sendNoGolfStartFinishMessage(cs);
+                        return;
+                    }
+
+                    if(!golfGame.hasEnoughTees()) {
+                        sendNotEnoughTeesMessage(cs);
+                        return;
+                    }
+
+                    if(!golfGame.hasEnoughHoles()) {
+                        sendNotEnoughHolesMessage(cs);
                         return;
                     }
                 }
@@ -43,8 +62,19 @@ public class GameReady extends AbstractGameCommand{
         }
     }
 
-    private void sendNoStartFinishMessage(CommandSender cs) {
+    private void sendRaceNoStartFinishMessage(CommandSender cs) {
         PluginData.getMessageUtil().sendErrorMessage(cs, "You need to set a start and finish before announcing a race game. Also please remember that you can't add checkpoints after announcing a race.");
     }
 
+    private void sendNoGolfStartFinishMessage(CommandSender cs) {
+        PluginData.getMessageUtil().sendErrorMessage(cs, "A golf course needs a start tee or hole/end tee or hole.");
+    }
+
+    private void sendNotEnoughTeesMessage(CommandSender cs) {
+        PluginData.getMessageUtil().sendErrorMessage(cs, "A golf course needs a tee amount of 9, 18, 27, 14 or 20.");
+    }
+
+    private void sendNotEnoughHolesMessage(CommandSender cs) {
+        PluginData.getMessageUtil().sendErrorMessage(cs, "A golf course needs a hole amount of 9, 18, 27, 14 or 20.");
+    }
 }

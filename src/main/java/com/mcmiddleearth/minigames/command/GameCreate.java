@@ -5,12 +5,8 @@
  */
 package com.mcmiddleearth.minigames.command;
 
-import com.mcmiddleearth.minigames.game.GameType;
+import com.mcmiddleearth.minigames.game.*;
 import com.mcmiddleearth.minigames.data.PluginData;
-import com.mcmiddleearth.minigames.game.AbstractGame;
-import com.mcmiddleearth.minigames.game.HideAndSeekGame;
-import com.mcmiddleearth.minigames.game.QuizGame;
-import com.mcmiddleearth.minigames.game.RaceGame;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -23,7 +19,7 @@ public class GameCreate extends AbstractGameCommand{
     public GameCreate(String... permissionNodes) {
         super(2, true, permissionNodes);
         setShortDescription(": Creates a new mini game.");
-        setUsageDescription(" quiz|race|hide <gamename>: Creates a lore quiz or a race or a hide and seek game with name <gamename>. The location of the player issuing the command becomes the warp of the game.");
+        setUsageDescription(" quiz|race|hide|golf|pvp <gamename>: Creates a lore quiz or a race or a hide and seek or golf game with name <gamename>. The location of the player issuing the command becomes the warp of the game.");
     }
     
     @Override
@@ -39,6 +35,7 @@ public class GameCreate extends AbstractGameCommand{
                 sendInvalidGameTypeErrorMessage(cs);
                 return;
             }
+
             switch(type) {
                 case HIDE_AND_SEEK:
                     PluginData.stopSpectating((Player)cs);
@@ -53,6 +50,16 @@ public class GameCreate extends AbstractGameCommand{
                     PluginData.stopSpectating((Player)cs);
                     game = new QuizGame((Player) cs, args[1]);
                     sendQuizGameCreateMessage(cs);
+                    break;
+                case GOLF:
+                    PluginData.stopSpectating((Player)cs);
+                    game = new GolfGame((Player) cs, args[1]);
+                    sendGolfGameCreateMessage(cs);
+                    break;
+                case PVP:
+                    PluginData.stopSpectating((Player)cs);
+                    game = new PvPGame((Player) cs, args[1]);
+                    sendPvPGameCreateMessage(cs);
                     break;
                 default:
                     sendInvalidGameTypeErrorMessage(cs);
@@ -81,4 +88,11 @@ public class GameCreate extends AbstractGameCommand{
         PluginData.getMessageUtil().sendInfoMessage(cs, "You created a new Race game.");
     }
 
+    private void sendGolfGameCreateMessage(CommandSender cs) {
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You created a new Golf game.");
+    }
+
+    private void sendPvPGameCreateMessage(CommandSender cs) {
+        PluginData.getMessageUtil().sendInfoMessage(cs, "You created a new PvP game.");
+    }
  }

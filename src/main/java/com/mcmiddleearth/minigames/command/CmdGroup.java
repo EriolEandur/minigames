@@ -28,12 +28,14 @@ public enum CmdGroup {
     GENERAL         ("General"),
     HIDE_AND_SEEK   ("Hide"),
     RACE            ("Race"),
-    LORE_QUIZ       ("Quiz");
+    LORE_QUIZ       ("Quiz"),
+    GOLF            ("Golf"),
+    PVP             ("PvP");
 
     @Getter
     private final String name;
 
-    private CmdGroup(String name) {
+    CmdGroup(String name) {
         this.name = name;
     }
     
