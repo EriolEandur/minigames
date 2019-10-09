@@ -100,7 +100,7 @@ public class Checkpoint {
 
     public boolean isCheckLocation(Location loc) {
         for(Location search : checkLocList) {
-            if(loc.distance(search)<2) {
+            if(loc.getWorld().equals(search.getWorld()) && loc.distance(search)<2) {
                 return true;
             }
         }
