@@ -27,13 +27,11 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -70,7 +68,7 @@ public abstract class AbstractGame {
     
     private final List<UUID> leaveMessaged = new ArrayList<>();
     
-    private final Map<UUID,GameMode> playerPreviousMode = new HashMap<>();
+    public final Map<UUID,GameMode> playerPreviousMode = new HashMap<>();
     
     @Getter
     private Location warp = null;
@@ -368,9 +366,9 @@ public abstract class AbstractGame {
             sendGm3NotAllowed(event.getPlayer());
         }
     }
-    
+
     public void playerDamaged(EntityDamageByEntityEvent event) {
-        
+        event.setCancelled(true);
     }
     
     public void forceTeleport(Player player, Location loc) {
@@ -383,7 +381,6 @@ public abstract class AbstractGame {
         player.teleport(loc, TeleportCause_WARP);
     }
 
-    
     public boolean joinAllowed() {
         return announced;
     }

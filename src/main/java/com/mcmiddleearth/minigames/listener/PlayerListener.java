@@ -13,15 +13,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.*;
 
 /**
- *
  * @author Eriol_Eandur
  */
 public class PlayerListener implements Listener{
@@ -33,7 +30,7 @@ public class PlayerListener implements Listener{
             game.playerMove(event);
         }
     }
-    
+
     @EventHandler
     public void playerQuit(PlayerQuitEvent event) {
         if(PluginData.isInGame(event.getPlayer())) {
@@ -76,17 +73,6 @@ public class PlayerListener implements Listener{
         if(PluginData.isInGame(event.getPlayer())) {
             AbstractGame game = PluginData.getGame(event.getPlayer());
             game.playerChangeGameMode(event);
-        }
-    }
-    
-    @EventHandler
-    public void playerHit(EntityDamageByEntityEvent event) {
-        if(event.getEntity() instanceof Player 
-                && event.getDamager() instanceof Player) {
-            if(PluginData.isInGame((Player)event.getEntity())) {
-                AbstractGame game = PluginData.getGame((Player) event.getEntity());
-                game.playerDamaged(event);
-            }
         }
     }
 }

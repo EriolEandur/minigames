@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.json.simple.parser.ParseException;
@@ -69,16 +71,44 @@ public class PluginData {
     @Getter
     private static final File raceDir = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
                                                     + File.separator + "Races");
+
+    @Getter
+    private static final File golfDir = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
+            + File.separator + "Courses");
+
+    @Getter
+    private static final File pvpDirectory = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
+            + File.separator + "Arenas");
+
+    @Getter
+    private static final File loadoutDirectory = new File(MiniGamesPlugin.getPluginInstance().getDataFolder()
+            + File.separator + "Loadouts");
+
+    @Setter public static boolean pvpRunning = false;
     
     static {
         if(!MiniGamesPlugin.getPluginInstance().getDataFolder().exists()) {
             MiniGamesPlugin.getPluginInstance().getDataFolder().mkdirs();
         }
+
         if(!questionDir.exists()) {
             questionDir.mkdirs();
         }
+
         if(!raceDir.exists()) {
             raceDir.mkdirs();
+        }
+
+        if(!golfDir.exists()) {
+            golfDir.mkdirs();
+        }
+
+        if(!pvpDirectory.exists()) {
+            pvpDirectory.mkdirs();
+        }
+
+        if(!loadoutDirectory.exists()) {
+            loadoutDirectory.mkdirs();
         }
     }
    
@@ -219,5 +249,4 @@ public class PluginData {
         }
         return true;
     }
-    
 }

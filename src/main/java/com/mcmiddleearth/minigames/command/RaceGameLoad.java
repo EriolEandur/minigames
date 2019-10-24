@@ -42,7 +42,7 @@ public class RaceGameLoad extends AbstractGameCommand{
             File file = new File(PluginData.getRaceDir(), args[0] + ".json");
             try {
                 raceGame.getCheckpointManager().loadRace(file);
-                sendQuestionsLoadedMessage(cs);
+                sendRaceLoadedMessage(cs);
             } catch (FileNotFoundException ex) {
                 sendFileNotFoundMessage(cs);
             } catch (ParseException ex) {
@@ -51,7 +51,7 @@ public class RaceGameLoad extends AbstractGameCommand{
         }
     }
 
-    private void sendQuestionsLoadedMessage(CommandSender cs) {
+    private void sendRaceLoadedMessage(CommandSender cs) {
         PluginData.getMessageUtil().sendInfoMessage(cs, "Race loaded from file.");
     }
 
