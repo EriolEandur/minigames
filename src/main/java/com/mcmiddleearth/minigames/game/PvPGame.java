@@ -10,7 +10,7 @@ import com.mcmiddleearth.minigames.scoreboard.PvPGameScoreboard;
 import com.mcmiddleearth.minigames.utils.WorldGuardUtil;
 import com.mcmiddleearth.pluginutil.PlayerUtil;
 import com.mcmiddleearth.pluginutil.TitleUtil;
-import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -454,8 +454,8 @@ public class PvPGame extends AbstractGame implements Listener {
                     player.teleport(from.setDirection(to.getDirection()), TeleportCause_FORCE);
                 }
             } else if (started && !finished) {
-                Vector fromVector = new Vector(from.getX(), from.getY(), from.getZ());
-                Vector toVector = new Vector(to.getX(), to.getY(), to.getZ());
+                BlockVector3 fromVector = BlockVector3.at(from.getX(), from.getY(), from.getZ());
+                BlockVector3 toVector = BlockVector3.at(to.getX(), to.getY(), to.getZ());
 
                 RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
                 RegionManager regions = container.get(FaweAPI.wrapPlayer(getManager().getPlayer()).getWorld());

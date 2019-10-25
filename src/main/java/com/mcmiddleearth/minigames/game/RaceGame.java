@@ -215,7 +215,7 @@ public class RaceGame extends AbstractGame {
                     Material material;
                     byte value;
                     if(cage) {
-                        if(BlockUtil.isTransparent(loc)) {
+                        if(loc.getBlock().isPassable()) {
                             material=Material.BARRIER;
                         }
                         else {

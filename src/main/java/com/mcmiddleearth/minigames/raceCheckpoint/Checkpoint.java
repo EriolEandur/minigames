@@ -19,6 +19,7 @@ package com.mcmiddleearth.minigames.raceCheckpoint;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.pluginutil.BlockUtil;
 import com.mcmiddleearth.pluginutil.FileUtil;
+import com.mcmiddleearth.pluginutil.NumericUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,6 +27,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -253,6 +255,7 @@ public class Checkpoint {
     
     private void loadMarkerFromFile() throws FileNotFoundException{
         File file = new File(markerDir,markerName+"."+markerExt);
+        List<BlockState> checkTemp = new ArrayList<>();
         if(!file.exists()) {
             throw new FileNotFoundException(markerName+".mkr file not found.");
         }
@@ -262,6 +265,7 @@ public class Checkpoint {
                 marker.clear();
                 checkLocList.clear();
                 double yaw = readYaw(scanner);
+                double originalYaw = yaw;
                 BlockRotation rotation = getRotation(yaw);
                 if(rotation.isDiagonal()) {
                     file = new File(markerDir,markerName+"_d."+markerExt);
@@ -272,36 +276,68 @@ public class Checkpoint {
                         fw = new FileReader(file); 
                         scanner = new Scanner(fw);
                         double diagonalYaw = readYaw(scanner);
+                        originalYaw = diagonalYaw;
                         rotation = getRotation(diagonalYaw);
                     }
                 }
                 if(rotation.isDiagonal()) {
                     rotation = rotation.subtractRotation(BlockRotation.HALF_RIGHT);
                 }
+                boolean conversion = false;
                 while(scanner.hasNext()) {
                     int x = scanner.nextInt();
                     int y = scanner.nextInt();
                     int z = scanner.nextInt();
                     String data = scanner.next();
-                    BlockData blockData = Bukkit.getServer().createBlockData(data);
+                    String dv = scanner.nextLine();
+                    BlockData blockData;
+                    try {
+                        blockData = Bukkit.getServer().createBlockData(data);
+                    } catch(IllegalArgumentException ex) {
+                        conversion = true;
+                        BlockState state = Bukkit.getWorlds().get(0).getBlockAt(1,1,1).getState();
+                        try {
+                            state.setType(Material.valueOf(data));
+                        } catch(IllegalArgumentException exep) {
+                            state.setType(Material.valueOf("LEGACY_"+data));
+                        }
+                        if(data.equals("WOOD_DOUBLE_STEP")) {
+//Logger.getGlobal().info("wood double slab");
+                            state.setType(Material.OAK_PLANKS);
+                        }
+//Logger.getGlobal().info("state: "+state.getType().name());
+                        state.setRawData((byte)NumericUtil.getInt(dv));
+                        blockData = state.getBlockData();
+//Logger.getGlobal().info("data: "+blockData.getMaterial().name());
+                        
+                    }
+                    BlockData originalData = blockData.clone();
                     Material type = blockData.getMaterial();
-                    scanner.nextLine();
+//Logger.getGlobal().info("type: "+type.name());
                     if (type != null) {
                         if(type.equals(Material.NETHERRACK)) {
+                            Block block;
                             switch (rotation) {
                                 case RIGHT:
                                     addCheckIfAir(-z, y, x);
+                                    block = location.getBlock().getRelative(-z, y, x);
                                     break;
                                 case TURN_AROUND:
                                     addCheckIfAir(-x, y, -z);
-                                    break;
+                                    block = location.getBlock().getRelative(-x, y, -z);
+                                   break;
                                 case LEFT:
                                     addCheckIfAir(z, y, -x);
+                                    block = location.getBlock().getRelative(z, y, -x);
                                     break;
                                 default:
                                     addCheckIfAir(x, y, z);
+                                    block = location.getBlock().getRelative(x, y, z);
                                     break;
                             }
+                            BlockState state = block.getState();
+                            state.setType(Material.NETHERRACK);
+                            checkTemp.add(state);
                         } else if(!type.equals(Material.PRISMARINE)) {
                             Block block;
                             switch (rotation) {
@@ -319,7 +355,8 @@ public class Checkpoint {
                                     break;
                             }
 
-                            if (type.equals(Material.WALL_SIGN)) {
+                            if (type.equals(Material.WALL_SIGN)
+                                    || type.equals(Material.LEGACY_WALL_SIGN)) {
                                 blockData = adaptData(((WallSign) blockData).getFacing(), null, blockData, rotation, new BlockFace[]{BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST});
                             } else if (type.equals(Material.WALL_TORCH)) {
                                 blockData = adaptData(((Directional) blockData).getFacing(), null, blockData, rotation, new BlockFace[]{BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST});
@@ -349,12 +386,62 @@ public class Checkpoint {
                             BlockState state = block.getState();
                             state.setBlockData(blockData);
                             marker.add(state);
+                            state = block.getState();
+                            state.setBlockData(originalData);
+                            checkTemp.add(state);
                         }
+                    }
+                }
+                if(conversion) {
+                    BlockRotation originalRotation;
+                    if(rotation.isDiagonal()) {
+                        originalRotation = rotation.subtractRotation(BlockRotation.HALF_LEFT);
+                    } else {
+                        originalRotation = rotation;
+                    }
+                    //float originalYaw = location.getYaw() - originalRotation.getYaw();
+//Logger.getGlobal().info("original Yaw: "+originalYaw+" location yaw: "+location.getYaw()+" orgRot yaw: "+originalRotation.getYaw());
+                    try(PrintWriter printer = new PrintWriter(new FileWriter(file))) {
+                        printer.println("YAW "+originalYaw);
+                        writeBlockStates(marker, originalRotation, printer);
+                        writeBlockStates(checkTemp, originalRotation, printer);
                     }
                 }
         } catch (IOException ex) {
             Logger.getLogger(Checkpoint.class.getName()).log(Level.SEVERE, "Loading marker file.", ex);
         }
+    }
+    
+    private void writeBlockStates(Collection<BlockState> states, BlockRotation originalRotation,
+                                  PrintWriter printer) {
+        states.forEach(state -> {
+            int x,z;
+            int y = state.getY()-location.getBlockY();
+            switch (originalRotation) {
+                case RIGHT:
+                    x = state.getZ() - location.getBlockZ();
+                    z = - state.getX() + location.getBlockX();
+                    //block = location.getBlock().getRelative(-z, y, x);
+                    break;
+                case TURN_AROUND:
+                    x = - state.getX() + location.getBlockX();
+                    z = - state.getZ() + location.getBlockZ();
+                    //block = location.getBlock().getRelative(-x, y, -z);
+                    break;
+                case LEFT:
+                    x = - state.getZ() + location.getBlockZ();
+                    z =   state.getX() - location.getBlockX();
+                    //block = location.getBlock().getRelative(z, y, -x);
+                    break;
+                default:
+                    x = state.getX() - location.getBlockX();
+                    z = state.getZ() - location.getBlockZ();
+                    //block = location.getBlock().getRelative(x, y, z);
+                    break;
+            }
+            printer.println(x+" "+y+" "+z
+                           +" "+state.getBlockData().getAsString());
+        });
     }
     
     private void addCheckIfAir(double x, double y, double z) {

@@ -19,7 +19,6 @@ package com.mcmiddleearth.minigames.quizQuestion;
 import com.mcmiddleearth.minigames.data.PluginData;
 import lombok.Getter;
 import lombok.Setter;
-import net.md_5.bungee.api.ChatColor;
 
 /**
  *

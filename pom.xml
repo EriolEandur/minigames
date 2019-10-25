@@ -49,18 +49,12 @@
 
         <repository>
             <id>fawe-repo</id>
-            <url>http://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/</url>
+            <url>https://ci.athion.net/job/FastAsyncWorldEdit-Breaking/ws/mvn</url>
         </repository>
 
         <repository>
-            <id>sk89q-snapshots</id>
-            <url>http://maven.sk89q.com/artifactory/repo</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <id>sk89q-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
         </repository>
     </repositories>
 
@@ -89,9 +83,7 @@
         <dependency>
             <groupId>com.mcmiddleearth</groupId>
             <artifactId>PluginUtils</artifactId>
-            <version>1.2-SNAPSHOT-native-003</version>
-            <scope>system</scope>
-            <systemPath>D:/MCME/dev/jars/PluginUtils-1.2-SNAPSHOT-native-003.jar</systemPath>
+            <version>1.2</version>
         </dependency>
 
         <dependency>
@@ -101,19 +93,10 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sk89q</groupId>
-            <artifactId>worldguard</artifactId>
-            <version>7.0.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>D:/MCME/dev/jars/worldguard-legacy-7.0.0-SNAPSHOT-dist.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sk89q.worldedit</groupId>
-            <artifactId>worldedit</artifactId>
-            <version>1.13</version>
-            <systemPath>D:/MCME/dev/jars/FastAsyncWorldEdit-bukkit-1.13.132.jar</systemPath>
-            <scope>system</scope>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-bukkit</artifactId>
+            <version>7.0.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
