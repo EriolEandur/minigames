@@ -1,6 +1,5 @@
 package com.mcmiddleearth.minigames.game;
 
-import com.boydti.fawe.FaweAPI;
 import com.mcmiddleearth.minigames.MiniGamesPlugin;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.pvp.PvPLoadoutItem;
@@ -10,6 +9,7 @@ import com.mcmiddleearth.minigames.scoreboard.PvPGameScoreboard;
 import com.mcmiddleearth.minigames.utils.WorldGuardUtil;
 import com.mcmiddleearth.pluginutil.PlayerUtil;
 import com.mcmiddleearth.pluginutil.TitleUtil;
+import com.mcmiddleearth.pluginutil.WEUtil;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -458,7 +458,7 @@ public class PvPGame extends AbstractGame implements Listener {
                 BlockVector3 toVector = BlockVector3.at(to.getX(), to.getY(), to.getZ());
 
                 RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-                RegionManager regions = container.get(FaweAPI.wrapPlayer(getManager().getPlayer()).getWorld());
+                RegionManager regions = container.get(WEUtil.getWEWorld(getManager().getPlayer()));//FaweAPI.wrapPlayer(getManager().getPlayer()).getWorld());
 
                 if (regions == null) {
                     return;

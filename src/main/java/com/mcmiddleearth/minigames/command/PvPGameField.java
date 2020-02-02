@@ -1,11 +1,12 @@
 package com.mcmiddleearth.minigames.command;
 
-import com.boydti.fawe.FaweAPI;
+//import com.boydti.fawe.FaweAPI;
 import com.mcmiddleearth.minigames.data.PluginData;
 import com.mcmiddleearth.minigames.game.AbstractGame;
 import com.mcmiddleearth.minigames.game.GameType;
 import com.mcmiddleearth.minigames.game.PvPGame;
-import com.sk89q.worldedit.Vector;
+import com.mcmiddleearth.pluginutil.WEUtil;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -34,11 +35,11 @@ public class PvPGameField extends AbstractGameCommand {
             }
 
             PvPGame pvpGame = (PvPGame) game;
-            Region region = FaweAPI.wrapPlayer(cs).getSelection();
+            Region region = WEUtil.getSelection((Player)cs);//FaweAPI.wrapPlayer(cs).getSelection();
 
             if (region != null) {
-                Vector max = region.getMaximumPoint();
-                Vector min = region.getMinimumPoint();
+                BlockVector3 max = region.getMaximumPoint();
+                BlockVector3 min = region.getMinimumPoint();
 
                 if (pvpGame.getLocationManager().setArenaMax(new Location(((Player) cs).getWorld(), max.getX(), max.getY(), max.getZ()))
                         && pvpGame.getLocationManager().setArenaMin(new Location(((Player) cs).getWorld(), min.getX(), min.getY(), min.getZ()))) {

@@ -1,7 +1,8 @@
 package com.mcmiddleearth.minigames.utils;
 
-import com.boydti.fawe.FaweAPI;
+//import com.boydti.fawe.FaweAPI;
 import com.mcmiddleearth.minigames.game.PvPGame;
+import com.mcmiddleearth.pluginutil.WEUtil;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flags;
@@ -21,7 +22,7 @@ public class WorldGuardUtil {
         removePVPArea(game);
 
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(FaweAPI.wrapPlayer(game.getManager().getPlayer()).getWorld());
+        RegionManager regions = container.get(WEUtil.getWEWorld(game.getManager().getPlayer()));//FaweAPI.wrapPlayer(game.getManager().getPlayer()).getWorld());
 
         Location max = game.getLocationManager().getArenaMax().getLocation();
         Location min = game.getLocationManager().getArenaMin().getLocation();
@@ -37,7 +38,7 @@ public class WorldGuardUtil {
 
     public static void removePVPArea(PvPGame game) {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(FaweAPI.wrapPlayer(game.getManager().getPlayer()).getWorld());
+        RegionManager regions = container.get(WEUtil.getWEWorld(game.getManager().getPlayer()));//FaweAPI.wrapPlayer(game.getManager().getPlayer()).getWorld());
 
         regions.removeRegion("pvpArea");
     }

@@ -94,7 +94,7 @@ public class HideAndSeekGame extends AbstractGame implements Listener {
             seeker = getOnlinePlayers().get(new Double(Math.floor(Math.random()*(getPlayers().size()))).intValue());
         }
         final PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 
-                                                    (hideTime+seekTime)*20, 1, false, false);
+                                                    (hideTime+seekTime)*20, 3, false, true);
         ((Player)seeker).addPotionEffect(effect);
         for(Player player : getOnlinePlayers()) {
             if(!PlayerUtil.isSame(player,seeker)) {
